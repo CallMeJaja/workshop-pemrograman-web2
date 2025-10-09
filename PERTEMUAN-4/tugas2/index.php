@@ -71,7 +71,7 @@
                                         <select name="tahun" class="form-select" required>
                                             <option value="">Tahun</option>
                                             <?php
-                                            for ($i = 1990; $i <= 2010; $i++) {
+                                            for ($i = 2000; $i <= 2010; $i++) {
                                                 echo "<option value='$i'>$i</option>";
                                             }
                                             ?>
