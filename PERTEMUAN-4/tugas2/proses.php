@@ -19,7 +19,6 @@
                     <div class="card-body">
                         <?php
                         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                            // Ambil data dari form
                             $nama = isset($_POST['nama']) ? trim($_POST['nama']) : '';
                             $ttl = isset($_POST['ttl']) ? trim($_POST['ttl']) : '';
                             $tanggal = isset($_POST['tanggal']) ? $_POST['tanggal'] : '';
@@ -29,7 +28,6 @@
                             $jenis_kelamin = isset($_POST['jenis_kelamin']) ? $_POST['jenis_kelamin'] : '';
                             $nilai_un = isset($_POST['nilai_un']) ? $_POST['nilai_un'] : '';
 
-                            // Validasi input
                             $errors = [];
 
                             if (empty($nama)) {
@@ -81,7 +79,6 @@
                                 </a>
                             <?php
                             } else {
-                                // Jika tidak ada error, tampilkan hasil
                                 $tgl_lahir = $tanggal . " " . $bulan . " " . $tahun;
                             ?>
                                 <div class="alert alert-success" role="alert">
@@ -139,7 +136,6 @@
                             <?php
                             }
                         } else {
-                            // Jika diakses langsung tanpa POST
                             ?>
                             <div class="alert alert-warning" role="alert">
                                 <h5 class="alert-heading"><i class="bi bi-exclamation-triangle-fill"></i> Akses Tidak Valid!</h5>
