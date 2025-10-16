@@ -91,7 +91,7 @@
                                 <!-- Informasi Karyawan -->
                                 <div class="mb-3">
                                     <h6 class="text-primary">Informasi Karyawan</h6>
-                                    <table class="table table-sm table-borderless mb-0">
+                                    <table class="table table-sm table-bordered mb-0 rounded-3 overflow-hidden">
                                         <tr>
                                             <td width="50%">Golongan</td>
                                             <td><strong><?php echo $golongan; ?></strong></td>
@@ -110,21 +110,21 @@
                                 <!-- Detail Jam Kerja -->
                                 <div class="mb-3">
                                     <h6 class="text-primary">Detail Jam Kerja</h6>
-                                    <table class="table table-sm table-borderless mb-0">
+                                    <table class="table table-sm table-bordered mb-0 rounded-3 overflow-hidden">
                                         <tr>
                                             <td width="50%">Jam Kerja Normal</td>
                                             <td><strong><?php echo $jamNormal; ?> jam</strong></td>
                                         </tr>
                                         <?php if ($jamKerja > 48): ?>
-                                        <tr>
-                                            <td>Jam Lembur</td>
-                                            <td><strong class="text-warning"><?php echo $totalJamLembur; ?> jam</strong></td>
-                                        </tr>
+                                            <tr>
+                                                <td>Jam Lembur</td>
+                                                <td><strong class="text-warning"><?php echo $totalJamLembur; ?> jam</strong></td>
+                                            </tr>
                                         <?php else: ?>
-                                        <tr>
-                                            <td>Jam Lembur</td>
-                                            <td><strong>0 jam</strong></td>
-                                        </tr>
+                                            <tr>
+                                                <td>Jam Lembur</td>
+                                                <td><strong>0 jam</strong></td>
+                                            </tr>
                                         <?php endif; ?>
                                     </table>
                                 </div>
@@ -132,16 +132,16 @@
                                 <!-- Perhitungan Gaji -->
                                 <div class="mb-3">
                                     <h6 class="text-primary">Perhitungan Gaji</h6>
-                                    <table class="table table-sm table-borderless mb-0">
+                                    <table class="table table-sm table-bordered mb-0 rounded-3 overflow-hidden">
                                         <tr>
                                             <td width="50%">Gaji Normal</td>
                                             <td>Rp <?php echo number_format($jamNormal * $upahPerJam, 0, ',', '.'); ?></td>
                                         </tr>
                                         <?php if ($jamKerja > 48): ?>
-                                        <tr>
-                                            <td>Gaji Lembur (<?php echo $totalJamLembur; ?> jam × Rp <?php echo number_format($upahLemburPerJam, 0, ',', '.'); ?>)</td>
-                                            <td>Rp <?php echo number_format($gajiLembur, 0, ',', '.'); ?></td>
-                                        </tr>
+                                            <tr>
+                                                <td>Gaji Lembur (<?php echo $totalJamLembur; ?> jam × Rp <?php echo number_format($upahLemburPerJam, 0, ',', '.'); ?>)</td>
+                                                <td>Rp <?php echo number_format($gajiLembur, 0, ',', '.'); ?></td>
+                                            </tr>
                                         <?php endif; ?>
                                     </table>
                                 </div>
