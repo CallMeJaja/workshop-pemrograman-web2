@@ -22,10 +22,10 @@ if (isset($_POST['submit'])) {
     for ($bulan = 1; $bulan <= $jangka_waktu; $bulan++) {
         $saldo_awal_bulan = $saldo;
         $bunga_tahunan = ($saldo_awal_bulan < 1100000) ? 0.03 : 0.04;
-        $bunga_bulan = $saldo_awal_bulan * $bunga_tahunan;
-
+        $bunga_bulan = $saldo * $bunga_tahunan;
         $saldo += $bunga_bulan;
         $saldo -= $admin_fee;
+
 
         echo "<tr>";
         echo "<td>{$bulan}</td>";
