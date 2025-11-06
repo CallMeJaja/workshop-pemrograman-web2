@@ -37,23 +37,34 @@ $posisi = [
 
 function hitungUpahJamKerja($jam_kerja, $upah_per_jam)
 {
-    return $jam_kerja * $upah_per_jam;
+    return hitungJamLembur($jam_kerja) > 0
+        ? 160 * $upah_per_jam
+        : $jam_kerja * $upah_per_jam;
 }
 
-function hitungUpahLembur($jam_lembur, $upah_per_jam, $persen_lembur)
+function hitungUpahLembur($jam_kerja, $upah_per_jam, $persen_lembur)
 {
-    $upah_lembur_per_jam = $upah_per_jam * ($persen_lembur / 100);
-    return $jam_lembur * $upah_lembur_per_jam;
+    $jam_lembur = hitungJamLembur($jam_kerja);
+    if ($jam_lembur > 0) {
+        $upah_lembur_per_jam = $upah_per_jam * ($persen_lembur / 100);
+        return $jam_lembur * $upah_lembur_per_jam;
+    } else {
+        return 0;
+    }
+}
+
+function hitungJamLembur($jam_kerja)
+{
+    if ($jam_kerja > 160) {
+        return $jam_kerja - 160;
+    } else {
+        return 0;
+    }
 }
 
 function hitungUpahFee($harga_project, $persen_fee)
 {
     return $harga_project * ($persen_fee / 100);
-}
-
-function hitungPPh21($total_upah)
-{
-    return 0;
 }
 
 function hitungTotalUpah($upah_jam_kerja, $upah_lembur, $upah_fee)
@@ -82,13 +93,10 @@ function hitungTotalUpah($upah_jam_kerja, $upah_lembur, $upah_fee)
     <label for="jam_kerja">Jam Kerja:</label>
     <input type="number" name="jam_kerja" id="jam_kerja" required min="1">
     <br>
-    <label for="jam_lembur">Jam Lembur:</label>
-    <input type="number" name="jam_lembur" id="jam_lembur" required min="1">
-    <br>
     <label for="harga_project">Harga Project:</label>
     <input type="number" name="harga_project" id="harga_project" required min="1">
     <br>
-    <input type="submit" value="Kirim" name="submit">
+    <input type="submit" value="Hitung Gaji" name="submit">
     <input type="reset" value="Reset" name="reset">
 </form>
 
@@ -97,21 +105,20 @@ if (isset($_POST['submit'])) {
     $nama = $_POST['anggota'];
     $role = $_POST['role'];
     $jam_kerja = $_POST['jam_kerja'];
-    $jam_lembur = $_POST['jam_lembur'];
     $harga_project = $_POST['harga_project'];
 
     echo "<h2>Data yang Dikirim:</h2>";
     echo "Nama Anggota: " . $nama . "<br>";
     echo "Posisi: " . $role . "<br>";
     echo "Jam Kerja: " . $jam_kerja . "<br>";
-    echo "Jam Lembur: " . $jam_lembur . "<br>";
-    echo "Harga Project: " . $harga_project . "<br>";
+    echo "Jam Lembur: " . hitungJamLembur($jam_kerja) . "<br>";
+    echo "<strong>Harga Project: " . number_format($harga_project, 0, ',', '.') . "</strong><br>";
 
     $upah_per_jam = $posisi[$role]['upah_per_jam'];
     $persen_lembur = $posisi[$role]['persen_lembur'];
     $persen_fee = $posisi[$role]['persen_fee'];
     $upah_jam_kerja = hitungUpahJamKerja($jam_kerja, $upah_per_jam);
-    $upah_lembur = hitungUpahLembur($jam_lembur, $upah_per_jam, $persen_lembur);
+    $upah_lembur = hitungUpahLembur($jam_kerja, $upah_per_jam, $persen_lembur);
     $upah_fee = hitungUpahFee($harga_project, $persen_fee);
     $total_upah = hitungTotalUpah($upah_jam_kerja, $upah_lembur, $upah_fee);
 
