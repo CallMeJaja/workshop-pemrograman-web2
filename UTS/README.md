@@ -406,6 +406,6 @@ Jika ada pertanyaan atau issue:
 
 **⭐ Jika project ini membantu, berikan star di GitHub! ⭐**
 
-Made with ❤️ for UTS Pemrograman Web 2
+Made with ❤️ for UTS Workshop Pemrograman Web 2
 
 </div>
