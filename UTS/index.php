@@ -96,7 +96,7 @@
                         <form method="POST" action="">
                             <div class="mb-3">
                                 <label for="anggota" class="form-label">Nama Anggota</label>
-                                <select name="anggota" id="anggota" class="form-select" required>
+                                <select name="anggota" id="anggota" class="form-select">
                                     <option value="">Pilih Anggota</option>
                                     <?php foreach ($anggota as $a) : ?>
                                         <option value="<?= $a ?>" <?= (isset($_POST['anggota']) && $_POST['anggota'] == $a) ? 'selected' : '' ?>><?= $a ?></option>
@@ -105,7 +105,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="role" class="form-label">Posisi</label>
-                                <select name="role" id="role" class="form-select" required>
+                                <select name="role" id="role" class="form-select">
                                     <option value="">Pilih Posisi</option>
                                     <?php foreach ($posisi as $p => $details) : ?>
                                         <option value="<?= $p ?>" <?= (isset($_POST['role']) && $_POST['role'] == $p) ? 'selected' : '' ?>><?= $p ?></option>
@@ -115,12 +115,12 @@
                             <div class="mb-3">
                                 <label for="jam_kerja" class="form-label">Jam Kerja</label>
                                 <input type="number" class="form-control" name="jam_kerja" id="jam_kerja"
-                                    value="<?php echo isset($_POST['jam_kerja']) ? $_POST['jam_kerja'] : ''; ?>" required min="1">
+                                    value="<?php echo isset($_POST['jam_kerja']) ? $_POST['jam_kerja'] : ''; ?>">
                             </div>
                             <div class="mb-3">
                                 <label for="harga_project" class="form-label">Harga Project (Rp)</label>
                                 <input type="number" class="form-control" name="harga_project" id="harga_project"
-                                    value="<?php echo isset($_POST['harga_project']) ? $_POST['harga_project'] : ''; ?>" required min="1">
+                                    value="<?php echo isset($_POST['harga_project']) ? $_POST['harga_project'] : ''; ?>">
                             </div>
                             <button type="submit" name="submit" class="btn btn-primary">Hitung Gaji</button>
                             <button type="reset" class="btn btn-secondary">Reset</button>
