@@ -76,7 +76,7 @@ Setiap anggota tim memiliki:
 
 ## 🔧 Teknologi yang Digunakan
 
-- **PHP** 7.4+ (Native, no framework)
+- **PHP** 7.4+
 - **HTML5** - Struktur halaman
 - **Bootstrap 5.3** - Framework CSS untuk UI/UX
 - **JavaScript** - Bootstrap JS untuk komponen interaktif
@@ -87,8 +87,8 @@ Setiap anggota tim memiliki:
 
 ```
 UTS/
-├── index.php          # Aplikasi utama (Form + Perhitungan + Bootstrap UI)
-├── README.md          # Dokumentasi project (file ini)
+├── index.php          # Aplikasi utama
+├── README.md          # Dokumentasi project
 ├── requirement.md     # Spesifikasi kebutuhan UTS
 └── .gitignore         # Git ignore file
 ```
@@ -98,10 +98,12 @@ UTS/
 ## 🎨 UI/UX Features
 
 ### Layout Responsif
+
 - **Desktop (≥992px)**: Layout 2 kolom - Form & Hasil (kiri) | Referensi Gaji (kanan)
 - **Tablet & Mobile (<992px)**: Layout 1 kolom - Stacked vertical
 
 ### Visual Elements
+
 - **Color-coded Badges**: Setiap posisi memiliki badge warna berbeda
   - Lead Developer: `Red`
   - QA Engineer: `Cyan`
@@ -118,18 +120,20 @@ UTS/
 
 Berdasarkan rate tim yang cukup tinggi, berikut rekomendasi harga project:
 
-| Skala Project | Harga Project | Durasi | Tim |
-|---------------|---------------|--------|-----|
-| **Small** | Rp 10.000.000 - Rp 50.000.000 | 1-2 minggu | 1-2 orang |
-| **Medium** | Rp 50.000.000 - Rp 200.000.000 | 1-2 bulan | 2-3 orang |
-| **Large** | Rp 200.000.000 - Rp 500.000.000 | 2-4 bulan | 3-5 orang |
-| **Enterprise** | > Rp 500.000.000 | 4+ bulan | 5+ orang |
+| Skala Project  | Harga Project                   | Durasi     | Tim       |
+| -------------- | ------------------------------- | ---------- | --------- |
+| **Small**      | Rp 10.000.000 - Rp 50.000.000   | 1-2 minggu | 1-2 orang |
+| **Medium**     | Rp 50.000.000 - Rp 200.000.000  | 1-2 bulan  | 2-3 orang |
+| **Large**      | Rp 200.000.000 - Rp 500.000.000 | 2-4 bulan  | 3-5 orang |
+| **Enterprise** | > Rp 500.000.000                | 4+ bulan   | 5+ orang  |
 
 **Validasi System:**
+
 - Minimum harga project: **Rp 10.000.000**
 - Rekomendasi: **Rp 50.000.000 - Rp 1.000.000.000**
 
 **Contoh Realistic:**
+
 - Harga Project: Rp 500.000.000
 - Lead Dev Fee (5%): Rp 25.000.000
 - Backend Dev Fee (3%): Rp 15.000.000
@@ -211,8 +215,8 @@ Sistem akan menampilkan **Slip Gaji Karyawan** dengan:
   - Jam Kerja total
   - Jam Lembur (badge: kuning jika ada, abu-abu jika tidak ada)
   - Harga Project
-  
 - **Rincian Perhitungan Gaji (Tabel):**
+
   - Upah dari Jam Kerja (maksimal 160 jam jika ada lembur)
   - Upah dari Jam Lembur (0 jika jam kerja ≤ 160) + persentase
   - Upah dari Fee Project + persentase
@@ -223,6 +227,7 @@ Sistem akan menampilkan **Slip Gaji Karyawan** dengan:
 ### **Validasi & Error Handling**
 
 Sistem akan menampilkan alert merah jika:
+
 - Nama anggota belum dipilih
 - Posisi belum dipilih
 - Jam kerja tidak valid atau ≤ 0
@@ -243,19 +248,23 @@ Sistem akan menampilkan alert merah jika:
 **Proses:**
 
 1. **Hitung Jam Lembur:**
+
    - `180 - 160 = 20 jam lembur`
 
 2. **Upah Jam Kerja:**
+
    - Rate: Rp 450.000/jam
    - Karena ada lembur, hanya 160 jam dihitung normal
    - `160 × 450.000 = Rp 72.000.000`
 
 3. **Upah Lembur:**
+
    - Persen lembur: 18%
    - Upah lembur per jam: `450.000 × 18% = Rp 81.000`
    - `20 jam × 81.000 = Rp 1.620.000`
 
 4. **Fee Project:**
+
    - Persen fee: 5%
    - `500.000.000 × 5% = Rp 25.000.000`
 
@@ -275,16 +284,20 @@ Sistem akan menampilkan alert merah jika:
 **Proses:**
 
 1. **Hitung Jam Lembur:**
+
    - `150 ≤ 160` → **Tidak ada lembur**
 
 2. **Upah Jam Kerja:**
+
    - Rate: Rp 300.000/jam
    - `150 × 300.000 = Rp 45.000.000`
 
 3. **Upah Lembur:**
+
    - `Rp 0` (tidak ada lembur)
 
 4. **Fee Project:**
+
    - Persen fee: 3%
    - `100.000.000 × 3% = Rp 3.000.000`
 
@@ -304,15 +317,19 @@ Sistem akan menampilkan alert merah jika:
 **Proses:**
 
 1. **Hitung Jam Lembur:**
+
    - `200 - 160 = 40 jam lembur`
 
 2. **Upah Jam Kerja:**
+
    - `160 × 450.000 = Rp 72.000.000`
 
 3. **Upah Lembur:**
+
    - `40 × 81.000 = Rp 3.240.000`
 
 4. **Fee Project:**
+
    - `1.000.000.000 × 5% = Rp 50.000.000`
 
 5. **Total Upah:**
@@ -501,6 +518,7 @@ Jika ada pertanyaan atau issue:
 ## 🔐 Security Notes
 
 ⚠️ **Catatan Keamanan untuk Production:**
+
 - Implementasi CSRF protection
 - Sanitize input dengan `filter_var()` atau `htmlspecialchars()`
 - Validasi server-side lebih ketat
