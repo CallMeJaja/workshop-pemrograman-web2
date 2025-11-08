@@ -2,7 +2,7 @@
 
 ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
 
 > **UTS Tipe D** - Sistem perhitungan gaji karyawan tim software berbasis web menggunakan PHP Native
 
@@ -21,8 +21,13 @@ Aplikasi web sederhana untuk menghitung gaji bulanan anggota tim software develo
 - ✅ **Multi Posisi** - Mendukung 5 posisi dengan rate berbeda
 - ✅ **Multi Anggota** - Mendukung 5 anggota tim
 - ✅ **Format Rupiah** - Tampilan nilai mata uang yang rapi dengan `number_format()`
-- ✅ **Validasi Input** - HTML5 validation untuk mencegah input tidak valid
+- ✅ **Validasi Input** - Server-side & client-side validation
 - ✅ **Rincian Detail** - Menampilkan breakdown komponen gaji secara lengkap
+- ✅ **Bootstrap UI** - Interface modern dan profesional dengan Bootstrap 5
+- ✅ **Responsive Design** - Layout 2 kolom (desktop) dan 1 kolom (mobile)
+- ✅ **Badge Posisi** - Visual indicator dengan warna untuk setiap posisi
+- ✅ **Sticky Sidebar** - Referensi ketentuan gaji selalu terlihat
+- ✅ **Error Handling** - Alert untuk input tidak valid
 
 ---
 
@@ -72,8 +77,8 @@ Setiap anggota tim memiliki:
 
 - **PHP** 7.4+ (Native, no framework)
 - **HTML5** - Struktur halaman
-- **CSS3** - Styling (opsional)
-- **JavaScript** - Validasi client-side (opsional)
+- **Bootstrap 5.3** - Framework CSS untuk UI/UX
+- **JavaScript** - Bootstrap JS untuk komponen interaktif
 
 ---
 
@@ -81,7 +86,7 @@ Setiap anggota tim memiliki:
 
 ```
 UTS/
-├── index.php           # Form input & perhitungan gaji
+├── index.php           # Aplikasi utama
 ├── README.md           # Dokumentasi project
 ├── temp/
 │   ├── TODO.md         # Daftar tugas pengerjaan
@@ -324,16 +329,18 @@ Menghitung total gaji keseluruhan dari semua komponen.
 
 Beberapa ide untuk meningkatkan aplikasi:
 
-- [ ] **Styling CSS** - Tambahkan desain UI yang lebih menarik (Bootstrap/Tailwind)
-- [ ] **Validasi JavaScript** - Validasi form di client-side untuk UX lebih baik
+- [x] **Styling CSS** - ✅ Bootstrap 5 sudah diimplementasikan
+- [x] **Validasi** - ✅ Server-side validation sudah ada
+- [x] **Responsive Design** - ✅ Layout 2 kolom (desktop) & 1 kolom (mobile)
 - [ ] **Database** - Simpan history perhitungan gaji (MySQL/PostgreSQL)
 - [ ] **Export PDF** - Cetak slip gaji menggunakan library TCPDF/FPDF
 - [ ] **Grafik** - Visualisasi perbandingan gaji antar posisi (Chart.js)
 - [ ] **PPh21** - Implementasi perhitungan pajak sesuai aturan perpajakan Indonesia
 - [ ] **Session/Login** - Multi-user dengan autentikasi
-- [ ] **Responsive Design** - Mobile-friendly interface
 - [ ] **CRUD Anggota** - Tambah/edit/hapus anggota tim
 - [ ] **Report Bulanan** - Rekap gaji seluruh tim per bulan
+- [ ] **Dark Mode** - Toggle tema gelap/terang
+- [ ] **Print Function** - Cetak slip gaji langsung dari browser
 
 ---
 
@@ -351,21 +358,24 @@ Beberapa ide untuk meningkatkan aplikasi:
 ✅ Implementasi perhitungan otomatis  
 ✅ Format output rupiah dengan `number_format()`  
 ✅ Display hasil perhitungan  
-⬜ Styling CSS/Bootstrap  
-⬜ Validasi input server-side (PHP)  
-⬜ Responsive design  
-⬜ Error handling yang lebih baik
+✅ Styling CSS/Bootstrap (Bootstrap 5)  
+✅ Validasi input server-side (PHP)  
+✅ Responsive design (2 kolom desktop, 1 kolom mobile)  
+✅ Error handling dengan alert  
+✅ Badge posisi dengan color coding  
+✅ Sticky sidebar referensi  
+✅ Slip gaji profesional dengan tabel
 
 ---
 
 ## 🐛 Known Issues / Limitations
 
-1. **UI/UX** - Masih sangat basic, belum ada styling CSS
-2. **Validasi** - Hanya menggunakan HTML5 `required` dan `min` attribute
-3. **Server-side Validation** - Belum ada validasi PHP untuk mencegah input invalid
-4. **Data Persistence** - Data tidak tersimpan (hilang setelah refresh)
-5. **Error Handling** - Belum ada handling untuk error (misal: posisi tidak dipilih)
-6. **Responsive** - Belum dioptimasi untuk mobile devices
+1. **Data Persistence** - Data tidak tersimpan (hilang setelah refresh)
+2. **Database** - Belum menggunakan database untuk menyimpan data
+3. **Export Feature** - Belum ada fitur export ke PDF/Excel
+4. **Multi-language** - Hanya tersedia dalam Bahasa Indonesia
+5. **History** - Belum ada riwayat perhitungan gaji
+6. **Print Styling** - Belum optimal untuk print preview
 
 ---
 
