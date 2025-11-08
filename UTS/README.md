@@ -132,7 +132,7 @@ Berdasarkan rate tim yang cukup tinggi, berikut rekomendasi harga project:
 - Minimum harga project: **Rp 10.000.000**
 - Rekomendasi: **Rp 50.000.000 - Rp 1.000.000.000**
 
-**Contoh Realistic:**
+**Contoh Realistis:**
 
 - Harga Project: Rp 500.000.000
 - Lead Dev Fee (5%): Rp 25.000.000
