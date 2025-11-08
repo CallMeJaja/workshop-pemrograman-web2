@@ -1,130 +1,354 @@
-<?php
-$anggota = [
-    "Reza Asriano Maulana",
-    "Satrio Ilham Syahputra",
-    "Dhafi Ebsan Yurizal",
-    "Helgi Nur Allamsyah",
-    "Fikri Ramdani"
-];
+<!DOCTYPE html>
+<html lang="en">
 
-$posisi = [
-    'Lead Developer' => [
-        'upah_per_jam' => 450000,
-        'persen_lembur' => 18,
-        'persen_fee' => 5
-    ],
-    'QA Engineer' => [
-        'upah_per_jam' => 250000,
-        'persen_lembur' => 12,
-        'persen_fee' => 1
-    ],
-    'DevOps Engineer' => [
-        'upah_per_jam' => 350000,
-        'persen_lembur' => 10,
-        'persen_fee' => 2.5
-    ],
-    'Backend Dev' => [
-        'upah_per_jam' => 300000,
-        'persen_lembur' => 15,
-        'persen_fee' => 3
-    ],
-    'Frontend Dev' => [
-        'upah_per_jam' => 300000,
-        'persen_lembur' => 15,
-        'persen_fee' => 3
-    ]
-];
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Gaji Anggota Tim</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 
-function hitungUpahJamKerja($jam_kerja, $upah_per_jam)
-{
-    return hitungJamLembur($jam_kerja) > 0
-        ? 160 * $upah_per_jam
-        : $jam_kerja * $upah_per_jam;
-}
+<body>
+    <div class="container-fluid mt-5 px-4">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">Kalkulator Gaji Anggota Tim</h3>
+                    </div>
+                    <div class="card-body">
 
-function hitungUpahLembur($jam_kerja, $upah_per_jam, $persen_lembur)
-{
-    $jam_lembur = hitungJamLembur($jam_kerja);
-    if ($jam_lembur > 0) {
-        $upah_lembur_per_jam = $upah_per_jam * ($persen_lembur / 100);
-        return $jam_lembur * $upah_lembur_per_jam;
-    } else {
-        return 0;
-    }
-}
+                        <?php
+                        $anggota = [
+                            "Reza Asriano Maulana",
+                            "Satrio Ilham Syahputra",
+                            "Dhafi Ebsan Yurizal",
+                            "Helgi Nur Allamsyah",
+                            "Fikri Ramdani"
+                        ];
 
-function hitungJamLembur($jam_kerja)
-{
-    if ($jam_kerja > 160) {
-        return $jam_kerja - 160;
-    } else {
-        return 0;
-    }
-}
+                        $posisi = [
+                            'Lead Developer' => [
+                                'upah_per_jam' => 450000,
+                                'persen_lembur' => 18,
+                                'persen_fee' => 5
+                            ],
+                            'QA Engineer' => [
+                                'upah_per_jam' => 250000,
+                                'persen_lembur' => 12,
+                                'persen_fee' => 1
+                            ],
+                            'DevOps Engineer' => [
+                                'upah_per_jam' => 350000,
+                                'persen_lembur' => 10,
+                                'persen_fee' => 2.5
+                            ],
+                            'Backend Dev' => [
+                                'upah_per_jam' => 300000,
+                                'persen_lembur' => 15,
+                                'persen_fee' => 3
+                            ],
+                            'Frontend Dev' => [
+                                'upah_per_jam' => 300000,
+                                'persen_lembur' => 15,
+                                'persen_fee' => 3
+                            ]
+                        ];
 
-function hitungUpahFee($harga_project, $persen_fee)
-{
-    return $harga_project * ($persen_fee / 100);
-}
+                        function hitungUpahJamKerja($jam_kerja, $upah_per_jam)
+                        {
+                            return hitungJamLembur($jam_kerja) > 0
+                                ? 160 * $upah_per_jam
+                                : $jam_kerja * $upah_per_jam;
+                        }
 
-function hitungTotalUpah($upah_jam_kerja, $upah_lembur, $upah_fee)
-{
-    return $upah_jam_kerja + $upah_lembur + $upah_fee;
-}
+                        function hitungUpahLembur($jam_kerja, $upah_per_jam, $persen_lembur)
+                        {
+                            $jam_lembur = hitungJamLembur($jam_kerja);
+                            if ($jam_lembur > 0) {
+                                $upah_lembur_per_jam = $upah_per_jam * ($persen_lembur / 100);
+                                return $jam_lembur * $upah_lembur_per_jam;
+                            } else {
+                                return 0;
+                            }
+                        }
 
-?>
+                        function hitungJamLembur($jam_kerja)
+                        {
+                            if ($jam_kerja > 160) {
+                                return $jam_kerja - 160;
+                            } else {
+                                return 0;
+                            }
+                        }
 
-<form action="#" method="POST">
-    <label for="nama">Nama:</label>
-    <select name="anggota" id="">
-        <option value="">Pilih Anggota</option>
-        <?php foreach ($anggota as $a) : ?>
-            <option value="<?= $a ?>"><?= $a ?></option>
-        <?php endforeach; ?>
-    </select> <br>
-    <label for="role">Posisi:</label>
-    <select name="role" id="role">
-        <option value="">Pilih Posisi</option>
-        <?php foreach ($posisi as $p => $details) : ?>
-            <option value="<?= $p ?>"><?= $p ?></option>
-        <?php endforeach; ?>
-    </select>
-    <br>
-    <label for="jam_kerja">Jam Kerja:</label>
-    <input type="number" name="jam_kerja" id="jam_kerja" required min="1">
-    <br>
-    <label for="harga_project">Harga Project:</label>
-    <input type="number" name="harga_project" id="harga_project" required min="1">
-    <br>
-    <input type="submit" value="Hitung Gaji" name="submit">
-    <input type="reset" value="Reset" name="reset">
-</form>
+                        function hitungUpahFee($harga_project, $persen_fee)
+                        {
+                            return $harga_project * ($persen_fee / 100);
+                        }
 
-<?php
-if (isset($_POST['submit'])) {
-    $nama = $_POST['anggota'];
-    $role = $_POST['role'];
-    $jam_kerja = $_POST['jam_kerja'];
-    $harga_project = $_POST['harga_project'];
+                        function hitungTotalUpah($upah_jam_kerja, $upah_lembur, $upah_fee)
+                        {
+                            return $upah_jam_kerja + $upah_lembur + $upah_fee;
+                        }
+                        ?>
 
-    echo "<h2>Data yang Dikirim:</h2>";
-    echo "Nama Anggota: " . $nama . "<br>";
-    echo "Posisi: " . $role . "<br>";
-    echo "Jam Kerja: " . $jam_kerja . "<br>";
-    echo "Jam Lembur: " . hitungJamLembur($jam_kerja) . "<br>";
-    echo "<strong>Harga Project: " . number_format($harga_project, 0, ',', '.') . "</strong><br>";
+                        <form method="POST" action="">
+                            <div class="mb-3">
+                                <label for="anggota" class="form-label">Nama Anggota</label>
+                                <select name="anggota" id="anggota" class="form-select" required>
+                                    <option value="">Pilih Anggota</option>
+                                    <?php foreach ($anggota as $a) : ?>
+                                        <option value="<?= $a ?>" <?= (isset($_POST['anggota']) && $_POST['anggota'] == $a) ? 'selected' : '' ?>><?= $a ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Posisi</label>
+                                <select name="role" id="role" class="form-select" required>
+                                    <option value="">Pilih Posisi</option>
+                                    <?php foreach ($posisi as $p => $details) : ?>
+                                        <option value="<?= $p ?>" <?= (isset($_POST['role']) && $_POST['role'] == $p) ? 'selected' : '' ?>><?= $p ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="jam_kerja" class="form-label">Jam Kerja</label>
+                                <input type="number" class="form-control" name="jam_kerja" id="jam_kerja"
+                                    value="<?php echo isset($_POST['jam_kerja']) ? $_POST['jam_kerja'] : ''; ?>" required min="1">
+                            </div>
+                            <div class="mb-3">
+                                <label for="harga_project" class="form-label">Harga Project (Rp)</label>
+                                <input type="number" class="form-control" name="harga_project" id="harga_project"
+                                    value="<?php echo isset($_POST['harga_project']) ? $_POST['harga_project'] : ''; ?>" required min="1">
+                            </div>
+                            <button type="submit" name="submit" class="btn btn-primary">Hitung Gaji</button>
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                        </form>
 
-    $upah_per_jam = $posisi[$role]['upah_per_jam'];
-    $persen_lembur = $posisi[$role]['persen_lembur'];
-    $persen_fee = $posisi[$role]['persen_fee'];
-    $upah_jam_kerja = hitungUpahJamKerja($jam_kerja, $upah_per_jam);
-    $upah_lembur = hitungUpahLembur($jam_kerja, $upah_per_jam, $persen_lembur);
-    $upah_fee = hitungUpahFee($harga_project, $persen_fee);
-    $total_upah = hitungTotalUpah($upah_jam_kerja, $upah_lembur, $upah_fee);
+                        <?php
+                        if (isset($_POST['submit'])) {
+                            $nama = $_POST['anggota'];
+                            $role = $_POST['role'];
+                            $jam_kerja = $_POST['jam_kerja'];
+                            $harga_project = $_POST['harga_project'];
 
-    echo "<h2>Perhitungan Upah:</h2>";
-    echo "Upah dari Jam Kerja: Rp " . number_format($upah_jam_kerja, 0, ',', '.') . "<br>";
-    echo "Upah dari Jam Lembur: Rp " . number_format($upah_lembur, 0, ',', '.') . "<br>";
-    echo "Upah dari Fee Project: Rp " . number_format($upah_fee, 0, ',', '.') . "<br>";
-    echo "<strong>Total Upah: Rp " . number_format($total_upah, 0, ',', '.') . "</strong>";
-}
+                            // Validasi input
+                            $errors = [];
+
+                            if (empty($nama)) {
+                                $errors[] = "Nama anggota harus dipilih.";
+                            }
+
+                            if (empty($role)) {
+                                $errors[] = "Posisi harus dipilih.";
+                            }
+
+                            if (!is_numeric($jam_kerja) || $jam_kerja <= 0) {
+                                $errors[] = "Jam kerja harus berupa angka positif.";
+                            }
+
+                            if (!is_numeric($harga_project) || $harga_project <= 0) {
+                                $errors[] = "Harga project harus berupa angka positif.";
+                            }
+
+                            if (!empty($errors)) {
+                        ?>
+                                <hr>
+                                <div class="alert alert-danger mt-3" role="alert">
+                                    <h5 class="alert-heading">Error Validasi Input</h5>
+                                    <ul class="mb-0">
+                                        <?php foreach ($errors as $error): ?>
+                                            <li><?php echo $error; ?></li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                </div>
+                            <?php
+                            } else {
+                                $upah_per_jam = $posisi[$role]['upah_per_jam'];
+                                $persen_lembur = $posisi[$role]['persen_lembur'];
+                                $persen_fee = $posisi[$role]['persen_fee'];
+                                $upah_jam_kerja = hitungUpahJamKerja($jam_kerja, $upah_per_jam);
+                                $upah_lembur = hitungUpahLembur($jam_kerja, $upah_per_jam, $persen_lembur);
+                                $upah_fee = hitungUpahFee($harga_project, $persen_fee);
+                                $total_upah = hitungTotalUpah($upah_jam_kerja, $upah_lembur, $upah_fee);
+
+                                // Badge color mapping
+                                $badge_colors = [
+                                    'Lead Developer' => 'danger',
+                                    'QA Engineer' => 'info',
+                                    'DevOps Engineer' => 'warning text-dark',
+                                    'Backend Dev' => 'primary',
+                                    'Frontend Dev' => 'success'
+                                ];
+                                $badge_color = $badge_colors[$role] ?? 'secondary';
+                            ?>
+                                <hr>
+                                <div class="card border-primary mt-3">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Slip Gaji Karyawan</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <p class="mb-2"><strong>Nama Anggota:</strong><br><?= $nama ?></p>
+                                                <p class="mb-2"><strong>Posisi:</strong><br>
+                                                    <span class="badge bg-<?= $badge_color ?> fs-6"><?= $role ?></span>
+                                                </p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p class="mb-2"><strong>Jam Kerja:</strong> <?= $jam_kerja ?> jam</p>
+                                                <p class="mb-2"><strong>Jam Lembur:</strong>
+                                                    <?php
+                                                    $jam_lembur = hitungJamLembur($jam_kerja);
+                                                    echo $jam_lembur > 0
+                                                        ? '<span class="badge bg-warning text-dark">' . $jam_lembur . ' jam</span>'
+                                                        : '<span class="badge bg-secondary">0 jam</span>';
+                                                    ?>
+                                                </p>
+                                                <p class="mb-2"><strong>Harga Project:</strong> Rp<?= number_format($harga_project, 0, ',', '.') ?></p>
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <h6 class="text-muted mb-3">Rincian Perhitungan Gaji:</h6>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>Komponen</th>
+                                                        <th class="text-end">Jumlah</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Upah dari Jam Kerja</td>
+                                                        <td class="text-end">Rp<?= number_format($upah_jam_kerja, 0, ',', '.') ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Upah dari Jam Lembur (<?= $persen_lembur ?>%)</td>
+                                                        <td class="text-end">Rp<?= number_format($upah_lembur, 0, ',', '.') ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Upah dari Fee Project (<?= $persen_fee ?>%)</td>
+                                                        <td class="text-end">Rp<?= number_format($upah_fee, 0, ',', '.') ?></td>
+                                                    </tr>
+                                                    <tr class="table-success">
+                                                        <th>TOTAL UPAH</th>
+                                                        <th class="text-end">Rp<?= number_format($total_upah, 0, ',', '.') ?></th>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="alert alert-info mb-0 mt-3">
+                                            <small>
+                                                <strong>Catatan:</strong>
+                                                Upah per jam untuk <?= $role ?>: Rp<?= number_format($upah_per_jam, 0, ',', '.') ?>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                        <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Referensi -->
+            <div class="col-lg-4">
+                <div class="card sticky-top" style="top: 20px;">
+                    <div class="card-header bg-warning">
+                        <h5 class="mb-0">Referensi Ketentuan Gaji</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="mb-3">Upah per Jam Berdasarkan Posisi</h6>
+                        <div class="table-responsive mb-4">
+                            <table class="table table-bordered table-sm">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Posisi</th>
+                                        <th class="text-end">Upah/Jam</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Lead Developer</td>
+                                        <td class="text-end">Rp 450.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>QA Engineer</td>
+                                        <td class="text-end">Rp 250.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>DevOps Engineer</td>
+                                        <td class="text-end">Rp 350.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Backend Dev</td>
+                                        <td class="text-end">Rp 300.000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Frontend Dev</td>
+                                        <td class="text-end">Rp 300.000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h6 class="mb-3">Persentase Bonus</h6>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-sm">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Posisi</th>
+                                        <th class="text-center">Lembur</th>
+                                        <th class="text-center">Fee</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Lead Developer</td>
+                                        <td class="text-center">18%</td>
+                                        <td class="text-center">5%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>QA Engineer</td>
+                                        <td class="text-center">12%</td>
+                                        <td class="text-center">1%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>DevOps Engineer</td>
+                                        <td class="text-center">10%</td>
+                                        <td class="text-center">2.5%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Backend Dev</td>
+                                        <td class="text-center">15%</td>
+                                        <td class="text-center">3%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Frontend Dev</td>
+                                        <td class="text-center">15%</td>
+                                        <td class="text-center">3%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="alert alert-info mt-3 mb-0">
+                            <small><strong>Catatan:</strong> Jam kerja ideal 160 jam/bulan. Kelebihan dihitung sebagai lembur.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
