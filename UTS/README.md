@@ -58,8 +58,8 @@ Setiap anggota tim memiliki:
 
 1. Reza Asriano Maulana
 2. Satrio Ilham Syahputra
-3. Dhafi Ebsan Yurizal
-4. Helgi Nur Allamsyah
+3. Helgi Nur Allamsyah
+4. Dhafi Ebsan Yurizal
 5. Fikri Ramdani
 
 ### Posisi & Rate
