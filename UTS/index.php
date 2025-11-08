@@ -123,7 +123,7 @@
                                     value="<?php echo isset($_POST['harga_project']) ? $_POST['harga_project'] : ''; ?>">
                             </div>
                             <button type="submit" name="submit" class="btn btn-primary">Hitung Gaji</button>
-                            <button type="reset" class="btn btn-secondary">Reset</button>
+                            <button type="reset" class="btn btn-secondary" onclick="window.location.href=window.location.pathname; return false;">Reset</button>
                         </form>
 
                         <?php
