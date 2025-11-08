@@ -115,12 +115,14 @@
                             <div class="mb-3">
                                 <label for="jam_kerja" class="form-label">Jam Kerja</label>
                                 <input type="number" class="form-control" name="jam_kerja" id="jam_kerja"
-                                    value="<?php echo isset($_POST['jam_kerja']) ? $_POST['jam_kerja'] : ''; ?>">
+                                    value="<?php echo isset($_POST['jam_kerja']) ? $_POST['jam_kerja'] : ''; ?>" min="1" placeholder="Contoh: 180">
+                                <small class="text-muted">Jam kerja ideal: 160 jam/bulan (40 jam/minggu)</small>
                             </div>
                             <div class="mb-3">
                                 <label for="harga_project" class="form-label">Harga Project (Rp)</label>
                                 <input type="number" class="form-control" name="harga_project" id="harga_project"
-                                    value="<?php echo isset($_POST['harga_project']) ? $_POST['harga_project'] : ''; ?>">
+                                    value="<?php echo isset($_POST['harga_project']) ? $_POST['harga_project'] : ''; ?>" min="10000000" placeholder="Minimal Rp 10.000.000">
+                                <small class="text-muted">Minimum: Rp 10.000.000 | Rekomendasi: Rp 50.000.000 - Rp 1.000.000.000</small>
                             </div>
                             <button type="submit" name="submit" class="btn btn-primary">Hitung Gaji</button>
                             <button type="reset" class="btn btn-secondary" onclick="window.location.href=window.location.pathname; return false;">Reset</button>
@@ -148,8 +150,8 @@
                                 $errors[] = "Jam kerja harus berupa angka positif.";
                             }
 
-                            if (!is_numeric($harga_project) || $harga_project <= 0) {
-                                $errors[] = "Harga project harus berupa angka positif.";
+                            if (!is_numeric($harga_project) || $harga_project < 10000000) {
+                                $errors[] = "Harga project minimal Rp 10.000.000 (realistis untuk project software).";
                             }
 
                             if (!empty($errors)) {
