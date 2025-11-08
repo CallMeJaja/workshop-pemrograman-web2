@@ -2,7 +2,7 @@
 
 ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
 > **UTS Tipe D** - Sistem perhitungan gaji karyawan tim software berbasis web menggunakan PHP Native
 
@@ -21,14 +21,8 @@ Aplikasi web sederhana untuk menghitung gaji bulanan anggota tim software develo
 - ✅ **Multi Posisi** - Mendukung 5 posisi dengan rate berbeda
 - ✅ **Multi Anggota** - Mendukung 5 anggota tim
 - ✅ **Format Rupiah** - Tampilan nilai mata uang yang rapi dengan `number_format()`
-- ✅ **Validasi Input** - Server-side & client-side validation
+- ✅ **Validasi Input** - HTML5 validation untuk mencegah input tidak valid
 - ✅ **Rincian Detail** - Menampilkan breakdown komponen gaji secara lengkap
-- ✅ **Bootstrap UI** - Interface modern dan profesional dengan Bootstrap 5
-- ✅ **Responsive Design** - Layout 2 kolom (desktop) dan 1 kolom (mobile)
-- ✅ **Badge Posisi** - Visual indicator dengan warna untuk setiap posisi
-- ✅ **Sticky Sidebar** - Referensi ketentuan gaji selalu terlihat
-- ✅ **Error Handling** - Alert untuk input tidak valid
-- ✅ **Validasi Harga Realistis** - Minimum harga project Rp 10 juta
 
 ---
 
@@ -78,8 +72,8 @@ Setiap anggota tim memiliki:
 
 - **PHP** 7.4+ (Native, no framework)
 - **HTML5** - Struktur halaman
-- **Bootstrap 5.3** - Framework CSS untuk UI/UX
-- **JavaScript** - Bootstrap JS untuk komponen interaktif
+- **CSS3** - Styling (opsional)
+- **JavaScript** - Validasi client-side (opsional)
 
 ---
 
@@ -87,52 +81,13 @@ Setiap anggota tim memiliki:
 
 ```
 UTS/
-├── index.php          # Aplikasi utama (Form + Perhitungan + Bootstrap UI)
-├── README.md          # Dokumentasi project (file ini)
-├── requirement.md     # Spesifikasi kebutuhan UTS
-└── .gitignore         # Git ignore file
+├── index.php           # Form input & perhitungan gaji
+├── README.md           # Dokumentasi project
+├── temp/
+│   ├── TODO.md         # Daftar tugas pengerjaan
+│   └── requirement.md  # Spesifikasi kebutuhan
+└── Module/             # (Module UTS)
 ```
-
----
-
-## 🎨 UI/UX Features
-
-### Layout Responsif
-- **Desktop (≥992px)**: Layout 2 kolom - Form & Hasil (kiri) | Referensi Gaji (kanan)
-- **Tablet & Mobile (<992px)**: Layout 1 kolom - Stacked vertical
-
-### Visual Elements
-- **Color-coded Badges**: Setiap posisi memiliki badge warna berbeda
-  - Lead Developer: `Red`
-  - QA Engineer: `Cyan`
-  - DevOps Engineer: `Yellow`
-  - Backend Dev: `Blue`
-  - Frontend Dev: `Green`
-- **Sticky Sidebar**: Tabel referensi tetap terlihat saat scroll (desktop)
-- **Professional Slip Gaji**: Format tabel dengan breakdown detail
-- **Alert System**: Error validation dengan Bootstrap alert
-
----
-
-## 💰 Panduan Harga Project
-
-Berdasarkan rate tim yang cukup tinggi, berikut rekomendasi harga project:
-
-| Skala Project | Harga Project | Durasi | Tim |
-|---------------|---------------|--------|-----|
-| **Small** | Rp 10.000.000 - Rp 50.000.000 | 1-2 minggu | 1-2 orang |
-| **Medium** | Rp 50.000.000 - Rp 200.000.000 | 1-2 bulan | 2-3 orang |
-| **Large** | Rp 200.000.000 - Rp 500.000.000 | 2-4 bulan | 3-5 orang |
-| **Enterprise** | > Rp 500.000.000 | 4+ bulan | 5+ orang |
-
-**Validasi System:**
-- Minimum harga project: **Rp 10.000.000**
-- Rekomendasi: **Rp 50.000.000 - Rp 1.000.000.000**
-
-**Contoh Realistic:**
-- Harga Project: Rp 500.000.000
-- Lead Dev Fee (5%): Rp 25.000.000
-- Backend Dev Fee (3%): Rp 15.000.000
 
 ---
 
@@ -185,17 +140,11 @@ http://localhost:8000
 
 ### **Langkah 1: Input Data**
 
-1. **Pilih Nama Anggota** dari dropdown (5 pilihan)
-2. **Pilih Posisi** sesuai role (5 pilihan posisi)
-3. **Masukkan Jam Kerja** total dalam 1 bulan
-   - Minimum: 1 jam
-   - Ideal: 160 jam/bulan (40 jam/minggu)
-   - Contoh dengan lembur: 180 jam
-   - **Jam lembur otomatis dihitung** jika > 160 jam
-4. **Masukkan Harga Project**
-   - Minimum: Rp 10.000.000
-   - Rekomendasi: Rp 50.000.000 - Rp 1.000.000.000
-   - Contoh: Rp 500.000.000
+1. Pilih **Nama Anggota** dari dropdown (5 pilihan)
+2. Pilih **Posisi** sesuai role (5 pilihan posisi)
+3. Masukkan **Jam Kerja** total dalam 1 bulan (contoh: 180 jam)
+   - Jam lembur akan **otomatis dihitung** jika > 160 jam
+4. Masukkan **Harga Project** (contoh: 10000000)
 
 ### **Langkah 2: Submit**
 
@@ -203,30 +152,19 @@ Klik tombol **"Hitung Gaji"** untuk memproses perhitungan
 
 ### **Langkah 3: Lihat Hasil**
 
-Sistem akan menampilkan **Slip Gaji Karyawan** dengan:
+Sistem akan menampilkan:
 
-- **Informasi Karyawan:**
+- **Data Input:**
   - Nama Anggota
-  - Posisi (dengan badge berwarna)
+  - Posisi
   - Jam Kerja total
-  - Jam Lembur (badge: kuning jika ada, abu-abu jika tidak ada)
+  - Jam Lembur (otomatis dari kelebihan 160 jam)
   - Harga Project
-  
-- **Rincian Perhitungan Gaji (Tabel):**
+- **Rincian Upah:**
   - Upah dari Jam Kerja (maksimal 160 jam jika ada lembur)
-  - Upah dari Jam Lembur (0 jika jam kerja ≤ 160) + persentase
-  - Upah dari Fee Project + persentase
-  - **Total Upah** (highlight hijau)
-
-- **Catatan:** Info upah per jam untuk posisi terpilih
-
-### **Validasi & Error Handling**
-
-Sistem akan menampilkan alert merah jika:
-- Nama anggota belum dipilih
-- Posisi belum dipilih
-- Jam kerja tidak valid atau ≤ 0
-- Harga project < Rp 10.000.000
+  - Upah dari Jam Lembur (0 jika jam kerja ≤ 160)
+  - Upah dari Fee Project
+  - **Total Upah** (semua komponen)
 
 ---
 
@@ -236,31 +174,33 @@ Sistem akan menampilkan alert merah jika:
 
 **Input:**
 
-- Posisi: Lead Developer
-- Jam Kerja: 180 jam
-- Harga Project: Rp 500.000.000
+- **Nama**: Reza Asriano Maulana
+- **Posisi**: Lead Developer
+- **Jam Kerja Total**: 180 jam
+- **Harga Project**: Rp 10.000.000
 
 **Proses:**
 
-1. **Hitung Jam Lembur:**
-   - `180 - 160 = 20 jam lembur`
+```
+1. Cek Jam Lembur:
+   - Jam kerja (180) > 160 → Ada lembur!
+   - Jam lembur = 180 - 160 = 20 jam
 
-2. **Upah Jam Kerja:**
-   - Rate: Rp 450.000/jam
-   - Karena ada lembur, hanya 160 jam dihitung normal
-   - `160 × 450.000 = Rp 72.000.000`
+2. Upah Jam Kerja Normal:
+   - Karena ada lembur, max 160 jam
+   - Upah = 160 × Rp 450.000 = Rp 72.000.000
 
-3. **Upah Lembur:**
-   - Persen lembur: 18%
-   - Upah lembur per jam: `450.000 × 18% = Rp 81.000`
-   - `20 jam × 81.000 = Rp 1.620.000`
+3. Upah Lembur:
+   - Rate lembur = Rp 450.000 × 18% = Rp 81.000/jam
+   - Upah lembur = 20 × Rp 81.000 = Rp 1.620.000
 
-4. **Fee Project:**
-   - Persen fee: 5%
-   - `500.000.000 × 5% = Rp 25.000.000`
+4. Fee Project:
+   - Fee = Rp 10.000.000 × 5% = Rp 500.000
 
-5. **Total Upah:**
-   - `72.000.000 + 1.620.000 + 25.000.000 = Rp 98.620.000`
+5. Total Upah:
+   = Rp 72.000.000 + Rp 1.620.000 + Rp 500.000
+   = Rp 74.120.000
+```
 
 ---
 
@@ -268,57 +208,31 @@ Sistem akan menampilkan alert merah jika:
 
 **Input:**
 
-- Posisi: Backend Dev
-- Jam Kerja: 150 jam
-- Harga Project: Rp 100.000.000
+- **Nama**: Satrio Ilham Syahputra
+- **Posisi**: Backend Dev
+- **Jam Kerja Total**: 150 jam
+- **Harga Project**: Rp 5.000.000
 
 **Proses:**
 
-1. **Hitung Jam Lembur:**
-   - `150 ≤ 160` → **Tidak ada lembur**
+```
+1. Cek Jam Lembur:
+   - Jam kerja (150) ≤ 160 → Tidak ada lembur
+   - Jam lembur = 0 jam
 
-2. **Upah Jam Kerja:**
-   - Rate: Rp 300.000/jam
-   - `150 × 300.000 = Rp 45.000.000`
+2. Upah Jam Kerja Normal:
+   - Upah = 150 × Rp 300.000 = Rp 45.000.000
 
-3. **Upah Lembur:**
-   - `Rp 0` (tidak ada lembur)
+3. Upah Lembur:
+   - Tidak ada lembur = Rp 0
 
-4. **Fee Project:**
-   - Persen fee: 3%
-   - `100.000.000 × 3% = Rp 3.000.000`
+4. Fee Project:
+   - Fee = Rp 5.000.000 × 3% = Rp 150.000
 
-5. **Total Upah:**
-   - `45.000.000 + 0 + 3.000.000 = Rp 48.000.000`
-
----
-
-### **Skenario 3: Project Besar (Enterprise)**
-
-**Input:**
-
-- Posisi: Lead Developer
-- Jam Kerja: 200 jam
-- Harga Project: Rp 1.000.000.000
-
-**Proses:**
-
-1. **Hitung Jam Lembur:**
-   - `200 - 160 = 40 jam lembur`
-
-2. **Upah Jam Kerja:**
-   - `160 × 450.000 = Rp 72.000.000`
-
-3. **Upah Lembur:**
-   - `40 × 81.000 = Rp 3.240.000`
-
-4. **Fee Project:**
-   - `1.000.000.000 × 5% = Rp 50.000.000`
-
-5. **Total Upah:**
-   - `72.000.000 + 3.240.000 + 50.000.000 = Rp 125.240.000`
-
-**💰 Insight:** Fee project sangat berpengaruh pada total upah, terutama untuk project besar!
+5. Total Upah:
+   = Rp 45.000.000 + Rp 0 + Rp 150.000
+   = Rp 45.150.000
+```
 
 ---
 
@@ -390,9 +304,9 @@ Menghitung fee project berdasarkan persentase dari nilai project.
 
 **Contoh**:
 
-- Harga project: Rp 500.000.000
+- Harga project: Rp 10.000.000
 - Persen fee: 5%
-- Hasil: `500.000.000 × 5% = Rp 25.000.000`
+- Hasil: `10000000 × 5% = Rp 500.000`
 
 ---
 
@@ -402,7 +316,7 @@ Menghitung total gaji keseluruhan dari semua komponen.
 
 **Rumus**: `upah_jam_kerja + upah_lembur + upah_fee`
 
-**Contoh**: `72.000.000 + 1.620.000 + 25.000.000 = Rp 98.620.000`
+**Contoh**: `72000000 + 1620000 + 500000 = Rp 74.120.000`
 
 ---
 
@@ -410,18 +324,16 @@ Menghitung total gaji keseluruhan dari semua komponen.
 
 Beberapa ide untuk meningkatkan aplikasi:
 
-- [x] **Styling CSS** - ✅ Bootstrap 5 sudah diimplementasikan
-- [x] **Validasi** - ✅ Server-side validation sudah ada
-- [x] **Responsive Design** - ✅ Layout 2 kolom (desktop) & 1 kolom (mobile)
+- [ ] **Styling CSS** - Tambahkan desain UI yang lebih menarik (Bootstrap/Tailwind)
+- [ ] **Validasi JavaScript** - Validasi form di client-side untuk UX lebih baik
 - [ ] **Database** - Simpan history perhitungan gaji (MySQL/PostgreSQL)
 - [ ] **Export PDF** - Cetak slip gaji menggunakan library TCPDF/FPDF
 - [ ] **Grafik** - Visualisasi perbandingan gaji antar posisi (Chart.js)
 - [ ] **PPh21** - Implementasi perhitungan pajak sesuai aturan perpajakan Indonesia
 - [ ] **Session/Login** - Multi-user dengan autentikasi
+- [ ] **Responsive Design** - Mobile-friendly interface
 - [ ] **CRUD Anggota** - Tambah/edit/hapus anggota tim
 - [ ] **Report Bulanan** - Rekap gaji seluruh tim per bulan
-- [ ] **Dark Mode** - Toggle tema gelap/terang
-- [ ] **Print Function** - Cetak slip gaji langsung dari browser
 
 ---
 
@@ -439,27 +351,21 @@ Beberapa ide untuk meningkatkan aplikasi:
 ✅ Implementasi perhitungan otomatis  
 ✅ Format output rupiah dengan `number_format()`  
 ✅ Display hasil perhitungan  
-✅ Styling CSS/Bootstrap (Bootstrap 5)  
-✅ Validasi input server-side (PHP)  
-✅ Responsive design (2 kolom desktop, 1 kolom mobile)  
-✅ Error handling dengan alert  
-✅ Badge posisi dengan color coding  
-✅ Sticky sidebar referensi  
-✅ Slip gaji profesional dengan tabel  
-✅ Validasi minimum harga project (Rp 10 juta)  
-✅ Hint & placeholder informatif  
-✅ Responsive 2-column layout
+⬜ Styling CSS/Bootstrap  
+⬜ Validasi input server-side (PHP)  
+⬜ Responsive design  
+⬜ Error handling yang lebih baik
 
 ---
 
 ## 🐛 Known Issues / Limitations
 
-1. **Data Persistence** - Data tidak tersimpan (hilang setelah refresh)
-2. **Database** - Belum menggunakan database untuk menyimpan data
-3. **Export Feature** - Belum ada fitur export ke PDF/Excel
-4. **Multi-language** - Hanya tersedia dalam Bahasa Indonesia
-5. **History** - Belum ada riwayat perhitungan gaji
-6. **Print Styling** - Belum optimal untuk print preview
+1. **UI/UX** - Masih sangat basic, belum ada styling CSS
+2. **Validasi** - Hanya menggunakan HTML5 `required` dan `min` attribute
+3. **Server-side Validation** - Belum ada validasi PHP untuk mencegah input invalid
+4. **Data Persistence** - Data tidak tersimpan (hilang setelah refresh)
+5. **Error Handling** - Belum ada handling untuk error (misal: posisi tidak dipilih)
+6. **Responsive** - Belum dioptimasi untuk mobile devices
 
 ---
 
@@ -491,21 +397,8 @@ Jika ada pertanyaan atau issue:
 ## 📚 Referensi
 
 - [PHP Official Documentation](https://www.php.net/docs.php)
-- [Bootstrap 5 Documentation](https://getbootstrap.com/docs/5.3/getting-started/introduction/)
 - [W3Schools PHP Tutorial](https://www.w3schools.com/php/)
 - [MDN Web Docs](https://developer.mozilla.org/)
-- [PHP number_format()](https://www.php.net/manual/en/function.number-format.php)
-
----
-
-## 🔐 Security Notes
-
-⚠️ **Catatan Keamanan untuk Production:**
-- Implementasi CSRF protection
-- Sanitize input dengan `filter_var()` atau `htmlspecialchars()`
-- Validasi server-side lebih ketat
-- Gunakan prepared statements jika menggunakan database
-- Implement rate limiting untuk prevent spam
 
 ---
 
