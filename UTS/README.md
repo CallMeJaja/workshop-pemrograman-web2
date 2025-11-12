@@ -515,18 +515,6 @@ Jika ada pertanyaan atau issue:
 
 ---
 
-## 🔐 Security Notes
-
-⚠️ **Catatan Keamanan untuk Production:**
-
-- Implementasi CSRF protection
-- Sanitize input dengan `filter_var()` atau `htmlspecialchars()`
-- Validasi server-side lebih ketat
-- Gunakan prepared statements jika menggunakan database
-- Implement rate limiting untuk prevent spam
-
----
-
 <div align="center">
 
 **⭐ Jika project ini membantu, berikan star di GitHub! ⭐**
