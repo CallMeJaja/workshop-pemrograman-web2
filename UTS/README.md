@@ -37,7 +37,6 @@ Aplikasi web sederhana untuk menghitung gaji bulanan anggota tim software develo
 ### Validation & Error Handling
 
 - ✅ **Client-side Validation** - Bootstrap form validation dengan real-time feedback
-- ✅ **Server-side Validation** - PHP validation untuk keamanan data
 - ✅ **Required Indicators** - Tanda asterisk (\*) merah pada field wajib
 - ✅ **Error Messages** - Pesan error dengan icon dan styling yang jelas
 - ✅ **Info Alerts** - Alert informasi untuk panduan pengguna
@@ -516,7 +515,6 @@ Beberapa ide untuk meningkatkan aplikasi:
 - [x] Buat fungsi `hitungTotalUpah()`
 - [x] Implementasi perhitungan otomatis
 - [x] Format output rupiah dengan `number_format()`
-- [x] Validasi input server-side (PHP)
 - [x] Error handling dengan conditional
 
 ### Frontend Development ✅
