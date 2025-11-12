@@ -11,44 +11,58 @@
 <body>
     <div class="container-fluid mt-5 px-4">
         <div class="row">
-            <div class="col-lg-2">
+            <div class="col-lg-3">
                 <div class="card mb-4">
                     <div class="card-header bg-dark text-bg-dark">
                         <h4 class="mb-0 text-center fw-bold">Identitas Mahasiswa</h4>
                     </div>
                     <div class="card-body">
-                        <div class="mb-3">
+                        <div class="mb-2">
                             <small class="text-muted d-block mb-1">Nama:</small>
-                            <span class="badge bg-primary text-bg-primary w-100 text-start py-2">Reza Asriano Maulana</span>
+                            <div class="p-2 rounded" style="background-color: #E3F2FD; border-left: 3px solid #2196F3;">
+                                <span class="text-dark">Reza Asriano Maulana</span>
+                            </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-2">
                             <small class="text-muted d-block mb-1">NIM:</small>
-                            <span class="badge bg-info w-100 text-bg-info text-start py-2">202404021</span>
+                            <div class="p-2 rounded" style="background-color: #E0F7FA; border-left: 3px solid #00BCD4;">
+                                <span class="text-dark">202404021</span>
+                            </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-2">
                             <small class="text-muted d-block mb-1">MATA KULIAH:</small>
-                            <span class="badge bg-warning text-bg-warning w-100 text-start py-2">Workshop Pemrograman Web 2</span>
+                            <div class="p-2 rounded" style="background-color: #FFF9C4; border-left: 3px solid #FBC02D;">
+                                <span class="text-dark">Workshop Pemrograman Web 2</span>
+                            </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-2">
                             <small class="text-muted d-block mb-1">PRODI:</small>
-                            <span class="badge bg-success text-bg-success w-100 text-start py-2">Teknologi Rekayasa Perangkat Lunak</span>
+                            <div class="p-2 rounded" style="background-color: #E8F5E9; border-left: 3px solid #4CAF50;">
+                                <span class="text-dark">Teknologi Rekayasa Perangkat Lunak</span>
+                            </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-2">
                             <small class="text-muted d-block mb-1">SEMESTER:</small>
-                            <span class="badge bg-danger text-bg-danger w-100 text-start py-2">3 (Tiga)</span>
+                            <div class="p-2 rounded" style="background-color: #FFEBEE; border-left: 3px solid #F44336;">
+                                <span class="text-dark">3 (Tiga)</span>
+                            </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-2">
                             <small class="text-muted d-block mb-1">DOSEN PENGAMPU:</small>
-                            <span class="badge bg-secondary text-bg-secondary w-100 text-start py-2">Ricak Agus Setiawan, S.T., M.SI.</span>
+                            <div class="p-2 rounded" style="background-color: #ECEFF1; border-left: 3px solid #607D8B;">
+                                <span class="text-dark">Ricak Agus Setiawan, S.T., M.SI.</span>
+                            </div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-2">
                             <small class="text-muted d-block mb-1">INSTITUSI:</small>
-                            <span class="badge bg-warning text-bg-warning w-100 text-start py-2">Politeknik Enjinering Indorama</span>
+                            <div class="p-2 rounded" style="background-color: #FFF8E1; border-left: 3px solid #FFA000;">
+                                <span class="text-dark">Politeknik Enjinering Indorama</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-5">
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-bg-primary">
                         <h4 class="mb-0 text-center fw-bold">Kalkulator Gaji Anggota Tim</h4>
@@ -284,8 +298,8 @@
             <!-- Sidebar Referensi -->
             <div class="col-lg-4">
                 <div class="card sticky-top" style="top: 20px;">
-                    <div class="card-header bg-warning text-bg-warning">
-                        <h4 class="mb-0 text-center fw-bold">Referensi Ketentuan Gaji</h4>
+                    <div class="card-header" style="background-color: #FFF9C4; border-bottom: 3px solid #FBC02D;">
+                        <h4 class="mb-0 text-center fw-bold text-dark">Referensi Ketentuan Gaji</h4>
                     </div>
                     <div class="card-body">
                         <h6 class="mb-3">Upah per Jam Berdasarkan Posisi</h6>
