@@ -154,6 +154,7 @@
                                     <?php endforeach; ?>
                                 </select>
                                 <div class="invalid-feedback">
+                                    <i class="bi bi-exclamation-circle"></i>
                                     Silakan pilih nama anggota.
                                 </div>
                             </div>
@@ -166,6 +167,7 @@
                                     <?php endforeach; ?>
                                 </select>
                                 <div class="invalid-feedback">
+                                    <i class="bi bi-exclamation-circle"></i>
                                     Silakan pilih posisi.
                                 </div>
                             </div>
@@ -175,6 +177,7 @@
                                     value="<?php echo isset($_POST['jam_kerja']) ? $_POST['jam_kerja'] : ''; ?>"
                                     placeholder="Contoh: 180" min="1" required>
                                 <div class="invalid-feedback">
+                                    <i class="bi bi-exclamation-circle"></i>
                                     Jam kerja harus berupa angka positif (minimal 1 jam).
                                 </div>
                                 <div class="alert alert-info mt-2 mb-0">
@@ -187,6 +190,7 @@
                                     value="<?php echo isset($_POST['harga_project']) ? $_POST['harga_project'] : ''; ?>"
                                     placeholder="Minimal Rp 10.000.000" min="10000000" required>
                                 <div class="invalid-feedback">
+                                    <i class="bi bi-exclamation-circle"></i>
                                     Harga Project Minimum: Rp 10.000.000 | Rekomendasi: Rp 50.000.000 - Rp 1.000.000.000
                                 </div>
                                 <small class="form-text text-muted"></small>
