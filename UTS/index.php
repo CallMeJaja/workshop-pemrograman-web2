@@ -20,47 +20,42 @@
                     </div>
                     <div class="card-body">
 
-                        <div class="mb-2">
-                            <div class="p-2 rounded" style="background-color: #E3F2FD; border-left: 4px solid #2196F3;">
-                                <small class="text-muted d-block mb-2 ">NAMA:</small>
-                                <span class="text-dark fw-medium">Reza Asriano Maulana</span>
-                            </div>
+                        <div class="mb-2 p-2 rounded" style="background-color: #E3F2FD; border-left: 4px solid #2196F3;">
+                            <small class="text-muted d-block mb-2 ">NAMA:</small>
+                            <span class="text-dark fw-medium">Reza Asriano Maulana</span>
                         </div>
-                        <div class="mb-2">
-                            <div class="p-2 rounded" style="background-color: #E0F7FA; border-left: 4px solid #00BCD4;">
-                                <small class="text-muted d-block mb-2">NIM:</small>
-                                <span class="text-dark fw-medium">202404021</span>
-                            </div>
+
+                        <div class="mb-2 p-2 rounded" style="background-color: #E0F7FA; border-left: 4px solid #00BCD4;">
+                            <small class="text-muted d-block mb-2">NIM:</small>
+                            <span class="text-dark fw-medium">202404021</span>
                         </div>
+
                         <div class="mb-2">
-                            <div class="p-2 rounded" style="background-color: #FFF9C4; border-left: 4px solid #FBC02D;">
+                            <div class="mb-2 p-2 rounded" style="background-color: #FFF9C4; border-left: 4px solid #FBC02D;">
                                 <small class="text-muted d-block mb-2">MATA KULIAH:</small>
                                 <span class="text-dark fw-medium">Workshop Pemrograman Web 2</span>
                             </div>
                         </div>
-                        <div class="mb-2">
-                            <div class="p-2 rounded" style="background-color: #E8F5E9; border-left: 4px solid #4CAF50;">
-                                <small class="text-muted d-block mb-2">PRODI:</small>
-                                <span class="text-dark fw-medium">Teknologi Rekayasa Perangkat Lunak</span>
-                            </div>
+
+                        <div class="mb-2 p-2 rounded" style="background-color: #E8F5E9; border-left: 4px solid #4CAF50;">
+                            <small class="text-muted d-block mb-2">PRODI:</small>
+                            <span class="text-dark fw-medium">Teknologi Rekayasa Perangkat Lunak</span>
                         </div>
-                        <div class="mb-2">
-                            <div class="p-2 rounded" style="background-color: #FFEBEE; border-left: 4px solid #F44336;">
-                                <small class="text-muted d-block mb-2">SEMESTER:</small>
-                                <span class="text-dark fw-medium">3 (Tiga)</span>
-                            </div>
+
+                        <div class="mb-2 p-2 rounded" style="background-color: #FFEBEE; border-left: 4px solid #F44336;">
+                            <small class="text-muted d-block mb-2">SEMESTER:</small>
+                            <span class="text-dark fw-medium">3 (Tiga)</span>
+
                         </div>
-                        <div class="mb-2">
-                            <div class="p-2 rounded" style="background-color: #ECEFF1; border-left: 4px solid #607D8B;">
-                                <small class="text-muted d-block mb-2">DOSEN PENGAMPU:</small>
-                                <span class="text-dark fw-medium">Ricak Agus Setiawan, S.T., M.SI.</span>
-                            </div>
+
+                        <div class="mb-2 p-2 rounded" style="background-color: #ECEFF1; border-left: 4px solid #607D8B;">
+                            <small class="text-muted d-block mb-2">DOSEN PENGAMPU:</small>
+                            <span class="text-dark fw-medium">Ricak Agus Setiawan, S.T., M.SI.</span>
+
                         </div>
-                        <div class="mb-2">
-                            <div class="p-2 rounded" style="background-color: #FFF8E1; border-left: 4px solid #FFA000;">
-                                <small class="text-muted d-block mb-2">INSTITUSI:</small>
-                                <span class="text-dark fw-medium">Politeknik Enjinering Indorama</span>
-                            </div>
+                        <div class="mb-2 p-2 rounded" style="background-color: #FFF8E1; border-left: 4px solid #FFA000;">
+                            <small class="text-muted d-block mb-2">INSTITUSI:</small>
+                            <span class="text-dark fw-medium">Politeknik Enjinering Indorama</span>
                         </div>
 
                     </div>
@@ -68,9 +63,10 @@
             </div>
             <div class="col-lg-5">
                 <div class="card mb-4">
-                    <div class="card-header py-3" style="background-color: #2563EB; color: white;">
-                        <h4 class="mb-0 text-center fw-bold">Kalkulator Gaji Anggota Tim</h4>
+                    <div class="card-header bg-primary text-white py-3 px-4">
+                        <h5 class="mb-0 fw-semibold text-center">Kalkulator Gaji Anggota Tim</h5>
                     </div>
+
                     <div class="card-body">
 
                         <?php
@@ -195,7 +191,7 @@
                                 </div>
                                 <small class="form-text text-muted"></small>
                             </div>
-                            <button type="submit" name="submit" class="btn btn-primary">Hitung Gaji</button>
+                            <button type="submit" name="submit" class="btn btn-primary me-2">Hitung Gaji</button>
                             <button type="reset" onclick="window.location.href=window.location.pathname; return false;" class="btn btn-secondary">Reset</button>
                         </form>
 
@@ -226,7 +222,7 @@
                             $badge_color = $badge_colors[$role] ?? 'secondary';
                         ?>
                             <hr>
-                            <div class="card border-primary mt-3">
+                            <div class="card border-primary mt-4">
                                 <div class="card-header bg-light">
                                     <h5 class="mb-0"><i class="bi bi-file-earmark-text"></i> Slip Gaji Karyawan</h5>
                                 </div>
@@ -302,13 +298,13 @@
             <!-- Sidebar Referensi -->
             <div class="col-lg-4">
                 <div class="card sticky-top" style="top: 20px;">
-                    <div class="card-header py-3" style="background-color: #FFF9C4; border-bottom: 3px solid #FBC02D;">
-                        <h4 class="mb-0 text-center fw-bold text-dark">Referensi Ketentuan Gaji</h4>
+                    <div class="card-header text-dark py-3 text-center" style="background-color: #FFF9C4; border-bottom: 3px solid #FBC02D;">
+                        <h4 class="mb-0 fw-semibold">Referensi Ketentuan Gaji</h4>
                     </div>
                     <div class="card-body">
                         <h6 class="mb-3">Upah per Jam Berdasarkan Posisi</h6>
                         <div class="table-responsive mb-4">
-                            <table class="table table-bordered table-sm">
+                            <table class="table table-bordered table-hover mb-0 ">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Posisi</th>
@@ -342,7 +338,7 @@
 
                         <h6 class="mb-3">Persentase Bonus</h6>
                         <div class="table-responsive">
-                            <table class="table table-bordered table-sm">
+                            <table class="table table-bordered table-hover mb-0 ">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Posisi</th>
