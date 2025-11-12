@@ -11,10 +11,27 @@
 <body>
     <div class="container-fluid mt-5 px-4">
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-2">
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-4 text-center">Identitas Mahasiswa</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <small class="text-muted d-block mb-1">Nama:</small>
+                            <span class="badge bg-primary w-100 text-start py-2">Reza Asriano Maulana</span>
+                        </div>
+                        <div>
+                            <small class="text-muted d-block mb-1">NIM:</small>
+                            <span class="badge bg-secondary w-100 text-start py-2">202404021</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0">Kalkulator Gaji Anggota Tim</h3>
+                        <h3 class="mb-0 text-center">Kalkulator Gaji Anggota Tim</h3>
                     </div>
                     <div class="card-body">
 
@@ -264,7 +281,7 @@
             <div class="col-lg-4">
                 <div class="card sticky-top" style="top: 20px;">
                     <div class="card-header bg-warning">
-                        <h5 class="mb-0">Referensi Ketentuan Gaji</h5>
+                        <h5 class="mb-0 text-center">Referensi Ketentuan Gaji</h5>
                     </div>
                     <div class="card-body">
                         <h6 class="mb-3">Upah per Jam Berdasarkan Posisi</h6>
