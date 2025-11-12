@@ -22,7 +22,6 @@
    - Upah kerja per jam
    - Upah lembur per jam
    - Fee project
-   - Potongan PPh21
 
 4. **Perhitungan gaji**
 
