@@ -13,25 +13,41 @@
         <div class="row">
             <div class="col-lg-2">
                 <div class="card mb-4">
-                    <div class="card-header bg-info text-white">
-                        <h4 class="mb-4 text-center">Identitas Mahasiswa</h4>
+                    <div class="card-header bg-dark text-bg-dark">
+                        <h4 class="mb-0 text-center fw-bold">Identitas Mahasiswa</h4>
                     </div>
                     <div class="card-body">
-                        <div class="mb-2">
+                        <div class="mb-3">
                             <small class="text-muted d-block mb-1">Nama:</small>
-                            <span class="badge bg-primary w-100 text-start py-2">Reza Asriano Maulana</span>
+                            <span class="badge bg-primary text-bg-primary w-100 text-start py-2">Reza Asriano Maulana</span>
                         </div>
-                        <div>
+                        <div class="mb-3">
                             <small class="text-muted d-block mb-1">NIM:</small>
-                            <span class="badge bg-secondary w-100 text-start py-2">202404021</span>
+                            <span class="badge bg-info w-100 text-bg-info text-start py-2">202404021</span>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-1">MATA KULIAH:</small>
+                            <span class="badge bg-warning text-bg-warning w-100 text-start py-2">Workshop Pemrograman Web 2</span>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-1">PRODI:</small>
+                            <span class="badge bg-success text-bg-success w-100 text-start py-2">Teknologi Rekayasa Perangkat Lunak</span>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-1">SEMESTER:</small>
+                            <span class="badge bg-danger text-bg-danger w-100 text-start py-2">3 (Tiga)</span>
+                        </div>
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-1">INSTITUSI:</small>
+                            <span class="badge bg-warning text-bg-warning w-100 text-start py-2">Politeknik Enjinering Indorama</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6">
                 <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="mb-0 text-center">Kalkulator Gaji Anggota Tim</h3>
+                    <div class="card-header bg-primary text-bg-primary">
+                        <h4 class="mb-0 text-center fw-bold">Kalkulator Gaji Anggota Tim</h4>
                     </div>
                     <div class="card-body">
 
@@ -280,8 +296,8 @@
             <!-- Sidebar Referensi -->
             <div class="col-lg-4">
                 <div class="card sticky-top" style="top: 20px;">
-                    <div class="card-header bg-warning">
-                        <h5 class="mb-0 text-center">Referensi Ketentuan Gaji</h5>
+                    <div class="card-header bg-warning text-bg-warning">
+                        <h4 class="mb-0 text-center fw-bold">Referensi Ketentuan Gaji</h4>
                     </div>
                     <div class="card-body">
                         <h6 class="mb-3">Upah per Jam Berdasarkan Posisi</h6>
