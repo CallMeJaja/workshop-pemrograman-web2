@@ -16,19 +16,32 @@ Aplikasi web sederhana untuk menghitung gaji bulanan anggota tim software develo
 
 ## ✨ Fitur Utama
 
-- ✅ **Input Data Karyawan** - Form input nama, posisi, jam kerja, dan nilai project
+### Core Features
+
+- ✅ **Input Data Karyawan** - Form input nama, posisi, jam kerja, dan nilai project dengan dropdown selection
 - ✅ **Perhitungan Otomatis** - Kalkulasi upah kerja, upah lembur (auto-calculated), dan fee project
-- ✅ **Multi Posisi** - Mendukung 5 posisi dengan rate berbeda
-- ✅ **Multi Anggota** - Mendukung 5 anggota tim
+- ✅ **Multi Posisi** - Mendukung 5 posisi dengan rate berbeda (Lead Dev, QA, DevOps, Backend, Frontend)
+- ✅ **Multi Anggota** - Mendukung 5 anggota tim dengan nama lengkap
 - ✅ **Format Rupiah** - Tampilan nilai mata uang yang rapi dengan `number_format()`
-- ✅ **Validasi Input** - Server-side & client-side validation
-- ✅ **Rincian Detail** - Menampilkan breakdown komponen gaji secara lengkap
-- ✅ **Bootstrap UI** - Interface modern dan profesional dengan Bootstrap 5
-- ✅ **Responsive Design** - Layout 2 kolom (desktop) dan 1 kolom (mobile)
+- ✅ **Rincian Detail** - Menampilkan breakdown komponen gaji secara lengkap dalam tabel
+
+### UI/UX Features
+
+- ✅ **Bootstrap 5 UI** - Interface modern dan profesional dengan gradient headers
+- ✅ **Responsive Design** - Layout 3 kolom (desktop) dan 1 kolom (mobile)
 - ✅ **Badge Posisi** - Visual indicator dengan warna untuk setiap posisi
-- ✅ **Sticky Sidebar** - Referensi ketentuan gaji selalu terlihat
-- ✅ **Error Handling** - Alert untuk input tidak valid
-- ✅ **Validasi Harga Realistis** - Minimum harga project Rp 10 juta
+- ✅ **Color-coded Sidebar** - Identitas mahasiswa dengan soft pastel colors
+- ✅ **Sticky Sidebar** - Referensi ketentuan gaji selalu terlihat saat scroll
+- ✅ **Bootstrap Icons** - Icon library untuk better visual communication
+
+### Validation & Error Handling
+
+- ✅ **Client-side Validation** - Bootstrap form validation dengan real-time feedback
+- ✅ **Server-side Validation** - PHP validation untuk keamanan data
+- ✅ **Required Indicators** - Tanda asterisk (\*) merah pada field wajib
+- ✅ **Error Messages** - Pesan error dengan icon dan styling yang jelas
+- ✅ **Info Alerts** - Alert informasi untuk panduan pengguna
+- ✅ **Validasi Harga Realistis** - Minimum harga project Rp 10 juta dengan pesan validasi
 
 ---
 
@@ -99,20 +112,38 @@ UTS/
 
 ### Layout Responsif
 
-- **Desktop (≥992px)**: Layout 2 kolom - Form & Hasil (kiri) | Referensi Gaji (kanan)
+- **Desktop (≥992px)**: Layout 3 kolom
+  - Kolom 1 (25%): Identitas Mahasiswa (sidebar kiri)
+  - Kolom 2 (50%): Form Kalkulator & Hasil
+  - Kolom 3 (25%): Referensi Gaji (sticky sidebar kanan)
 - **Tablet & Mobile (<992px)**: Layout 1 kolom - Stacked vertical
 
 ### Visual Elements
 
-- **Color-coded Badges**: Setiap posisi memiliki badge warna berbeda
-  - Lead Developer: `Red`
-  - QA Engineer: `Cyan`
-  - DevOps Engineer: `Yellow`
-  - Backend Dev: `Blue`
-  - Frontend Dev: `Green`
-- **Sticky Sidebar**: Tabel referensi tetap terlihat saat scroll (desktop)
-- **Professional Slip Gaji**: Format tabel dengan breakdown detail
-- **Alert System**: Error validation dengan Bootstrap alert
+#### 1. **Position Badges**
+
+Setiap posisi memiliki badge warna berbeda:
+
+- Lead Developer: `Red (danger)`
+- QA Engineer: `Cyan (info)`
+- DevOps Engineer: `Yellow (warning)`
+- Backend Dev: `Blue (primary)`
+- Frontend Dev: `Green (success)`
+
+#### 2. **Form Validation UI**
+
+- Required fields dengan asterisk merah (\*)
+- Invalid feedback dengan icon exclamation
+- Info alert biru untuk catatan jam kerja
+- Bootstrap validation classes (is-invalid, is-valid)
+
+#### 3. **Professional Slip Gaji**
+
+- Card dengan border primary
+- Badge untuk jam lembur (warning/secondary)
+- Tabel bordered dengan hover effect
+- Total upah highlighted dengan background success
+- Info alert untuk catatan upah per jam
 
 ---
 
@@ -226,12 +257,19 @@ Sistem akan menampilkan **Slip Gaji Karyawan** dengan:
 
 ### **Validasi & Error Handling**
 
-Sistem akan menampilkan alert merah jika:
+#### Client-side Validation (Real-time)
 
-- Nama anggota belum dipilih
-- Posisi belum dipilih
-- Jam kerja tidak valid atau ≤ 0
+Sistem akan menampilkan feedback merah di bawah input jika:
+
+- Field required kosong
+- Jam kerja < 1
 - Harga project < Rp 10.000.000
+
+#### Visual Feedback
+
+- **Invalid**: Border merah + icon exclamation + pesan error
+- **Valid**: Border hijau (setelah input benar)
+- **Required**: Asterisk merah (\*) di label
 
 ---
 
@@ -427,97 +465,184 @@ Menghitung total gaji keseluruhan dari semua komponen.
 
 Beberapa ide untuk meningkatkan aplikasi:
 
-- [x] **Styling CSS** - ✅ Bootstrap 5 sudah diimplementasikan
-- [x] **Validasi** - ✅ Server-side validation sudah ada
-- [x] **Responsive Design** - ✅ Layout 2 kolom (desktop) & 1 kolom (mobile)
-- [ ] **Database** - Simpan history perhitungan gaji (MySQL/PostgreSQL)
-- [ ] **Export PDF** - Cetak slip gaji menggunakan library TCPDF/FPDF
-- [ ] **Grafik** - Visualisasi perbandingan gaji antar posisi (Chart.js)
-- [ ] **PPh21** - Implementasi perhitungan pajak sesuai aturan perpajakan Indonesia
-- [ ] **Session/Login** - Multi-user dengan autentikasi
-- [ ] **CRUD Anggota** - Tambah/edit/hapus anggota tim
-- [ ] **Report Bulanan** - Rekap gaji seluruh tim per bulan
-- [ ] **Dark Mode** - Toggle tema gelap/terang
-- [ ] **Print Function** - Cetak slip gaji langsung dari browser
+### Already Implemented ✅
+
+- [x] **Styling CSS** - ✅ Bootstrap 5 dengan gradient headers
+- [x] **Validasi** - ✅ Client-side
+- [x] **Responsive Design** - ✅ Layout 3 kolom (desktop) & 1 kolom (mobile)
+- [x] **Bootstrap Icons** - ✅ Icon library untuk visual elements
+- [x] **Color-coded Badges** - ✅ Badge warna untuk setiap posisi
+- [x] **Info Alerts** - ✅ Alert untuk panduan pengguna
+- [x] **Required Indicators** - ✅ Asterisk merah pada field wajib
+- [x] **Professional Slip Gaji** - ✅ Tabel dengan breakdown detail
+
+### Future Enhancements 🚀
+
+- [ ] **Database Integration** - Simpan history perhitungan gaji (MySQL/PostgreSQL)
+- [ ] **Export PDF** - Cetak slip gaji menggunakan library TCPDF/FPDF/DomPDF
+- [ ] **Export Excel** - Export data menggunakan PHPSpreadsheet
+- [ ] **Data Visualization** - Grafik perbandingan gaji antar posisi (Chart.js/ApexCharts)
+- [ ] **PPh21 Calculator** - Implementasi perhitungan pajak sesuai aturan perpajakan Indonesia
+- [ ] **Session/Login** - Multi-user dengan autentikasi (login system)
+- [ ] **CRUD Anggota** - Tambah/edit/hapus anggota tim via admin panel
+- [ ] **CRUD Posisi** - Kelola data posisi dan rate
+- [ ] **Monthly Report** - Rekap gaji seluruh tim per bulan dengan filter
+- [ ] **Dark Mode** - Toggle tema gelap/terang dengan localStorage
+- [ ] **Print Functionality** - CSS @media print untuk print preview yang optimal
+- [ ] **Auto-format Currency Input** - Format ribuan otomatis saat user mengetik
+- [ ] **Email Notification** - Kirim slip gaji via email (PHPMailer)
+- [ ] **Multi-language** - Bahasa Indonesia & English
+- [ ] **Absensi Integration** - Link dengan sistem absensi untuk auto-fill jam kerja
+- [ ] **Project Management** - Kelola multiple projects dengan timeline
+- [ ] **Employee Dashboard** - Dashboard untuk melihat riwayat gaji pribadi
+- [ ] **Admin Dashboard** - Dashboard analytics untuk HR/Finance
+- [ ] **API Integration** - RESTful API untuk integrasi dengan sistem lain
+- [ ] **Progressive Web App (PWA)** - Installable web app
+- [ ] **Real-time Calculation** - AJAX untuk kalkulasi tanpa page reload
 
 ---
 
 ## 📋 Checklist Pengerjaan
 
-✅ Setup structure project  
-✅ Buat array data anggota (5 orang)  
-✅ Buat array data posisi (5 posisi)  
-✅ Buat fungsi `hitungJamLembur()`  
-✅ Buat fungsi `hitungUpahJamKerja()`  
-✅ Buat fungsi `hitungUpahLembur()`  
-✅ Buat fungsi `hitungUpahFee()`  
-✅ Buat fungsi `hitungTotalUpah()`  
-✅ Buat form input (nama, posisi, jam kerja, harga project)  
-✅ Implementasi perhitungan otomatis  
-✅ Format output rupiah dengan `number_format()`  
-✅ Display hasil perhitungan  
-✅ Styling CSS/Bootstrap (Bootstrap 5)  
-✅ Validasi input server-side (PHP)  
-✅ Responsive design (2 kolom desktop, 1 kolom mobile)  
-✅ Error handling dengan alert  
-✅ Badge posisi dengan color coding  
-✅ Sticky sidebar referensi  
-✅ Slip gaji profesional dengan tabel  
-✅ Validasi minimum harga project (Rp 10 juta)  
-✅ Hint & placeholder informatif  
-✅ Responsive 2-column layout
+### Backend Development ✅
+
+- [x] Setup structure project
+- [x] Buat array data anggota (5 orang)
+- [x] Buat array data posisi (5 posisi) dengan detail lengkap
+- [x] Buat fungsi `hitungJamLembur()`
+- [x] Buat fungsi `hitungUpahJamKerja()`
+- [x] Buat fungsi `hitungUpahLembur()`
+- [x] Buat fungsi `hitungUpahFee()`
+- [x] Buat fungsi `hitungTotalUpah()`
+- [x] Implementasi perhitungan otomatis
+- [x] Format output rupiah dengan `number_format()`
+- [x] Validasi input server-side (PHP)
+- [x] Error handling dengan conditional
+
+### Frontend Development ✅
+
+- [x] Buat form input (nama, posisi, jam kerja, harga project)
+- [x] Display hasil perhitungan dalam tabel
+- [x] Styling CSS/Bootstrap (Bootstrap 5.3)
+- [x] Responsive design (3 kolom desktop, 1 kolom mobile)
+- [x] Badge posisi dengan color coding
+- [x] Sticky sidebar referensi
+- [x] Slip gaji profesional dengan tabel bordered
+- [x] Validasi client-side dengan Bootstrap validation
+- [x] Required indicators (asterisk merah)
+- [x] Error messages dengan icon
+- [x] Info alerts untuk panduan
+- [x] Gradient headers untuk semua card
+- [x] Color-coded identity sidebar
+- [x] Bootstrap Icons integration
+
+### Documentation ✅
+
+- [x] README.md lengkap dengan:
+  - [x] Deskripsi project
+  - [x] Fitur-fitur
+  - [x] Data tim & posisi
+  - [x] Teknologi yang digunakan
+  - [x] Struktur project
+  - [x] UI/UX features detail
+  - [x] Panduan harga project
+  - [x] Cara menjalankan
+  - [x] Cara menggunakan
+  - [x] Contoh perhitungan (3 skenario)
+  - [x] Penjelasan fungsi PHP
+  - [x] Future enhancements
+  - [x] Checklist pengerjaan
+  - [x] Known issues
+  - [x] Kontak & referensi
 
 ---
 
 ## 🐛 Known Issues / Limitations
 
-1. **Data Persistence** - Data tidak tersimpan (hilang setelah refresh)
-2. **Database** - Belum menggunakan database untuk menyimpan data
-3. **Export Feature** - Belum ada fitur export ke PDF/Excel
-4. **History** - Belum ada riwayat perhitungan gaji
-5. **Print Styling** - Belum optimal untuk print preview
+1. **Data Persistence** - Data tidak tersimpan (hilang setelah refresh page)
+2. **No Database** - Belum menggunakan database untuk menyimpan riwayat
+3. **No Export Feature** - Belum ada fitur export ke PDF/Excel
+4. **No History** - Belum ada riwayat perhitungan gaji sebelumnya
+5. **Print Styling** - Belum optimal untuk print preview (CSS @media print)
+6. **Currency Input** - Belum ada auto-format ribuan saat user mengetik
+7. **No Session** - Tidak ada sistem login/session management
+8. **Static Data** - Data anggota & posisi masih hardcoded dalam PHP array
+9. **No Email** - Belum ada fitur kirim slip gaji via email
+10. **Single Calculation** - Hanya bisa hitung 1 karyawan per submit
 
 ---
 
 ## 👨‍💻 Pengembang
 
 **Nama**: Reza Asriano Maulana  
+**NIM**: 202404021  
 **Mata Kuliah**: Workshop Pemrograman Web 2  
-**Institusi**: Politeknik Enjinering Indorama  
+**Prodi**: Teknologi Rekayasa Perangkat Lunak  
 **Semester**: 3 (Tiga)  
-**Tahun** : Ganjil 2025/2026
+**Dosen Pengampu**: Ricak Agus Setiawan, S.T., M.SI.  
+**Institusi**: Politeknik Enjinering Indorama  
+**Tahun Akademik**: Ganjil 2025/2026
 
 ---
 
 ## 📄 Lisensi
 
-Project ini dibuat untuk keperluan akademik (UTS).
+Project ini dibuat untuk keperluan akademik (UTS) dan tidak dimaksudkan untuk penggunaan komersial tanpa izin.
 
 ---
 
 ## 📞 Kontak & Dukungan
 
-Jika ada pertanyaan atau issue:
+Jika ada pertanyaan, saran, atau menemukan bug:
 
-1. Buka [GitHub Issues](https://github.com/CallMeJaja/workshop-pemrograman-web2/issues)
-2. Atau hubungi langsung via GitHub
+1. **GitHub Issues**: [Open Issue](https://github.com/CallMeJaja/workshop-pemrograman-web2/issues)
+2. **Email**: [Contact via GitHub](https://github.com/CallMeJaja)
+3. **Pull Requests**: Contributions are welcome!
 
 ---
 
-## 📚 Referensi
+## 📚 Referensi & Resources
+
+### Official Documentation
 
 - [PHP Official Documentation](https://www.php.net/docs.php)
-- [Bootstrap 5 Documentation](https://getbootstrap.com/docs/5.3/getting-started/introduction/)
+- [Bootstrap 5.3 Documentation](https://getbootstrap.com/docs/5.3/getting-started/introduction/)
+- [Bootstrap Icons](https://icons.getbootstrap.com/)
+- [MDN Web Docs - HTML/CSS/JS](https://developer.mozilla.org/)
+
+### Tutorials & Guides
+
 - [W3Schools PHP Tutorial](https://www.w3schools.com/php/)
-- [MDN Web Docs](https://developer.mozilla.org/)
-- [PHP number_format()](https://www.php.net/manual/en/function.number-format.php)
+- [W3Schools Bootstrap 5 Tutorial](https://www.w3schools.com/bootstrap5/)
+- [Bootstrap Form Validation](https://getbootstrap.com/docs/5.3/forms/validation/)
+
+### PHP Functions Reference
+
+- [number_format()](https://www.php.net/manual/en/function.number-format.php) - Format angka dengan thousand separator
+- [isset()](https://www.php.net/manual/en/function.isset.php) - Check variabel sudah di-set
+- [empty()](https://www.php.net/manual/en/function.empty.php) - Check variabel kosong
+
+### UI/UX Inspiration
+
+- [Bootstrap Examples](https://getbootstrap.com/docs/5.3/examples/)
+- [Dribbble](https://dribbble.com/) - UI/UX design inspiration
+- [Behance](https://www.behance.net/) - Web design showcase
 
 ---
 
 <div align="center">
 
-**⭐ Jika project ini membantu, berikan star di GitHub! ⭐**
+## ⭐ Star This Project!
 
-Made with ❤️ for UTS Workshop Pemrograman Web 2
+**Jika project ini membantu Anda, berikan star di GitHub!**
+
+[![GitHub stars](https://img.shields.io/github/stars/CallMeJaja/workshop-pemrograman-web2?style=social)](https://github.com/CallMeJaja/workshop-pemrograman-web2/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/CallMeJaja/workshop-pemrograman-web2?style=social)](https://github.com/CallMeJaja/workshop-pemrograman-web2/network/members)
+
+---
+
+Made with ❤️ and ☕ for **UTS Workshop Pemrograman Web 2**
+
+**© 2025 Reza Asriano Maulana - Politeknik Enjinering Indorama**
 
 </div>
