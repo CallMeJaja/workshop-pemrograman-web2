@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="card mb-4">
-                    <div class="card-header text-white text-center py-3" style="background-color: #1F2937;">
+                    <div class="card-header text-white text-center py-3" style="background-color: #2C3E50;">
                         <h5 class="mb-0">Identitas Mahasiswa</h5>
                     </div>
                     <div class="card-body">
@@ -63,7 +63,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="card mb-4">
-                    <div class="card-header bg-primary text-white py-3 px-4">
+                    <div class="card-header text-white py-3 px-4" style="background-color: #0d6efd;">
                         <h5 class="mb-0 fw-semibold text-center">Kalkulator Gaji Anggota Tim</h5>
                     </div>
 
@@ -227,7 +227,7 @@
                         ?>
                             <hr>
                             <div class="card border-primary mt-4">
-                                <div class="card-header bg-light">
+                                <div class="card-header bg-light border-bottom">
                                     <h5 class="mb-0"><i class="bi bi-file-earmark-text"></i> Slip Gaji Karyawan</h5>
                                 </div>
                                 <div class="card-body">
@@ -302,7 +302,7 @@
             <!-- Sidebar Referensi -->
             <div class="col-lg-3">
                 <div class="card sticky-top" style="top: 20px;">
-                    <div class="card-header text-dark py-3 text-center" style="background-color: #FFF9C4; border-bottom: 3px solid #FBC02D;">
+                    <div class="card-header py-3 text-dark text-center" style="background-color: #ffc107;">
                         <h4 class="mb-0 fw-semibold">Referensi Ketentuan Gaji</h4>
                     </div>
                     <div class="card-body">
