@@ -474,9 +474,8 @@ Beberapa ide untuk meningkatkan aplikasi:
 1. **Data Persistence** - Data tidak tersimpan (hilang setelah refresh)
 2. **Database** - Belum menggunakan database untuk menyimpan data
 3. **Export Feature** - Belum ada fitur export ke PDF/Excel
-4. **Multi-language** - Hanya tersedia dalam Bahasa Indonesia
-5. **History** - Belum ada riwayat perhitungan gaji
-6. **Print Styling** - Belum optimal untuk print preview
+4. **History** - Belum ada riwayat perhitungan gaji
+5. **Print Styling** - Belum optimal untuk print preview
 
 ---
 

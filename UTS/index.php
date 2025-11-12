@@ -38,6 +38,10 @@
                             <span class="badge bg-danger text-bg-danger w-100 text-start py-2">3 (Tiga)</span>
                         </div>
                         <div class="mb-3">
+                            <small class="text-muted d-block mb-1">DOSEN PENGAMPU:</small>
+                            <span class="badge bg-secondary text-bg-secondary w-100 text-start py-2">Ricak Agus Setiawan, S.T., M.SI.</span>
+                        </div>
+                        <div class="mb-3">
                             <small class="text-muted d-block mb-1">INSTITUSI:</small>
                             <span class="badge bg-warning text-bg-warning w-100 text-start py-2">Politeknik Enjinering Indorama</span>
                         </div>
