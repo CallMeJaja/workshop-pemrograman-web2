@@ -14,10 +14,15 @@
     <div class="container-fluid mt-5 px-4">
         <div class="row">
             <div class="col-lg-3">
-                <div class="card mb-4">
-                    <div class="card-header text-white text-center py-3" style="background-color: #2C3E50;">
-                        <h5 class="mb-0">Identitas Mahasiswa</h5>
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header text-white py-3 px-4"
+                        style="background-color: #1e3a5f;">
+                        <h4 class="mb-0 fw-semibold d-flex align-items-center text-uppercase">
+                            <i class="bi bi-person-circle me-2"></i>
+                            Identitas Mahasiswa
+                        </h4>
                     </div>
+
                     <div class="card-body">
 
                         <div class="mb-2 p-2 rounded" style="background-color: #E3F2FD; border-left: 4px solid #2196F3;">
@@ -62,9 +67,12 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="card mb-4">
+                <div class="card mb-4 shadow-sm">
                     <div class="card-header text-white py-3 px-4" style="background-color: #0d6efd;">
-                        <h5 class="mb-0 fw-semibold text-center">Kalkulator Gaji Anggota Tim</h5>
+                        <h4 class="mb-0 fw-semibold d-flex align-items-center text-uppercase">
+                            <i class="bi bi-calculator-fill me-2"></i>
+                            Kalkulator Gaji Anggota Tim
+                        </h4>
                     </div>
 
                     <div class="card-body">
@@ -256,7 +264,7 @@
 
                                     <h6 class="text-muted mb-3">Rincian Perhitungan Gaji:</h6>
                                     <div class="table-responsive">
-                                        <table class="table table-bordered">
+                                        <table class="table table-bordered table-hover">
                                             <thead class="table-light">
                                                 <tr>
                                                     <th>Komponen</th>
@@ -301,9 +309,12 @@
 
             <!-- Sidebar Referensi -->
             <div class="col-lg-3">
-                <div class="card sticky-top" style="top: 20px;">
-                    <div class="card-header py-3 text-dark text-center" style="background-color: #ffc107;">
-                        <h4 class="mb-0 fw-semibold">Referensi Ketentuan Gaji</h4>
+                <div class="card sticky-top shadow-sm" style="top: 20px;">
+                    <div class="card-header py-3 text-dark" style="background-color: #ffc107;">
+                        <h4 class="mb-0 fw-semibold d-flex align-items-center text-uppercase">
+                            <i class="bi-info-circle-fill me-2"></i>
+                            Referensi Ketentuan Gaji
+                        </h4>
                     </div>
                     <div class="card-body">
                         <h6 class="mb-3">Upah per Jam Berdasarkan Posisi</h6>
