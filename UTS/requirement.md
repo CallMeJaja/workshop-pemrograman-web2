@@ -32,7 +32,6 @@
    - Nama anggota tim
    - Posisi
    - Jam kerja dalam 1 bulan
-   - Jam lembur
    - Nilai harga project
 
 6. **Output program**
