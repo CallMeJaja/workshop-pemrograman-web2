@@ -61,7 +61,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5">
+            <div class="col-lg-6">
                 <div class="card mb-4">
                     <div class="card-header bg-primary text-white py-3 px-4">
                         <h5 class="mb-0 fw-semibold text-center">Kalkulator Gaji Anggota Tim</h5>
@@ -296,7 +296,7 @@
             </div>
 
             <!-- Sidebar Referensi -->
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="card sticky-top" style="top: 20px;">
                     <div class="card-header text-dark py-3 text-center" style="background-color: #FFF9C4; border-bottom: 3px solid #FBC02D;">
                         <h4 class="mb-0 fw-semibold">Referensi Ketentuan Gaji</h4>
