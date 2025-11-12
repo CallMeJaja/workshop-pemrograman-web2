@@ -15,52 +15,54 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="card mb-4">
-                    <div class="card-header bg-dark text-bg-dark">
-                        <h4 class="mb-0 text-center fw-bold">Identitas Mahasiswa</h4>
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">Identitas Mahasiswa</h5>
                     </div>
                     <div class="card-body">
+
                         <div class="mb-2">
-                            <small class="text-muted d-block mb-1">Nama:</small>
-                            <div class="p-2 rounded" style="background-color: #E3F2FD; border-left: 3px solid #2196F3;">
-                                <span class="text-dark">Reza Asriano Maulana</span>
+                            <div class="p-2 rounded" style="background-color: #E3F2FD; border-left: 4px solid #2196F3;">
+                                <small class="text-muted d-block mb-2 ">NAMA:</small>
+                                <span class="text-dark fw-medium">Reza Asriano Maulana</span>
                             </div>
                         </div>
                         <div class="mb-2">
-                            <small class="text-muted d-block mb-1">NIM:</small>
-                            <div class="p-2 rounded" style="background-color: #E0F7FA; border-left: 3px solid #00BCD4;">
-                                <span class="text-dark">202404021</span>
+                            <div class="p-2 rounded" style="background-color: #E0F7FA; border-left: 4px solid #00BCD4;">
+                                <small class="text-muted d-block mb-2">NIM:</small>
+                                <span class="text-dark fw-medium">202404021</span>
                             </div>
                         </div>
                         <div class="mb-2">
-                            <small class="text-muted d-block mb-1">MATA KULIAH:</small>
-                            <div class="p-2 rounded" style="background-color: #FFF9C4; border-left: 3px solid #FBC02D;">
-                                <span class="text-dark">Workshop Pemrograman Web 2</span>
+                            <div class="p-2 rounded" style="background-color: #FFF9C4; border-left: 4px solid #FBC02D;">
+                                <small class="text-muted d-block mb-2">MATA KULIAH:</small>
+                                <span class="text-dark fw-medium">Workshop Pemrograman Web 2</span>
                             </div>
                         </div>
                         <div class="mb-2">
-                            <small class="text-muted d-block mb-1">PRODI:</small>
-                            <div class="p-2 rounded" style="background-color: #E8F5E9; border-left: 3px solid #4CAF50;">
-                                <span class="text-dark">Teknologi Rekayasa Perangkat Lunak</span>
+                            <div class="p-2 rounded" style="background-color: #E8F5E9; border-left: 4px solid #4CAF50;">
+                                <small class="text-muted d-block mb-2">PRODI:</small>
+                                <span class="text-dark fw-medium">Teknologi Rekayasa Perangkat Lunak</span>
                             </div>
                         </div>
                         <div class="mb-2">
-                            <small class="text-muted d-block mb-1">SEMESTER:</small>
-                            <div class="p-2 rounded" style="background-color: #FFEBEE; border-left: 3px solid #F44336;">
-                                <span class="text-dark">3 (Tiga)</span>
+                            <div class="p-2 rounded" style="background-color: #FFEBEE; border-left: 4px solid #F44336;">
+                                <small class="text-muted d-block mb-2">SEMESTER:</small>
+                                <span class="text-dark fw-medium">3 (Tiga)</span>
                             </div>
                         </div>
                         <div class="mb-2">
-                            <small class="text-muted d-block mb-1">DOSEN PENGAMPU:</small>
-                            <div class="p-2 rounded" style="background-color: #ECEFF1; border-left: 3px solid #607D8B;">
-                                <span class="text-dark">Ricak Agus Setiawan, S.T., M.SI.</span>
+                            <div class="p-2 rounded" style="background-color: #ECEFF1; border-left: 4px solid #607D8B;">
+                                <small class="text-muted d-block mb-2">DOSEN PENGAMPU:</small>
+                                <span class="text-dark fw-medium">Ricak Agus Setiawan, S.T., M.SI.</span>
                             </div>
                         </div>
                         <div class="mb-2">
-                            <small class="text-muted d-block mb-1">INSTITUSI:</small>
-                            <div class="p-2 rounded" style="background-color: #FFF8E1; border-left: 3px solid #FFA000;">
-                                <span class="text-dark">Politeknik Enjinering Indorama</span>
+                            <div class="p-2 rounded" style="background-color: #FFF8E1; border-left: 4px solid #FFA000;">
+                                <small class="text-muted d-block mb-2">INSTITUSI:</small>
+                                <span class="text-dark fw-medium">Politeknik Enjinering Indorama</span>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
