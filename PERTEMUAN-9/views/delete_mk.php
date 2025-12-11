@@ -1,50 +1,51 @@
 <?php
 /**
- * Delete Mata Kuliah
- * Script untuk menghapus data mata kuliah dari tbl_matkul
+ * Script Hapus Data Mata Kuliah
+ * Menghapus data MK berdasarkan Kode. Mengelola constraint database.
  */
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once '../config/database.php';
 
-// Get ID from URL
-$id = isset($_GET['id']) ? $_GET['id'] : '';
-
-if (!empty($id)) {
+// Validasi parameter ID
+if (isset($_GET['id']) && !empty($_GET['id'])) {
+    $id = $_GET['id'];
     $conn = getConnection();
     
-    // Prepare Delete Statement
-    $query = "DELETE FROM tbl_matkul WHERE kodeMatkul = ?";
-    $stmt = $conn->prepare($query);
+    // Eksekusi penghapusan
+    $stmt = $conn->prepare("DELETE FROM tbl_matkul WHERE kodeMatkul = ?");
     $stmt->bind_param("s", $id);
 
     if ($stmt->execute()) {
-        // Success
-        echo "<script>
-                alert('Data mata kuliah berhasil dihapus!');
-                window.location.href = 'view_mk.php';
-              </script>";
+        $_SESSION['flash_message'] = [
+            'type' => 'success',
+            'message' => 'Data mata kuliah berhasil dihapus.'
+        ];
     } else {
-        // Failure
+        // Penanganan Error Constraint
         $errorMsg = $conn->error;
         if (strpos($errorMsg, 'Constraint') !== false || strpos($errorMsg, 'foreign key') !== false) {
-             echo "<script>
-                alert('Gagal menghapus! Mata kuliah ini masih memiliki data nilai. Hapus data nilai terlebih dahulu.');
-                window.location.href = 'view_mk.php';
-              </script>";
+             $_SESSION['flash_message'] = [
+                'type' => 'error',
+                'message' => 'Gagal menghapus! Mata kuliah ini masih memiliki data Nilai yang aktif.'
+             ];
         } else {
-             echo "<script>
-                alert('Gagal menghapus data: " . addslashes($errorMsg) . "');
-                window.location.href = 'view_mk.php';
-              </script>";
+             $_SESSION['flash_message'] = [
+                'type' => 'error',
+                'message' => 'Gagal menghapus data: ' . $errorMsg
+             ];
         }
     }
     
     $stmt->close();
+    header('Location: view_mk.php');
+    exit;
 } else {
-    // No ID provided
-    echo "<script>
-            alert('Kode MK tidak valid!');
-            window.location.href = 'view_mk.php';
-          </script>";
+    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Kode MK tidak valid!'];
+    header('Location: view_mk.php');
+    exit;
 }
 ?>

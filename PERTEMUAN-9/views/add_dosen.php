@@ -1,26 +1,28 @@
 <?php
 /**
- * Tambah Data Dosen
- * Form untuk menambahkan data dosen baru ke tbl_dosen
+ * Halaman Tambah Data Dosen
+ * Memproses penambahan data dosen baru dengan validasi duplikasi NIDN.
  */
 
 $pageTitle = 'Tambah Data Dosen - SIAKAD Kampus';
 require_once '../config/database.php';
-require_once '../includes/header.php';
+
+// Pastikan session aktif untuk flash message
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $error = '';
-$success = '';
 
-// Handle Form Submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nidn = $_POST['nidn'];
-    $nama = $_POST['nama'];
+    $nidn  = $_POST['nidn'];
+    $nama  = $_POST['nama'];
     $prodi = $_POST['prodi'];
     $email = $_POST['email'];
 
-    // Validasi Input
+    // Validasi kelengkapan dan format data
     if (empty($nidn) || empty($nama) || empty($prodi) || empty($email)) {
-        $error = 'Semua field harus diisi!';
+        $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($nidn)) {
         $error = 'NIDN harus berupa angka!';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -28,33 +30,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $conn = getConnection();
 
-        // Check duplicate NIDN
-        $checkQuery = "SELECT nidn FROM tbl_dosen WHERE nidn = ?";
-        $stmtCheck = $conn->prepare($checkQuery);
+        // Cek duplikasi NIDN
+        $stmtCheck = $conn->prepare("SELECT nidn FROM tbl_dosen WHERE nidn = ?");
         $stmtCheck->bind_param("s", $nidn);
         $stmtCheck->execute();
-        $resultCheck = $stmtCheck->get_result();
 
-        if ($resultCheck->num_rows > 0) {
-            $error = 'NIDN sudah terdaftar!';
+        if ($stmtCheck->get_result()->num_rows > 0) {
+            $error = 'NIDN sudah terdaftar dalam sistem!';
         } else {
-            // Insert data
-            $insertQuery = "INSERT INTO tbl_dosen (nidn, nama, prodi, email) VALUES (?, ?, ?, ?)";
-            $stmt = $conn->prepare($insertQuery);
+            // Simpan data baru
+            $stmt = $conn->prepare("INSERT INTO tbl_dosen (nidn, nama, prodi, email) VALUES (?, ?, ?, ?)");
             $stmt->bind_param("ssss", $nidn, $nama, $prodi, $email);
 
             if ($stmt->execute()) {
-                echo "<script>
-                        alert('Data dosen berhasil ditambahkan!');
-                        window.location.href = 'view_dosen.php';
-                      </script>";
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Data dosen berhasil ditambahkan!'
+                ];
+                header('Location: view_dosen.php');
                 exit;
             } else {
-                $error = 'Gagal menyimpan data: ' . $conn->error;
+                $error = 'Terjadi kesalahan sistem: ' . $conn->error;
             }
         }
     }
 }
+
+require_once '../includes/header.php';
 ?>
 
 <!-- Page Header -->

@@ -1,74 +1,77 @@
 <?php
 /**
- * Edit Data Mata Kuliah
- * Form untuk mengubah data mata kuliah di tbl_matkul
+ * Halaman Edit Data Mata Kuliah
+ * Memproses perubahan data mata kuliah. Kode MK bersifat read-only.
  */
 
 $pageTitle = 'Edit Data Mata Kuliah - SIAKAD Kampus';
 require_once '../config/database.php';
-require_once '../includes/header.php';
+
+// Pastikan session aktif
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $error = '';
-$success = '';
 $data = null;
+$kode_param = $_GET['id'] ?? '';
 
-// Get ID from URL
-// Check both 'id' (standard) and 'kode' (legacy support if any)
-$kode_param = isset($_GET['id']) ? $_GET['id'] : (isset($_GET['kode']) ? $_GET['kode'] : '');
-
+// Validasi parameter ID
 if (empty($kode_param)) {
-    echo "<script>alert('Kode MK tidak ditemukan!'); window.location.href='view_mk.php';</script>";
+    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Kode MK tidak ditemukan!'];
+    header('Location: view_mk.php');
     exit;
 }
 
 $conn = getConnection();
 
-// Fetch Data MK
-$query = "SELECT * FROM tbl_matkul WHERE kodeMatkul = ?";
-$stmt = $conn->prepare($query);
+// Ambil data mata kuliah eksisting
+$stmt = $conn->prepare("SELECT * FROM tbl_matkul WHERE kodeMatkul = ?");
 $stmt->bind_param("s", $kode_param);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    echo "<script>alert('Data tidak ditemukan!'); window.location.href='view_mk.php';</script>";
+    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Data mata kuliah tidak ditemukan!'];
+    header('Location: view_mk.php');
     exit;
 }
 
 $data = $result->fetch_assoc();
 
-// Fetch Dosen Data for Dropdown
-$dosenQuery = "SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC";
-$dosenResult = $conn->query($dosenQuery);
+// Ambil data dosen untuk dropdown
+$dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
 
-// Handle Form Submission
+// Proses Update Form
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $namaMatkul = $_POST['namaMatkul'];
-    $sks = $_POST['sks'];
-    $nidn = $_POST['nidn'];
+    $sks        = $_POST['sks'];
+    $nidn       = $_POST['nidn'];
 
-    // Validasi Input
+    // Validasi data input
     if (empty($namaMatkul) || empty($sks) || empty($nidn)) {
-        $error = 'Semua field harus diisi!';
+        $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($sks) || $sks < 1 || $sks > 6) {
         $error = 'SKS harus berupa angka antara 1 sampai 6!';
     } else {
-        // Update data
-        $updateQuery = "UPDATE tbl_matkul SET namaMatkul = ?, sks = ?, nidn = ? WHERE kodeMatkul = ?";
-        $stmtUpdate = $conn->prepare($updateQuery);
+        // Eksekusi update
+        $stmtUpdate = $conn->prepare("UPDATE tbl_matkul SET namaMatkul = ?, sks = ?, nidn = ? WHERE kodeMatkul = ?");
         $stmtUpdate->bind_param("siss", $namaMatkul, $sks, $nidn, $kode_param);
 
         if ($stmtUpdate->execute()) {
-             echo "<script>
-                    alert('Data mata kuliah berhasil diperbarui!');
-                    window.location.href = 'view_mk.php';
-                  </script>";
+             $_SESSION['flash_message'] = [
+                'type' => 'success',
+                'message' => 'Data mata kuliah berhasil diperbarui!'
+             ];
+             header('Location: view_mk.php');
             exit;
         } else {
             $error = 'Gagal memperbarui data: ' . $conn->error;
         }
     }
 }
+
+require_once '../includes/header.php';
 ?>
 
 <!-- Page Header -->

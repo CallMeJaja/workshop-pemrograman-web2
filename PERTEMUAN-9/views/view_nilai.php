@@ -1,15 +1,15 @@
 <?php
-
 /**
- * View Nilai
- * Menampilkan data nilai dari tbl_nilai dengan relasi ke tbl_mahasiswa, tbl_matkul, dan tbl_dosen
+ * Halaman Manajemen Data Nilai
+ * Menampilkan daftar nilai mahasiswa (NIM, Nama, Mata Kuliah, Dosen, Nilai, Grade).
+ * Relasi ke tabel mahasiswa, matkul, dan dosen.
  */
 
 $pageTitle = 'Data Nilai - SIAKAD Kampus';
 require_once '../config/database.php';
 require_once '../includes/header.php';
 
-// Get all nilai data with related information
+// Ambil data nilai beserta informasi relasinya
 $conn = getConnection();
 $query = "SELECT 
             n.id_nilai,
@@ -29,22 +29,16 @@ $query = "SELECT
           ORDER BY n.id_nilai ASC";
 $result = $conn->query($query);
 
-// Function to get badge color based on grade
+// Fungsi bantu untuk warna badge grade
 function getGradeBadge($grade)
 {
     switch ($grade) {
-        case 'A':
-            return 'bg-success';
-        case 'B':
-            return 'bg-primary';
-        case 'C':
-            return 'bg-warning text-dark';
-        case 'D':
-            return 'bg-danger';
-        case 'E':
-            return 'bg-dark';
-        default:
-            return 'bg-secondary';
+        case 'A': return 'bg-success';
+        case 'B': return 'bg-primary';
+        case 'C': return 'bg-warning text-dark';
+        case 'D': return 'bg-danger';
+        case 'E': return 'bg-dark';
+        default: return 'bg-secondary';
     }
 }
 ?>
@@ -148,9 +142,14 @@ function getGradeBadge($grade)
                                             <a href="edit_nilai.php?id=<?= htmlspecialchars($row['id_nilai']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <a href="delete_nilai.php?id=<?= htmlspecialchars($row['id_nilai']) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data nilai ini?')" title="Hapus Data">
+                                            <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteModal" 
+                                                data-id="<?= htmlspecialchars($row['id_nilai']) ?>"
+                                                data-nama="<?= htmlspecialchars($row['nama_mahasiswa']) ?> - <?= htmlspecialchars($row['namaMatkul']) ?>"
+                                                title="Hapus Data">
                                                 <i class="bi bi-trash"></i>
-                                            </a>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -184,5 +183,47 @@ function getGradeBadge($grade)
         </div>
     </div>
 </main>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>Konfirmasi Hapus
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin menghapus data nilai untuk <strong id="deleteName"></strong>?</p>
+                <div class="alert alert-warning small mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Data yang dihapus tidak dapat dikembalikan.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Hapus Data</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function(event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute('data-id');
+            var nama = button.getAttribute('data-nama');
+            
+            var namaEl = deleteModal.querySelector('#deleteName');
+            var confirmBtn = deleteModal.querySelector('#confirmDeleteBtn');
+            
+            namaEl.textContent = nama;
+            confirmBtn.setAttribute('href', 'delete_nilai.php?id=' + id);
+        });
+    });
+</script>
 
 <?php require_once '../includes/footer.php'; ?>

@@ -1,74 +1,74 @@
 <?php
 /**
- * Edit Data Dosen
- * Form untuk mengubah data dosen di tbl_dosen
+ * Halaman Edit Data Dosen
+ * Memproses perubahan data dosen dengan NIDN sebagai kunci utama (read-only).
  */
 
 $pageTitle = 'Edit Data Dosen - SIAKAD Kampus';
 require_once '../config/database.php';
-require_once '../includes/header.php';
+
+// Pastikan session dimulai
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $error = '';
-$success = '';
 $data = null;
+$nidn_param = $_GET['id'] ?? '';
 
-// Get ID from URL
-$nidn_param = isset($_GET['id']) ? $_GET['id'] : '';
-
+// Validasi parameter ID
 if (empty($nidn_param)) {
-    echo "<script>alert('ID tidak ditemukan!'); window.location.href='view_dosen.php';</script>";
+    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'ID data tidak ditemukan!'];
+    header('Location: view_dosen.php');
     exit;
 }
 
 $conn = getConnection();
 
-// Fetch Data
-$query = "SELECT * FROM tbl_dosen WHERE nidn = ?";
-$stmt = $conn->prepare($query);
+// Ambil data dosen eksisting
+$stmt = $conn->prepare("SELECT * FROM tbl_dosen WHERE nidn = ?");
 $stmt->bind_param("s", $nidn_param);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    echo "<script>alert('Data tidak ditemukan!'); window.location.href='view_dosen.php';</script>";
+    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Data dosen tidak ditemukan!'];
+    header('Location: view_dosen.php');
     exit;
 }
 
 $data = $result->fetch_assoc();
 
-// Handle Form Submission
+// Proses Update Form
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nidn_old = $_POST['nidn_old']; // Keep track of old ID if needed, but here we use it for Where clause if we allowed ID change. 
-    // Since we are making NIDN readonly (usually good practice), use nidn_old or just use the readonly value.
-    // However, if we want to follow strict security, we use the param or hidden field.
-    
-    $nama = $_POST['nama'];
+    $nama  = $_POST['nama'];
     $prodi = $_POST['prodi'];
     $email = $_POST['email'];
 
-    // Validasi Input
+    // Validasi data input
     if (empty($nama) || empty($prodi) || empty($email)) {
-        $error = 'Nama, Prodi, dan Email harus diisi!';
+        $error = 'Nama Lengkap, Program Studi, dan Email wajib diisi!';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Format email tidak valid!';
     } else {
-        // Update data
-        // NIDN is Primary Key and usually not editable, so using WHERE nidn = ? with the original value
-        $updateQuery = "UPDATE tbl_dosen SET nama = ?, prodi = ?, email = ? WHERE nidn = ?";
-        $stmtUpdate = $conn->prepare($updateQuery);
+        // Eksekusi update data
+        $stmtUpdate = $conn->prepare("UPDATE tbl_dosen SET nama = ?, prodi = ?, email = ? WHERE nidn = ?");
         $stmtUpdate->bind_param("ssss", $nama, $prodi, $email, $nidn_param);
 
         if ($stmtUpdate->execute()) {
-             echo "<script>
-                    alert('Data dosen berhasil diperbarui!');
-                    window.location.href = 'view_dosen.php';
-                  </script>";
+             $_SESSION['flash_message'] = [
+                'type' => 'success',
+                'message' => 'Data dosen berhasil diperbarui!'
+             ];
+             header('Location: view_dosen.php');
             exit;
         } else {
             $error = 'Gagal memperbarui data: ' . $conn->error;
         }
     }
 }
+
+require_once '../includes/header.php';
 ?>
 
 <!-- Page Header -->

@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 // Get current page for active nav highlighting
 $currentPage = basename($_SERVER['PHP_SELF']);
 ?>
@@ -58,7 +61,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     </style>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
@@ -109,3 +112,60 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             </div>
         </div>
     </nav>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header text-white" id="toastHeader">
+                <i class="bi me-2" id="toastIcon"></i>
+                <strong class="me-auto" id="toastTitle">Notifikasi</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastMessage">
+                <!-- Message will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <?php if (isset($_SESSION['flash_message'])): ?>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const toastEl = document.getElementById('liveToast');
+                const toastHeader = document.getElementById('toastHeader');
+                const toastIcon = document.getElementById('toastIcon');
+                const toastTitle = document.getElementById('toastTitle');
+                const toastMessage = document.getElementById('toastMessage');
+
+                // Data from PHP Session
+                const type = '<?= $_SESSION['flash_message']['type'] ?>';
+                const message = '<?= addslashes($_SESSION['flash_message']['message']) ?>';
+
+                // Configure Toast Appearance
+                if (type === 'success') {
+                    toastHeader.classList.add('bg-success');
+                    toastIcon.classList.add('bi-check-circle-fill');
+                    toastTitle.innerText = 'Berhasil';
+                } else if (type === 'error') {
+                    toastHeader.classList.add('bg-danger');
+                    toastIcon.classList.add('bi-exclamation-triangle-fill');
+                    toastTitle.innerText = 'Gagal';
+                } else if (type === 'warning') {
+                    toastHeader.classList.add('bg-warning');
+                    toastHeader.classList.remove('text-white'); // Warning usually black text
+                    toastEl.querySelector('.btn-close').classList.remove('btn-close-white');
+                    toastIcon.classList.add('bi-exclamation-circle-fill');
+                    toastTitle.innerText = 'Peringatan';
+                } else {
+                    toastHeader.classList.add('bg-primary');
+                    toastIcon.classList.add('bi-info-circle-fill');
+                    toastTitle.innerText = 'Informasi';
+                }
+
+                toastMessage.innerText = message;
+
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            });
+        </script>
+        <?php unset($_SESSION['flash_message']); ?>
+    <?php endif; ?>

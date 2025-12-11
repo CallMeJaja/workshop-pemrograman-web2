@@ -1,17 +1,19 @@
 <?php
 /**
- * Tambah Data Mahasiswa
- * Form untuk menambahkan data mahasiswa baru ke tbl_mahasiswa
+ * Halaman Tambah Data Mahasiswa
+ * Memproses pendaftaran mahasiswa baru dengan validasi data.
  */
 
 $pageTitle = 'Tambah Data Mahasiswa - SIAKAD Kampus';
 require_once '../config/database.php';
-require_once '../includes/header.php';
+
+// Pastikan session aktif
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $error = '';
-$success = '';
 
-// Handle Form Submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nim = $_POST['nim'];
     $nama = $_POST['nama'];
@@ -19,9 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $angkatan = $_POST['angkatan'];
     $email = $_POST['email'];
 
-    // Validasi Input
+    // Validasi input
     if (empty($nim) || empty($nama) || empty($prodi) || empty($angkatan) || empty($email)) {
-        $error = 'Semua field harus diisi!';
+        $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($nim)) {
         $error = 'NIM harus berupa angka!';
     } elseif (!is_numeric($angkatan) || strlen($angkatan) != 4) {
@@ -31,33 +33,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } else {
         $conn = getConnection();
 
-        // Check duplicate NIM
-        $checkQuery = "SELECT nim FROM tbl_mahasiswa WHERE nim = ?";
-        $stmtCheck = $conn->prepare($checkQuery);
+        // Cek duplikasi NIM
+        $stmtCheck = $conn->prepare("SELECT nim FROM tbl_mahasiswa WHERE nim = ?");
         $stmtCheck->bind_param("s", $nim);
         $stmtCheck->execute();
-        $resultCheck = $stmtCheck->get_result();
 
-        if ($resultCheck->num_rows > 0) {
-            $error = 'NIM sudah terdaftar!';
+        if ($stmtCheck->get_result()->num_rows > 0) {
+            $error = 'NIM sudah terdaftar dalam sistem!';
         } else {
-            // Insert data
-            $insertQuery = "INSERT INTO tbl_mahasiswa (nim, nama, prodi, angkatan, email) VALUES (?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($insertQuery);
+            // Simpan data mahasiswa
+            $stmt = $conn->prepare("INSERT INTO tbl_mahasiswa (nim, nama, prodi, angkatan, email) VALUES (?, ?, ?, ?, ?)");
             $stmt->bind_param("sssss", $nim, $nama, $prodi, $angkatan, $email);
 
             if ($stmt->execute()) {
-                echo "<script>
-                        alert('Data mahasiswa berhasil ditambahkan!');
-                        window.location.href = 'view_mahasiswa.php';
-                      </script>";
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Data mahasiswa berhasil ditambahkan!'
+                ];
+                header('Location: view_mahasiswa.php');
                 exit;
             } else {
-                $error = 'Gagal menyimpan data: ' . $conn->error;
+                $error = 'Terjadi kesalahan sistem: ' . $conn->error;
             }
         }
     }
 }
+
+require_once '../includes/header.php';
 ?>
 
 <!-- Page Header -->

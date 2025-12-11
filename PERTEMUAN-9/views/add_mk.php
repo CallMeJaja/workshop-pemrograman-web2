@@ -1,61 +1,62 @@
 <?php
 /**
- * Tambah Data Mata Kuliah
- * Form untuk menambahkan data mata kuliah baru ke tbl_matkul
+ * Halaman Tambah Data Mata Kuliah
+ * Memproses penambahan data mata kuliah baru.
  */
 
 $pageTitle = 'Tambah Data Mata Kuliah - SIAKAD Kampus';
 require_once '../config/database.php';
-require_once '../includes/header.php';
+
+// Pastikan session aktif
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $error = '';
-$success = '';
 
-// Fetch Dosen Data for Dropdown
+// Ambil data dosen untuk dropdown
 $conn = getConnection();
-$dosenQuery = "SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC";
-$dosenResult = $conn->query($dosenQuery);
+$dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
 
-// Handle Form Submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $kodeMatkul = $_POST['kodeMatkul'];
     $namaMatkul = $_POST['namaMatkul'];
-    $sks = $_POST['sks'];
-    $nidn = $_POST['nidn'];
+    $sks        = $_POST['sks'];
+    $nidn       = $_POST['nidn'];
 
-    // Validasi Input
+    // Validasi data input
     if (empty($kodeMatkul) || empty($namaMatkul) || empty($sks) || empty($nidn)) {
-        $error = 'Semua field harus diisi!';
+        $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($sks) || $sks < 1 || $sks > 6) {
         $error = 'SKS harus berupa angka antara 1 sampai 6!';
     } else {
-        // Check duplicate Kode MK
-        $checkQuery = "SELECT kodeMatkul FROM tbl_matkul WHERE kodeMatkul = ?";
-        $stmtCheck = $conn->prepare($checkQuery);
+        // Cek duplikasi Kode MK
+        $stmtCheck = $conn->prepare("SELECT kodeMatkul FROM tbl_matkul WHERE kodeMatkul = ?");
         $stmtCheck->bind_param("s", $kodeMatkul);
         $stmtCheck->execute();
-        $resultCheck = $stmtCheck->get_result();
 
-        if ($resultCheck->num_rows > 0) {
-            $error = 'Kode Mata Kuliah sudah terdaftar!';
+        if ($stmtCheck->get_result()->num_rows > 0) {
+            $error = 'Kode Mata Kuliah sudah terdaftar di sistem!';
         } else {
-            // Insert data
-            $insertQuery = "INSERT INTO tbl_matkul (kodeMatkul, namaMatkul, sks, nidn) VALUES (?, ?, ?, ?)";
-            $stmt = $conn->prepare($insertQuery);
+            // Simpan data baru
+            $stmt = $conn->prepare("INSERT INTO tbl_matkul (kodeMatkul, namaMatkul, sks, nidn) VALUES (?, ?, ?, ?)");
             $stmt->bind_param("ssis", $kodeMatkul, $namaMatkul, $sks, $nidn);
 
             if ($stmt->execute()) {
-                echo "<script>
-                        alert('Data mata kuliah berhasil ditambahkan!');
-                        window.location.href = 'view_mk.php';
-                      </script>";
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => 'Data mata kuliah berhasil ditambahkan!'
+                ];
+                header('Location: view_mk.php');
                 exit;
             } else {
-                $error = 'Gagal menyimpan data: ' . $conn->error;
+                $error = 'Terjadi kesalahan sistem: ' . $conn->error;
             }
         }
     }
 }
+
+require_once '../includes/header.php';
 ?>
 
 <!-- Page Header -->

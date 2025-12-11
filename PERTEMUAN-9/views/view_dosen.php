@@ -1,18 +1,16 @@
 <?php
-
 /**
- * View Dosen
- * Menampilkan data dosen dari tbl_dosen
+ * Halaman Manajemen Data Dosen
+ * Menampilkan daftar dosen dengan opsi tambah, edit, dan hapus.
  */
 
 $pageTitle = 'Data Dosen - SIAKAD Kampus';
 require_once '../config/database.php';
 require_once '../includes/header.php';
 
-// Get all dosen data
+// Ambil data dosen urut berdasarkan NIDN
 $conn = getConnection();
-$query = "SELECT * FROM tbl_dosen ORDER BY nidn ASC";
-$result = $conn->query($query);
+$result = $conn->query("SELECT * FROM tbl_dosen ORDER BY nidn ASC");
 ?>
 
 <!-- Page Header -->
@@ -100,9 +98,14 @@ $result = $conn->query($query);
                                             <a href="edit_dosen.php?id=<?= htmlspecialchars($row['nidn']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <a href="delete_dosen.php?id=<?= htmlspecialchars($row['nidn']) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data dosen ini?')" title="Hapus Data">
+                                            <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteModal" 
+                                                data-id="<?= htmlspecialchars($row['nidn']) ?>"
+                                                data-nama="<?= htmlspecialchars($row['nama']) ?>"
+                                                title="Hapus Data">
                                                 <i class="bi bi-trash"></i>
-                                            </a>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -124,5 +127,48 @@ $result = $conn->query($query);
         </div>
     </div>
 </main>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>Konfirmasi Hapus
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin menghapus data dosen <strong id="dosenName"></strong>?</p>
+                <div class="alert alert-warning small mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Data yang dihapus tidak dapat dikembalikan.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Hapus Data</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function(event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute('data-id');
+            var nama = button.getAttribute('data-nama');
+            
+            var modalTitle = deleteModal.querySelector('.modal-title');
+            var namaEl = deleteModal.querySelector('#dosenName');
+            var confirmBtn = deleteModal.querySelector('#confirmDeleteBtn');
+            
+            namaEl.textContent = nama;
+            confirmBtn.setAttribute('href', 'delete_dosen.php?id=' + id);
+        });
+    });
+</script>
 
 <?php require_once '../includes/footer.php'; ?>

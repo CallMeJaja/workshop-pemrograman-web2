@@ -1,15 +1,14 @@
 <?php
-
 /**
- * View Mata Kuliah
- * Menampilkan data mata kuliah dari tbl_matkul dengan relasi ke tbl_dosen
+ * Halaman Manajemen Data Mata Kuliah
+ * Menampilkan daftar mata kuliah dan relasi dosen pengampu.
  */
 
 $pageTitle = 'Data Mata Kuliah - SIAKAD Kampus';
 require_once '../config/database.php';
 require_once '../includes/header.php';
 
-// Get all mata kuliah data with dosen name
+// Ambil data mata kuliah dengan nama dosen
 $conn = getConnection();
 $query = "SELECT m.*, d.nama as nama_dosen 
           FROM tbl_matkul m 
@@ -102,9 +101,14 @@ $result = $conn->query($query);
                                             <a href="edit_mk.php?id=<?= htmlspecialchars($row['kodeMatkul']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <a href="delete_mk.php?id=<?= htmlspecialchars($row['kodeMatkul']) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data mata kuliah ini?')" title="Hapus Data">
+                                            <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteModal" 
+                                                data-id="<?= htmlspecialchars($row['kodeMatkul']) ?>"
+                                                data-nama="<?= htmlspecialchars($row['namaMatkul']) ?>"
+                                                title="Hapus Data">
                                                 <i class="bi bi-trash"></i>
-                                            </a>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -126,5 +130,47 @@ $result = $conn->query($query);
         </div>
     </div>
 </main>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>Konfirmasi Hapus
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Apakah Anda yakin ingin menghapus mata kuliah <strong id="deleteName"></strong>?</p>
+                <div class="alert alert-warning small mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Data yang dihapus tidak dapat dikembalikan.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger">Hapus Data</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function(event) {
+            var button = event.relatedTarget;
+            var id = button.getAttribute('data-id');
+            var nama = button.getAttribute('data-nama');
+            
+            var namaEl = deleteModal.querySelector('#deleteName');
+            var confirmBtn = deleteModal.querySelector('#confirmDeleteBtn');
+            
+            namaEl.textContent = nama;
+            confirmBtn.setAttribute('href', 'delete_mk.php?id=' + id);
+        });
+    });
+</script>
 
 <?php require_once '../includes/footer.php'; ?>

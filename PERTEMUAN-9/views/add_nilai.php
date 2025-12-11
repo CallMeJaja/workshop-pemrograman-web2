@@ -1,29 +1,26 @@
 <?php
 /**
- * Tambah Data Nilai
- * Form untuk menambahkan data nilai mahasiswa ke tbl_nilai
+ * Halaman Tambah Data Nilai
+ * Memproses input nilai mahasiswa. Grade dihitung otomatis.
  */
 
 $pageTitle = 'Tambah Data Nilai - SIAKAD Kampus';
 require_once '../config/database.php';
-require_once '../includes/header.php';
+
+// Pastikan session aktif
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $error = '';
-$success = '';
 
 $conn = getConnection();
 
-// Fetch Data for Dropdowns
-$mhsQuery = "SELECT nim, nama FROM tbl_mahasiswa ORDER BY nama ASC";
-$mhsResult = $conn->query($mhsQuery);
+// Ambil data untuk dropdown
+$mhsResult = $conn->query("SELECT nim, nama FROM tbl_mahasiswa ORDER BY nama ASC");
+$mkResult  = $conn->query("SELECT kodeMatkul, namaMatkul FROM tbl_matkul ORDER BY namaMatkul ASC");
 
-$mkQuery = "SELECT kodeMatkul, namaMatkul FROM tbl_matkul ORDER BY namaMatkul ASC";
-$mkResult = $conn->query($mkQuery);
-
-$dosenQuery = "SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC";
-$dosenResult = $conn->query($dosenQuery);
-
-// Function to calculate grade letter
+// Fungsi hitung Grade
 function calculateGrade($score) {
     if ($score >= 80) return 'A';
     if ($score >= 70) return 'B';
@@ -32,38 +29,50 @@ function calculateGrade($score) {
     return 'E';
 }
 
-// Handle Form Submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nim = $_POST['nim'];
+    $nim        = $_POST['nim'];
     $kodeMatkul = $_POST['kodeMatkul'];
-    $nidn = $_POST['nidn'];
-    $nilai = $_POST['nilai'];
+    $nilai      = $_POST['nilai'];
 
-    // Validasi Input
-    if (empty($nim) || empty($kodeMatkul) || empty($nidn) || $nilai === '') {
-        $error = 'Semua field harus diisi!';
+    // Validasi input
+    if (empty($nim) || empty($kodeMatkul) || $nilai === '') {
+        $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($nilai) || $nilai < 0 || $nilai > 100) {
         $error = 'Nilai harus berupa angka antara 0 sampai 100!';
     } else {
-        // Calculate Grade Letter
-        $nilaiHuruf = calculateGrade($nilai);
-
-        // Insert data
-        $insertQuery = "INSERT INTO tbl_nilai (nim, kodeMatkul, nidn, nilai, nilaiHuruf) VALUES (?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($insertQuery);
-        $stmt->bind_param("sssis", $nim, $kodeMatkul, $nidn, $nilai, $nilaiHuruf);
-
-        if ($stmt->execute()) {
-            echo "<script>
-                    alert('Data nilai berhasil ditambahkan! Grade: $nilaiHuruf');
-                    window.location.href = 'view_nilai.php';
-                  </script>";
-            exit;
+        // Otomatis ambil Dosen pengampu berdasarkan Mata Kuliah
+        $checkDosen = $conn->prepare("SELECT nidn FROM tbl_matkul WHERE kodeMatkul = ?");
+        $checkDosen->bind_param("s", $kodeMatkul);
+        $checkDosen->execute();
+        $resDosen = $checkDosen->get_result();
+        
+        if ($rowDosen = $resDosen->fetch_assoc()) {
+            $nidn = $rowDosen['nidn'];
+            
+            // Hitung Grade Huruf
+            $nilaiHuruf = calculateGrade($nilai);
+    
+            // Simpan data nilai
+            $stmt = $conn->prepare("INSERT INTO tbl_nilai (nim, kodeMatkul, nidn, nilai, nilaiHuruf) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssis", $nim, $kodeMatkul, $nidn, $nilai, $nilaiHuruf);
+    
+            if ($stmt->execute()) {
+                $_SESSION['flash_message'] = [
+                    'type' => 'success',
+                    'message' => "Data nilai berhasil ditambahkan! Grade: $nilaiHuruf"
+                ];
+                header('Location: view_nilai.php');
+                exit;
+            } else {
+                $error = 'Terjadi kesalahan sistem: ' . $conn->error;
+            }
         } else {
-            $error = 'Gagal menyimpan data: ' . $conn->error;
+           $error = 'Mata kuliah tidak valid atau tidak memiliki Dosen pengampu!'; 
         }
     }
 }
+
+require_once '../includes/header.php';
 ?>
 
 <!-- Page Header -->
@@ -130,20 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 }
                                 ?>
                             </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="nidn" class="form-label">Dosen Pengampu</label>
-                            <select class="form-select" id="nidn" name="nidn" required>
-                                <option value="" selected disabled>Pilih Dosen</option>
-                                <?php
-                                $dosenResult->data_seek(0);
-                                while ($dosen = $dosenResult->fetch_assoc()) {
-                                    $selected = (isset($_POST['nidn']) && $_POST['nidn'] == $dosen['nidn']) ? 'selected' : '';
-                                    echo "<option value='" . $dosen['nidn'] . "' $selected>" . $dosen['nama'] . " (" . $dosen['nidn'] . ")</option>";
-                                }
-                                ?>
-                            </select>
+                            <div class="form-text">Dosen pengampu akan otomatis terisi sesuai mata kuliah.</div>
                         </div>
 
                         <div class="mb-4">

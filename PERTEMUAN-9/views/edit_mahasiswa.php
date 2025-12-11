@@ -1,72 +1,77 @@
 <?php
 /**
- * Edit Data Mahasiswa
- * Form untuk mengubah data mahasiswa di tbl_mahasiswa
+ * Halaman Edit Data Mahasiswa
+ * Memproses perubahan data mahasiswa. NIM bersifat read-only.
  */
 
 $pageTitle = 'Edit Data Mahasiswa - SIAKAD Kampus';
 require_once '../config/database.php';
-require_once '../includes/header.php';
+
+// Pastikan session aktif
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $error = '';
-$success = '';
 $data = null;
+$nim_param = $_GET['id'] ?? '';
 
-// Get ID from URL
-$nim_param = isset($_GET['id']) ? $_GET['id'] : '';
-
+// Validasi parameter ID
 if (empty($nim_param)) {
-    echo "<script>alert('ID tidak ditemukan!'); window.location.href='view_mahasiswa.php';</script>";
+    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'ID data tidak ditemukan!'];
+    header('Location: view_mahasiswa.php');
     exit;
 }
 
 $conn = getConnection();
 
-// Fetch Data
-$query = "SELECT * FROM tbl_mahasiswa WHERE nim = ?";
-$stmt = $conn->prepare($query);
+// Ambil data mahasiswa eksisting
+$stmt = $conn->prepare("SELECT * FROM tbl_mahasiswa WHERE nim = ?");
 $stmt->bind_param("s", $nim_param);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    echo "<script>alert('Data tidak ditemukan!'); window.location.href='view_mahasiswa.php';</script>";
+    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Data mahasiswa tidak ditemukan!'];
+    header('Location: view_mahasiswa.php');
     exit;
 }
 
 $data = $result->fetch_assoc();
 
-// Handle Form Submission
+// Proses Update Form
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nama = $_POST['nama'];
     $prodi = $_POST['prodi'];
     $angkatan = $_POST['angkatan'];
     $email = $_POST['email'];
 
-    // Validasi Input
+    // Validasi data input
     if (empty($nama) || empty($prodi) || empty($angkatan) || empty($email)) {
-        $error = 'Semua field harus diisi!';
+        $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($angkatan) || strlen($angkatan) != 4) {
         $error = 'Tahun angkatan harus 4 digit angka!';
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = 'Format email tidak valid!';
     } else {
-        // Update data
-        $updateQuery = "UPDATE tbl_mahasiswa SET nama = ?, prodi = ?, angkatan = ?, email = ? WHERE nim = ?";
-        $stmtUpdate = $conn->prepare($updateQuery);
+        // Eksekusi update
+        $stmtUpdate = $conn->prepare("UPDATE tbl_mahasiswa SET nama = ?, prodi = ?, angkatan = ?, email = ? WHERE nim = ?");
         $stmtUpdate->bind_param("sssss", $nama, $prodi, $angkatan, $email, $nim_param);
 
         if ($stmtUpdate->execute()) {
-             echo "<script>
-                    alert('Data mahasiswa berhasil diperbarui!');
-                    window.location.href = 'view_mahasiswa.php';
-                  </script>";
+             $_SESSION['flash_message'] = [
+                'type' => 'success',
+                'message' => 'Data mahasiswa berhasil diperbarui!'
+             ];
+             header('Location: view_mahasiswa.php');
             exit;
         } else {
             $error = 'Gagal memperbarui data: ' . $conn->error;
         }
     }
 }
+
+require_once '../includes/header.php';
 ?>
 
 <!-- Page Header -->

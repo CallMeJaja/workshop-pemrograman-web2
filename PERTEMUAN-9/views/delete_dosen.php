@@ -1,53 +1,55 @@
 <?php
 /**
- * Delete Dosen
- * Script untuk menghapus data dosen dari tbl_dosen
+ * Script Hapus Data Dosen
+ * Menghapus data dosen berdasarkan ID. Menangani error Constraint/Foreign Key.
  */
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once '../config/database.php';
 
-// Get ID from URL
+// Validasi ID dari parameter URL
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $nidn = $_GET['id'];
     $conn = getConnection();
 
-    // Check availability first (optional but good for UX or ensuring record exists)
-    // Note: If enforced FK constraints exist, delete might fail if children exist.
-    
-    // Prepare Delete Statement
-    $query = "DELETE FROM tbl_dosen WHERE nidn = ?";
-    $stmt = $conn->prepare($query);
+    // Eksekusi penghapusan
+    $stmt = $conn->prepare("DELETE FROM tbl_dosen WHERE nidn = ?");
     $stmt->bind_param("s", $nidn);
 
     if ($stmt->execute()) {
-        // Success
-        echo "<script>
-                alert('Data dosen berhasil dihapus!');
-                window.location.href = 'view_dosen.php';
-              </script>";
+        $_SESSION['flash_message'] = [
+            'type' => 'success',
+            'message' => 'Data dosen berhasil dihapus secara permanen.'
+        ];
     } else {
-        // Failure (likely constraint violation)
+        // Penanganan Error (Constraint Database)
         $errorMsg = $conn->error;
-        // Check for integrity constraint violation
         if (strpos($errorMsg, 'Constraint') !== false || strpos($errorMsg, 'foreign key') !== false) {
-             echo "<script>
-                alert('Gagal menghapus! Data dosen ini sedang digunakan di tabel lain (Mata Kuliah/Nilai). Hapus data terkait terlebih dahulu.');
-                window.location.href = 'view_dosen.php';
-              </script>";
+             $_SESSION['flash_message'] = [
+                'type' => 'error',
+                'message' => 'Gagal menghapus! Dosen ini masih memiliki data Mata Kuliah atau Nilai aktif.'
+             ];
         } else {
-             echo "<script>
-                alert('Gagal menghapus data: " . addslashes($errorMsg) . "');
-                window.location.href = 'view_dosen.php';
-              </script>";
+             $_SESSION['flash_message'] = [
+                'type' => 'error',
+                'message' => 'Gagal menghapus data: ' . $errorMsg
+             ];
         }
     }
     
     $stmt->close();
+    header('Location: view_dosen.php');
+    exit;
 } else {
-    // No ID provided
-    echo "<script>
-            alert('ID tidak valid!');
-            window.location.href = 'view_dosen.php';
-          </script>";
+    // ID tidak valid
+    $_SESSION['flash_message'] = [
+        'type' => 'error',
+        'message' => 'Parameter ID tidak valid!'
+    ];
+    header('Location: view_dosen.php');
+    exit;
 }
 ?>

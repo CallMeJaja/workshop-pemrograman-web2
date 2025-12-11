@@ -1,49 +1,51 @@
 <?php
 /**
- * Delete Mahasiswa
- * Script untuk menghapus data mahasiswa dari tbl_mahasiswa
+ * Script Hapus Data Mahasiswa
+ * Menghapus data mahasiswa berdasarkan NIM. Menangani error Constraint.
  */
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 require_once '../config/database.php';
 
-// Get ID from URL
+// Validasi ID parameter
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $nim = $_GET['id'];
     $conn = getConnection();
 
-    // Prepare Delete Statement
-    $query = "DELETE FROM tbl_mahasiswa WHERE nim = ?";
-    $stmt = $conn->prepare($query);
+    // Eksekusi penghapusan
+    $stmt = $conn->prepare("DELETE FROM tbl_mahasiswa WHERE nim = ?");
     $stmt->bind_param("s", $nim);
 
     if ($stmt->execute()) {
-        // Success
-        echo "<script>
-                alert('Data mahasiswa berhasil dihapus!');
-                window.location.href = 'view_mahasiswa.php';
-              </script>";
+        $_SESSION['flash_message'] = [
+            'type' => 'success',
+            'message' => 'Data mahasiswa berhasil dihapus.'
+        ];
     } else {
-        // Failure
+        // Penanganan Error Constraint
         $errorMsg = $conn->error;
         if (strpos($errorMsg, 'Constraint') !== false || strpos($errorMsg, 'foreign key') !== false) {
-             echo "<script>
-                alert('Gagal menghapus! Data mahasiswa ini masih memiliki nilai. Hapus data nilai terlebih dahulu.');
-                window.location.href = 'view_mahasiswa.php';
-              </script>";
+             $_SESSION['flash_message'] = [
+                'type' => 'error',
+                'message' => 'Gagal menghapus! Mahasiswa ini masih memiliki data Nilai yang aktif.'
+             ];
         } else {
-             echo "<script>
-                alert('Gagal menghapus data: " . addslashes($errorMsg) . "');
-                window.location.href = 'view_mahasiswa.php';
-              </script>";
+             $_SESSION['flash_message'] = [
+                'type' => 'error',
+                'message' => 'Gagal menghapus data: ' . $errorMsg
+             ];
         }
     }
     
     $stmt->close();
+    header('Location: view_mahasiswa.php');
+    exit;
 } else {
-    // No ID provided
-    echo "<script>
-            alert('ID tidak valid!');
-            window.location.href = 'view_mahasiswa.php';
-          </script>";
+    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Parameter ID tidak valid!'];
+    header('Location: view_mahasiswa.php');
+    exit;
 }
 ?>
