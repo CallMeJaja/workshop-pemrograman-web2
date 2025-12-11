@@ -1,3 +1,4 @@
+<?php
 /**
  * Halaman Tambah Mata Kuliah
  * Memproses penambahan mata kuliah baru.

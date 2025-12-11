@@ -1,3 +1,4 @@
+<?php
 /**
  * Halaman Manajemen Data Dosen
  * Menampilkan daftar dosen dengan opsi tambah, edit, dan hapus.

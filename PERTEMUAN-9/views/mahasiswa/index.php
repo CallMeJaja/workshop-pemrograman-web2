@@ -1,3 +1,4 @@
+<?php
 /**
  * Halaman Manajemen Data Mahasiswa
  * Menampilkan daftar mahasiswa, opsi tambah, edit, dan hapus.

@@ -1,3 +1,4 @@
+<?php
 /**
  * Halaman Manajemen Data Nilai
  * Menampilkan daftar nilai mahasiswa (NIM, Nama, Mata Kuliah, Dosen, Nilai, Grade).

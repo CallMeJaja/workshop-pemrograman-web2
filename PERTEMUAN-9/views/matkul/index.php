@@ -1,3 +1,4 @@
+<?php
 /**
  * Halaman Manajemen Data Mata Kuliah
  * Menampilkan daftar mata kuliah dan relasi dosen pengampu.

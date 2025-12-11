@@ -1,3 +1,4 @@
+<?php
 /**
  * Halaman Tambah Data Mahasiswa
  * Memproses penambahan data mahasiswa baru.
