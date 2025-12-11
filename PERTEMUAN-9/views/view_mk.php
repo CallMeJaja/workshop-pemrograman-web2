@@ -65,6 +65,7 @@ $result = $conn->query($query);
                                 <th scope="col">Nama Mata Kuliah</th>
                                 <th scope="col" class="text-center">SKS</th>
                                 <th scope="col">Dosen Pengampu</th>
+                                <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,6 +91,16 @@ $result = $conn->query($query);
                                         <i class="bi bi-person-check me-1 text-primary"></i>
                                         <?= htmlspecialchars($row['nama_dosen'] ?? 'N/A') ?>
                                         <small class="text-muted">(<?= htmlspecialchars($row['nidn']) ?>)</small>
+                                    </td>
+                                    <td>
+                                        <a href="edit_mk.php?id=<?= htmlspecialchars($row['kodeMatkul']) ?>" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil me-1"></i>
+                                            Ubah
+                                        </a>
+                                        <a href="delete_mk.php?id=<?= htmlspecialchars($row['kodeMatkul']) ?>" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash me-1"></i>
+                                            Hapus
+                                        </a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

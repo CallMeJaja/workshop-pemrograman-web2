@@ -63,6 +63,7 @@ $result = $conn->query($query);
                                 <th scope="col">Program Studi</th>
                                 <th scope="col" class="text-center">Angkatan</th>
                                 <th scope="col">Email</th>
+                                <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -93,6 +94,16 @@ $result = $conn->query($query);
                                         <a href="mailto:<?= htmlspecialchars($row['email']) ?>" class="text-decoration-none">
                                             <i class="bi bi-envelope me-1"></i>
                                             <?= htmlspecialchars($row['email']) ?>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="edit_mahasiswa.php?id=<?= htmlspecialchars($row['nim']) ?>" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-pencil me-1"></i>
+                                            Ubah
+                                        </a>
+                                        <a href="delete_mahasiswa.php?id=<?= htmlspecialchars($row['nim']) ?>" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-trash me-1"></i>
+                                            Hapus
                                         </a>
                                     </td>
                                 </tr>
