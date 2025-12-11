@@ -79,6 +79,11 @@ function getGradeBadge($grade)
                     </h5>
                 </div>
                 <div class="col-auto">
+                    <a href="add_nilai.php" class="btn btn-warning text-dark fw-bold">
+                        <i class="bi bi-plus me-1"></i>Tambah Data Nilai
+                    </a>
+                </div>
+                <div class="col-auto">
                     <span class="badge bg-warning text-dark fs-6">
                         Total: <?= $result->num_rows ?> data
                     </span>
@@ -99,6 +104,7 @@ function getGradeBadge($grade)
                                 <th scope="col" class="text-center">Nilai</th>
                                 <th scope="col" class="text-center">Grade</th>
                                 <th scope="col">Dosen Pengampu</th>
+                                <th scope="col">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -136,6 +142,16 @@ function getGradeBadge($grade)
                                     <td>
                                         <i class="bi bi-person-check me-1 text-primary"></i>
                                         <?= htmlspecialchars($row['nama_dosen'] ?? 'N/A') ?>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="edit_nilai.php?id=<?= htmlspecialchars($row['id_nilai']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="delete_nilai.php?id=<?= htmlspecialchars($row['id_nilai']) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data nilai ini?')" title="Hapus Data">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

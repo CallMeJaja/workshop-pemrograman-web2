@@ -45,6 +45,11 @@ $result = $conn->query($query);
                     </h5>
                 </div>
                 <div class="col-auto">
+                    <a href="add_dosen.php" class="btn btn-primary fw-bold">
+                        <i class="bi bi-plus me-1"></i>Tambah Data Dosen
+                    </a>
+                </div>
+                <div class="col-auto">
                     <span class="badge bg-primary fs-6">
                         Total: <?= $result->num_rows ?> data
                     </span>
@@ -91,14 +96,14 @@ $result = $conn->query($query);
                                         </a>
                                     </td>
                                     <td>
-                                        <a href="edit_dosen.php?id=<?= htmlspecialchars($row['nidn']) ?>" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-pencil me-1"></i>
-                                            Ubah
-                                        </a>
-                                        <a href="delete_dosen.php?id=<?= htmlspecialchars($row['nidn']) ?>" class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash me-1"></i>
-                                            Hapus
-                                        </a>
+                                        <div class="btn-group" role="group">
+                                            <a href="edit_dosen.php?id=<?= htmlspecialchars($row['nidn']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="delete_dosen.php?id=<?= htmlspecialchars($row['nidn']) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data dosen ini?')" title="Hapus Data">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

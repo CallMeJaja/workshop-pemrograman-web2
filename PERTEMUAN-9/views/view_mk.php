@@ -48,6 +48,11 @@ $result = $conn->query($query);
                     </h5>
                 </div>
                 <div class="col-auto">
+                    <a href="add_mk.php" class="btn btn-info text-white fw-bold">
+                        <i class="bi bi-plus me-1"></i>Tambah Data Mata Kuliah
+                    </a>
+                </div>
+                <div class="col-auto">
                     <span class="badge bg-info fs-6">
                         Total: <?= $result->num_rows ?> data
                     </span>
@@ -93,14 +98,14 @@ $result = $conn->query($query);
                                         <small class="text-muted">(<?= htmlspecialchars($row['nidn']) ?>)</small>
                                     </td>
                                     <td>
-                                        <a href="edit_mk.php?id=<?= htmlspecialchars($row['kodeMatkul']) ?>" class="btn btn-sm btn-outline-primary">
-                                            <i class="bi bi-pencil me-1"></i>
-                                            Ubah
-                                        </a>
-                                        <a href="delete_mk.php?id=<?= htmlspecialchars($row['kodeMatkul']) ?>" class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-trash me-1"></i>
-                                            Hapus
-                                        </a>
+                                        <div class="btn-group" role="group">
+                                            <a href="edit_mk.php?id=<?= htmlspecialchars($row['kodeMatkul']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="delete_mk.php?id=<?= htmlspecialchars($row['kodeMatkul']) ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data mata kuliah ini?')" title="Hapus Data">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>

@@ -62,7 +62,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="../index.php">
                 <i class="bi bi-mortarboard-fill me-2"></i>SIAKAD Kampus
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,7 +71,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'index.php' ? 'active' : '' ?>" href="index.php">
+                        <a class="nav-link <?= $currentPage === 'index.php' ? 'active' : '' ?>" href="../index.php">
                             <i class="bi bi-house-door me-1"></i>Beranda
                         </a>
                     </li>
