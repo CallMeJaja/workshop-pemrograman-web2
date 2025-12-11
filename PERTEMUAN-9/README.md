@@ -1,6 +1,6 @@
 # Aplikasi Kampus (Pertemuan 9)
 
-Aplikasi web sederhana untuk manajemen data akademik kampus yang dikembangkan menggunakan PHP Native dan Bootstrap. Project ini merupakan bagian dari materi Workshop Pemrograman Web 2.
+Aplikasi web sederhana untuk manajemen data akademik kampus yang dikembangkan menggunakan PHP Native dan Bootstrap. Project ini merupakan bagian dari materi Workshop Pemrograman Web 2. 
 
 ## 📋 Fitur Utama
 - **Dashboard**: Ringkasan data akademik.
