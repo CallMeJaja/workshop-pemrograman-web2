@@ -107,23 +107,7 @@ $nilaiCount = $conn->query("SELECT COUNT(*) as total FROM tbl_nilai")->fetch_ass
             </div>
         </div>
 
-        <!-- Data Mata Kuliah -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card menu-card h-100">
-                <div class="card-body text-center py-4">
-                    <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                        <i class="bi bi-book text-info" style="font-size: 2.5rem;"></i>
-                    </div>
-                    <h5 class="card-title">Data Mata Kuliah</h5>
-                    <p class="card-text text-muted small">Lihat dan kelola data mata kuliah</p>
-                    <a href="views/view_mk.php" class="btn btn-info text-white">
-                        <i class="bi bi-eye me-1"></i>Lihat Data
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Data Mahasiswa -->
+<!-- Data Mahasiswa -->
         <div class="col-md-6 col-lg-3">
             <div class="card menu-card h-100">
                 <div class="card-body text-center py-4">
@@ -139,6 +123,22 @@ $nilaiCount = $conn->query("SELECT COUNT(*) as total FROM tbl_nilai")->fetch_ass
             </div>
         </div>
 
+        <!-- Data Mata Kuliah -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card menu-card h-100">
+                <div class="card-body text-center py-4">
+                    <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="bi bi-book text-info" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h5 class="card-title">Data Mata Kuliah</h5>
+                    <p class="card-text text-muted small">Lihat dan kelola data mata kuliah</p>
+                    <a href="views/view_mk.php" class="btn btn-info text-white">
+                        <i class="bi bi-eye me-1"></i>Lihat Data
+                    </a>
+                </div>
+            </div>
+        </div>
+        
         <!-- Data Nilai -->
         <div class="col-md-6 col-lg-3">
             <div class="card menu-card h-100">
