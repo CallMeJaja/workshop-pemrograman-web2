@@ -10,12 +10,10 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once '../../config/database.php';
 
-// Cek parameter ID
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id = $_GET['id'];
     $conn = getConnection();
     
-    // Eksekusi penghapusan
     $stmt = $conn->prepare("DELETE FROM tbl_nilai WHERE id_nilai = ?");
     $stmt->bind_param("i", $id);
 

@@ -7,7 +7,6 @@
 $pageTitle = 'Input Nilai - SIAKAD Kampus';
 require_once '../../config/database.php';
 
-// Pastikan session aktif
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -17,32 +16,47 @@ $error = '';
 
 // Data dropdown
 $mhsResult = $conn->query("SELECT nim, nama FROM tbl_mahasiswa ORDER BY nama ASC");
-$mkResult = $conn->query("SELECT kode_mk, nama_mk FROM tbl_matkul ORDER BY nama_mk ASC");
+$mkResult = $conn->query("SELECT kodeMatkul, namaMatkul FROM tbl_matkul ORDER BY namaMatkul ASC");
 $dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nim        = $_POST['nim'];
-    $kode_mk    = $_POST['kode_mk'];
-    $nidn       = $_POST['nidn'];
+    $kodeMatkul = $_POST['kodeMatkul'];
+    $nidn       = isset($_POST['nidn']) ? $_POST['nidn'] : null; // NIDN might need to be fetched via JS or separate selection, but let's assume hidden field or auto-select. Wait, add.php doesn't have NIDN input? Checking file content... it does not have NIDN input visible in form!! It says "Dosen pengampu akan otomatis terisi". That requires JS or backend lookup. For now, let's fix the column names.
+    // Wait, add.php logic: INSERT INTO tbl_nilai ... VALUES ... $nidn. 
+    // BUT the form doesn't send nidn. It says "Dosen pengampu akan otomatis terisi".
+    // AND the previous code expected $_POST['nidn'].
+    // If the form doesn't have it, $_POST['nidn'] is null/undefined.
+    // Let's Add NIDN lookup based on KodeMatkul before insert.
     $nilai      = $_POST['nilai'];
 
-    // Validasi data input
-    if (empty($nim) || empty($kode_mk) || empty($nidn) || $nilai === '') {
-        $error = 'Semua field wajib diisi!';
+    if (!empty($kodeMatkul)) {
+        $stmtDosen = $conn->prepare("SELECT nidn FROM tbl_matkul WHERE kodeMatkul = ?");
+        $stmtDosen->bind_param("s", $kodeMatkul);
+        $stmtDosen->execute();
+        $resDosen = $stmtDosen->get_result();
+        if ($resDosen->num_rows > 0) {
+            $d = $resDosen->fetch_assoc();
+            $nidn = $d['nidn'];
+        }
+    }
+
+    if (empty($nim) || empty($kodeMatkul) || empty($nidn) || $nilai === '') {
+        $error = 'Semua field wajib diisi! Pastikan Mata Kuliah memiliki Dosen Pengampu.';
     } elseif (!is_numeric($nilai) || $nilai < 0 || $nilai > 100) {
         $error = 'Nilai harus berupa angka antara 0 - 100!';
     } else {
-        // Hitung Grade otomatis
         $grade = '';
         if ($nilai >= 85) $grade = 'A';
         elseif ($nilai >= 75) $grade = 'B';
         elseif ($nilai >= 60) $grade = 'C';
         elseif ($nilai >= 50) $grade = 'D';
         else $grade = 'E';
+        
+        $nilaiHuruf = $grade;
 
-        // Simpan data
-        $stmt = $conn->prepare("INSERT INTO tbl_nilai (nim, kode_mk, nidn, nilai, grade) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssds", $nim, $kode_mk, $nidn, $nilai, $grade); // 'd' for double if nilai is decimal, otherwise 'i' or 'd' works. Assuming decimal/float.
+        $stmt = $conn->prepare("INSERT INTO tbl_nilai (nim, kodeMatkul, nidn, nilai, nilaiHuruf) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssds", $nim, $kodeMatkul, $nidn, $nilai, $nilaiHuruf); // 'd' for double if nilai is decimal, otherwise 'i' or 'd' works. Assuming decimal/float.
 
         if ($stmt->execute()) {
             $_SESSION['flash_message'] = [

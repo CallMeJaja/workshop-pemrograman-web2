@@ -7,7 +7,6 @@
 $pageTitle = 'Edit Mata Kuliah - SIAKAD Kampus';
 require_once '../../config/database.php';
 
-// Pastikan session aktif
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -16,7 +15,6 @@ $error = '';
 $data = null;
 $kode_mk_param = $_GET['id'] ?? '';
 
-// Validasi parameter ID
 if (empty($kode_mk_param)) {
     $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Kode Mata Kuliah tidak ditemukan!'];
     header('Location: index.php');
@@ -25,10 +23,8 @@ if (empty($kode_mk_param)) {
 
 $conn = getConnection();
 
-// Ambil data dosen untuk dropdown
 $dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
 
-// Ambil data mata kuliah eksisting
 $stmt = $conn->prepare("SELECT * FROM tbl_matkul WHERE kodeMatkul = ?");
 $stmt->bind_param("s", $kode_mk_param);
 $stmt->execute();
@@ -42,19 +38,16 @@ if ($result->num_rows == 0) {
 
 $data = $result->fetch_assoc();
 
-// Proses Update Form
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $namaMatkul = $_POST['namaMatkul'];
     $sks        = $_POST['sks'];
     $nidn       = $_POST['nidn'];
 
-    // Validasi data input
     if (empty($namaMatkul) || empty($sks) || empty($nidn)) {
         $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($sks)) {
         $error = 'SKS harus berupa angka!';
     } else {
-        // Eksekusi update
         $stmtUpdate = $conn->prepare("UPDATE tbl_matkul SET namaMatkul = ?, sks = ?, nidn = ? WHERE kodeMatkul = ?");
         $stmtUpdate->bind_param("siss", $namaMatkul, $sks, $nidn, $kode_mk_param);
 

@@ -9,7 +9,6 @@ $pageTitle = 'Data Nilai - SIAKAD Kampus';
 require_once '../../config/database.php';
 require_once '../../includes/header.php';
 
-// Ambil data nilai beserta informasi relasinya
 $conn = getConnection();
 $query = "SELECT 
             n.id_nilai,
@@ -29,7 +28,6 @@ $query = "SELECT
           ORDER BY n.id_nilai ASC";
 $result = $conn->query($query);
 
-// Fungsi menentukan warna badge berdasarkan grade
 function getGradeColor($grade) {
     switch ($grade) {
         case 'A': return 'bg-success';
@@ -41,7 +39,6 @@ function getGradeColor($grade) {
     }
 }?>
 
-<!-- Header Halaman -->
 <div class="bg-warning py-4 mb-4">
     <div class="container">
         <div class="row align-items-center">
@@ -60,7 +57,6 @@ function getGradeColor($grade) {
     </div>
 </div>
 
-<!-- Konten Utama -->
 <main class="container mb-5">
     <div class="card">
         <div class="card-header bg-white py-3">
@@ -106,11 +102,11 @@ function getGradeColor($grade) {
                                     <td class="text-center"><?= $no++ ?></td>
                                     <td>
                                         <i class="bi bi-person me-2"></i>
-                                        <?= htmlspecialchars($row['nama_mhs']) ?>
+                                        <?= htmlspecialchars($row['nama_mahasiswa']) ?>
                                     </td>
                                     <td>
                                         <i class="bi bi-book me-2"></i>
-                                        <?= htmlspecialchars($row['nama_mk']) ?>
+                                        <?= htmlspecialchars($row['namaMatkul']) ?>
                                     </td>
                                     <td>
                                         <small class="text-muted"><?= htmlspecialchars($row['nama_dosen']) ?></small>
@@ -119,8 +115,8 @@ function getGradeColor($grade) {
                                         <?= htmlspecialchars($row['nilai']) ?>
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge <?= getGradeColor($row['grade']) ?> rounded-pill" style="width: 30px;">
-                                            <?= htmlspecialchars($row['grade']) ?>
+                                        <span class="badge <?= getGradeColor($row['nilaiHuruf']) ?> rounded-pill" style="width: 30px;">
+                                            <?= htmlspecialchars($row['nilaiHuruf']) ?>
                                         </span>
                                     </td>
                                     <td>
@@ -132,7 +128,7 @@ function getGradeColor($grade) {
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#deleteModal"
                                                 data-id="<?= htmlspecialchars($row['id_nilai']) ?>"
-                                                data-nama="<?= htmlspecialchars($row['nama_mhs']) ?> - <?= htmlspecialchars($row['nama_mk']) ?>"
+                                                data-nama="<?= htmlspecialchars($row['nama_mahasiswa']) ?> - <?= htmlspecialchars($row['namaMatkul']) ?>"
                                                 title="Hapus Data">
                                                 <i class="bi bi-trash"></i>
                                             </button>
@@ -144,7 +140,6 @@ function getGradeColor($grade) {
                     </table>
                 </div>
 
-                <!-- Legenda Grade -->
                 <div class="mt-4 p-3 bg-light rounded">
                     <h6 class="mb-2"><i class="bi bi-info-circle me-2"></i>Keterangan Grade:</h6>
                     <div class="d-flex flex-wrap gap-2">
@@ -170,7 +165,6 @@ function getGradeColor($grade) {
     </div>
 </main>
 
-<!-- Modal Konfirmasi Hapus -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

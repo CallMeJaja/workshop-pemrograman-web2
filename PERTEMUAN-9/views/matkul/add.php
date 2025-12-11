@@ -7,7 +7,6 @@
 $pageTitle = 'Tambah Mata Kuliah - SIAKAD Kampus';
 require_once '../../config/database.php';
 
-// Pastikan session aktif
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -15,7 +14,6 @@ if (session_status() === PHP_SESSION_NONE) {
 $conn = getConnection();
 $error = '';
 
-// Ambil data dosen untuk dropdown
 $dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
 
 
@@ -25,13 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sks        = $_POST['sks'];
     $nidn       = $_POST['nidn'];
 
-    // Validasi data input
     if (empty($kodeMatkul) || empty($namaMatkul) || empty($sks) || empty($nidn)) {
         $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($sks)) {
         $error = 'SKS harus berupa angka!';
     } else {
-        // Cek duplikasi Kode MK
         $stmtCheck = $conn->prepare("SELECT kodeMatkul FROM tbl_matkul WHERE kodeMatkul = ?");
         $stmtCheck->bind_param("s", $kodeMatkul);
         $stmtCheck->execute();
@@ -39,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($stmtCheck->get_result()->num_rows > 0) {
            $error = 'Kode Mata Kuliah sudah terdaftar di sistem!'; 
         } else {
-            // Simpan data baru
             $stmt = $conn->prepare("INSERT INTO tbl_matkul (kodeMatkul, namaMatkul, sks, nidn) VALUES (?, ?, ?, ?)");
             $stmt->bind_param("ssis", $kodeMatkul, $namaMatkul, $sks, $nidn);
 

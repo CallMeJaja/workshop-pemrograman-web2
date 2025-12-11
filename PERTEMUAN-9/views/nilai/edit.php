@@ -7,7 +7,6 @@
 $pageTitle = 'Edit Nilai - SIAKAD Kampus';
 require_once '../../config/database.php';
 
-// Pastikan session aktif
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -17,14 +16,12 @@ $error = '';
 $data = null;
 $id_nilai = $_GET['id'] ?? '';
 
-// Validasi ID
 if (empty($id_nilai)) {
      $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'ID Nilai tidak ditemukan!'];
      header('Location: index.php');
      exit;
 }
 
-// Ambil data nilai eksisting
 $stmt = $conn->prepare("SELECT * FROM tbl_nilai WHERE id_nilai = ?");
 $stmt->bind_param("i", $id_nilai);
 $stmt->execute();
@@ -37,34 +34,32 @@ if ($result->num_rows == 0) {
 }
 $data = $result->fetch_assoc();
 
-// Data dropdown
 $mhsResult = $conn->query("SELECT nim, nama FROM tbl_mahasiswa ORDER BY nama ASC");
-$mkResult = $conn->query("SELECT kode_mk, nama_mk FROM tbl_matkul ORDER BY nama_mk ASC");
+$mkResult = $conn->query("SELECT kodeMatkul, namaMatkul FROM tbl_matkul ORDER BY namaMatkul ASC");
 $dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nim        = $_POST['nim'];
-    $kode_mk    = $_POST['kode_mk'];
+    $kodeMatkul = $_POST['kodeMatkul'];
     $nidn       = $_POST['nidn'];
     $nilai      = $_POST['nilai'];
 
-    // Validasi data input
-    if (empty($nim) || empty($kode_mk) || empty($nidn) || $nilai === '') {
+    if (empty($nim) || empty($kodeMatkul) || empty($nidn) || $nilai === '') {
         $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($nilai) || $nilai < 0 || $nilai > 100) {
         $error = 'Nilai harus berupa angka antara 0 - 100!';
     } else {
-        // Hitung Grade otomatis
         $grade = '';
         if ($nilai >= 85) $grade = 'A';
         elseif ($nilai >= 75) $grade = 'B';
         elseif ($nilai >= 60) $grade = 'C';
         elseif ($nilai >= 50) $grade = 'D';
         else $grade = 'E';
+        
+        $nilaiHuruf = $grade;
 
-        // Update data
-        $stmtUpdate = $conn->prepare("UPDATE tbl_nilai SET nim = ?, kode_mk = ?, nidn = ?, nilai = ?, grade = ? WHERE id_nilai = ?");
-        $stmtUpdate->bind_param("sssdsi", $nim, $kode_mk, $nidn, $nilai, $grade, $id_nilai);
+        $stmtUpdate = $conn->prepare("UPDATE tbl_nilai SET nim = ?, kodeMatkul = ?, nidn = ?, nilai = ?, nilaiHuruf = ? WHERE id_nilai = ?");
+        $stmtUpdate->bind_param("sssdsi", $nim, $kodeMatkul, $nidn, $nilai, $nilaiHuruf, $id_nilai);
 
         if ($stmtUpdate->execute()) {
              $_SESSION['flash_message'] = [
