@@ -41,16 +41,18 @@ $data = $result->fetch_assoc();
 
 // Proses Update Form
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nama   = $_POST['nama'];
-    $prodi  = $_POST['prodi'];
+    $nama     = $_POST['nama'];
+    $prodi    = $_POST['prodi'];
+    $angkatan = $_POST['angkatan'];
+    $email    = $_POST['email'];
 
     // Validasi data input
-    if (empty($nama) || empty($prodi)) {
+    if (empty($nama) || empty($prodi) || empty($angkatan) || empty($email)) {
         $error = 'Semua field wajib diisi!';
     } else {
         // Eksekusi update
-        $stmtUpdate = $conn->prepare("UPDATE tbl_mahasiswa SET nama = ?, prodi = ? WHERE nim = ?");
-        $stmtUpdate->bind_param("sss", $nama, $prodi, $nim_param);
+        $stmtUpdate = $conn->prepare("UPDATE tbl_mahasiswa SET nama = ?, prodi = ?, angkatan = ?, email = ? WHERE nim = ?");
+        $stmtUpdate->bind_param("sssss", $nama, $prodi, $angkatan, $email, $nim_param);
 
         if ($stmtUpdate->execute()) {
              $_SESSION['flash_message'] = [

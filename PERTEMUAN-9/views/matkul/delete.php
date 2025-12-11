@@ -16,7 +16,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     $conn = getConnection();
     
     // Eksekusi penghapusan
-    $stmt = $conn->prepare("DELETE FROM tbl_matkul WHERE kode_mk = ?");
+    $stmt = $conn->prepare("DELETE FROM tbl_matkul WHERE kodeMatkul = ?");
     $stmt->bind_param("s", $id);
 
     if ($stmt->execute()) {

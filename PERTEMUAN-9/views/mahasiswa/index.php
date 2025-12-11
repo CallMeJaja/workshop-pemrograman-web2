@@ -64,6 +64,8 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
                                 <th scope="col">NIM</th>
                                 <th scope="col">Nama Lengkap</th>
                                 <th scope="col">Program Studi</th>
+                                <th scope="col" class="text-center">Angkatan</th>
+                                <th scope="col">Email</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
@@ -85,6 +87,12 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
                                         <span class="badge bg-info text-dark">
                                             <?= htmlspecialchars($row['prodi'] ?? '-') ?>
                                         </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <?= htmlspecialchars($row['angkatan'] ?? '-') ?>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted"><?= htmlspecialchars($row['email'] ?? '-') ?></small>
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">

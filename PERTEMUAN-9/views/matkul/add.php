@@ -15,28 +15,33 @@ if (session_status() === PHP_SESSION_NONE) {
 $conn = getConnection();
 $error = '';
 
+// Ambil data dosen untuk dropdown
+$dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
+
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $kode_mk = $_POST['kode_mk'];
-    $nama_mk = $_POST['nama_mk'];
-    $sks     = $_POST['sks'];
+    $kodeMatkul = $_POST['kodeMatkul'];
+    $namaMatkul = $_POST['namaMatkul'];
+    $sks        = $_POST['sks'];
+    $nidn       = $_POST['nidn'];
 
     // Validasi data input
-    if (empty($kode_mk) || empty($nama_mk) || empty($sks)) {
+    if (empty($kodeMatkul) || empty($namaMatkul) || empty($sks) || empty($nidn)) {
         $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($sks)) {
         $error = 'SKS harus berupa angka!';
     } else {
         // Cek duplikasi Kode MK
-        $stmtCheck = $conn->prepare("SELECT kode_mk FROM tbl_matkul WHERE kode_mk = ?");
-        $stmtCheck->bind_param("s", $kode_mk);
+        $stmtCheck = $conn->prepare("SELECT kodeMatkul FROM tbl_matkul WHERE kodeMatkul = ?");
+        $stmtCheck->bind_param("s", $kodeMatkul);
         $stmtCheck->execute();
         
         if ($stmtCheck->get_result()->num_rows > 0) {
            $error = 'Kode Mata Kuliah sudah terdaftar di sistem!'; 
         } else {
             // Simpan data baru
-            $stmt = $conn->prepare("INSERT INTO tbl_matkul (kode_mk, nama_mk, sks) VALUES (?, ?, ?)");
-            $stmt->bind_param("ssi", $kode_mk, $nama_mk, $sks);
+            $stmt = $conn->prepare("INSERT INTO tbl_matkul (kodeMatkul, namaMatkul, sks, nidn) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("ssis", $kodeMatkul, $namaMatkul, $sks, $nidn);
 
             if ($stmt->execute()) {
                 $_SESSION['flash_message'] = [

@@ -25,8 +25,11 @@ if (empty($kode_mk_param)) {
 
 $conn = getConnection();
 
+// Ambil data dosen untuk dropdown
+$dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
+
 // Ambil data mata kuliah eksisting
-$stmt = $conn->prepare("SELECT * FROM tbl_matkul WHERE kode_mk = ?");
+$stmt = $conn->prepare("SELECT * FROM tbl_matkul WHERE kodeMatkul = ?");
 $stmt->bind_param("s", $kode_mk_param);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -41,18 +44,19 @@ $data = $result->fetch_assoc();
 
 // Proses Update Form
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nama_mk = $_POST['nama_mk'];
-    $sks     = $_POST['sks'];
+    $namaMatkul = $_POST['namaMatkul'];
+    $sks        = $_POST['sks'];
+    $nidn       = $_POST['nidn'];
 
     // Validasi data input
-    if (empty($nama_mk) || empty($sks)) {
+    if (empty($namaMatkul) || empty($sks) || empty($nidn)) {
         $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($sks)) {
         $error = 'SKS harus berupa angka!';
     } else {
         // Eksekusi update
-        $stmtUpdate = $conn->prepare("UPDATE tbl_matkul SET nama_mk = ?, sks = ? WHERE kode_mk = ?");
-        $stmtUpdate->bind_param("sis", $nama_mk, $sks, $kode_mk_param);
+        $stmtUpdate = $conn->prepare("UPDATE tbl_matkul SET namaMatkul = ?, sks = ?, nidn = ? WHERE kodeMatkul = ?");
+        $stmtUpdate->bind_param("siss", $namaMatkul, $sks, $nidn, $kode_mk_param);
 
         if ($stmtUpdate->execute()) {
              $_SESSION['flash_message'] = [

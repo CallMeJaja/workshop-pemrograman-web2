@@ -16,12 +16,14 @@ $conn = getConnection();
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nim = $_POST['nim'];
-    $nama = $_POST['nama'];
-    $prodi = $_POST['prodi'];
+    $nim      = $_POST['nim'];
+    $nama     = $_POST['nama'];
+    $prodi    = $_POST['prodi'];
+    $angkatan = $_POST['angkatan'];
+    $email    = $_POST['email'];
 
     // Validasi data input
-    if (empty($nim) || empty($nama) || empty($prodi)) {
+    if (empty($nim) || empty($nama) || empty($prodi) || empty($angkatan) || empty($email)) {
         $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($nim)) {
         $error = 'NIM harus berupa angka!';
@@ -35,8 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
            $error = 'NIM sudah terdaftar di sistem!'; 
         } else {
             // Simpan data baru
-            $stmt = $conn->prepare("INSERT INTO tbl_mahasiswa (nim, nama, prodi) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $nim, $nama, $prodi);
+            $stmt = $conn->prepare("INSERT INTO tbl_mahasiswa (nim, nama, prodi, angkatan, email) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssss", $nim, $nama, $prodi, $angkatan, $email);
 
             if ($stmt->execute()) {
                 $_SESSION['flash_message'] = [
