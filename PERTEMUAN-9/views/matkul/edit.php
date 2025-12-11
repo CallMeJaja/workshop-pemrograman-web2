@@ -1,11 +1,11 @@
 <?php
 /**
- * Halaman Edit Data Mata Kuliah
- * Memproses perubahan data mata kuliah. Kode MK bersifat read-only.
+ * Halaman Edit Mata Kuliah
+ * Memproses perubahan data mata kuliah.
  */
 
-$pageTitle = 'Edit Data Mata Kuliah - SIAKAD Kampus';
-require_once '../config/database.php';
+$pageTitle = 'Edit Mata Kuliah - SIAKAD Kampus';
+require_once '../../config/database.php';
 
 // Pastikan session aktif
 if (session_status() === PHP_SESSION_NONE) {
@@ -14,56 +14,52 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $error = '';
 $data = null;
-$kode_param = $_GET['id'] ?? '';
+$kode_mk_param = $_GET['id'] ?? '';
 
 // Validasi parameter ID
-if (empty($kode_param)) {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Kode MK tidak ditemukan!'];
-    header('Location: view_mk.php');
+if (empty($kode_mk_param)) {
+    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Kode Mata Kuliah tidak ditemukan!'];
+    header('Location: index.php');
     exit;
 }
 
 $conn = getConnection();
 
 // Ambil data mata kuliah eksisting
-$stmt = $conn->prepare("SELECT * FROM tbl_matkul WHERE kodeMatkul = ?");
-$stmt->bind_param("s", $kode_param);
+$stmt = $conn->prepare("SELECT * FROM tbl_matkul WHERE kode_mk = ?");
+$stmt->bind_param("s", $kode_mk_param);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Data mata kuliah tidak ditemukan!'];
-    header('Location: view_mk.php');
+    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Mata kuliah tidak ditemukan!'];
+    header('Location: index.php');
     exit;
 }
 
 $data = $result->fetch_assoc();
 
-// Ambil data dosen untuk dropdown
-$dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
-
 // Proses Update Form
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $namaMatkul = $_POST['namaMatkul'];
-    $sks        = $_POST['sks'];
-    $nidn       = $_POST['nidn'];
+    $nama_mk = $_POST['nama_mk'];
+    $sks     = $_POST['sks'];
 
     // Validasi data input
-    if (empty($namaMatkul) || empty($sks) || empty($nidn)) {
+    if (empty($nama_mk) || empty($sks)) {
         $error = 'Semua field wajib diisi!';
-    } elseif (!is_numeric($sks) || $sks < 1 || $sks > 6) {
-        $error = 'SKS harus berupa angka antara 1 sampai 6!';
+    } elseif (!is_numeric($sks)) {
+        $error = 'SKS harus berupa angka!';
     } else {
         // Eksekusi update
-        $stmtUpdate = $conn->prepare("UPDATE tbl_matkul SET namaMatkul = ?, sks = ?, nidn = ? WHERE kodeMatkul = ?");
-        $stmtUpdate->bind_param("siss", $namaMatkul, $sks, $nidn, $kode_param);
+        $stmtUpdate = $conn->prepare("UPDATE tbl_matkul SET nama_mk = ?, sks = ? WHERE kode_mk = ?");
+        $stmtUpdate->bind_param("sis", $nama_mk, $sks, $kode_mk_param);
 
         if ($stmtUpdate->execute()) {
              $_SESSION['flash_message'] = [
                 'type' => 'success',
                 'message' => 'Data mata kuliah berhasil diperbarui!'
              ];
-             header('Location: view_mk.php');
+             header('Location: index.php');
             exit;
         } else {
             $error = 'Gagal memperbarui data: ' . $conn->error;
@@ -71,10 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-require_once '../includes/header.php';
+require_once '../../includes/header.php';
 ?>
 
-<!-- Page Header -->
+<!-- Header Halaman -->
 <div class="bg-info text-white py-4 mb-4">
     <div class="container">
         <div class="row align-items-center">
@@ -84,8 +80,8 @@ require_once '../includes/header.php';
                 </h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 mt-2">
-                        <li class="breadcrumb-item"><a href="../index.php" class="text-white-50">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="view_mk.php" class="text-white-50">Data Mata Kuliah</a></li>
+                        <li class="breadcrumb-item"><a href="../../index.php" class="text-white-50">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="index.php" class="text-white-50">Data Mata Kuliah</a></li>
                         <li class="breadcrumb-item active text-white" aria-current="page">Edit Data</li>
                     </ol>
                 </nav>
@@ -94,7 +90,7 @@ require_once '../includes/header.php';
     </div>
 </div>
 
-<!-- Main Content -->
+<!-- Konten Utama -->
 <main class="container mb-5">
     <div class="row justify-center">
         <div class="col-lg-8 mx-auto">
@@ -145,7 +141,7 @@ require_once '../includes/header.php';
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="view_mk.php" class="btn btn-secondary me-md-2">
+                            <a href="index.php" class="btn btn-secondary me-md-2">
                                 <i class="bi bi-arrow-left me-1"></i>Batal
                             </a>
                             <button type="submit" class="btn btn-info text-white">
@@ -159,4 +155,4 @@ require_once '../includes/header.php';
     </div>
 </main>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once '../../includes/footer.php'; ?>

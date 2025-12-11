@@ -1,39 +1,39 @@
 <?php
 /**
- * Halaman Edit Data Dosen
- * Memproses perubahan data dosen dengan NIDN sebagai kunci utama (read-only).
+ * Halaman Edit Data Mahasiswa
+ * Memproses perubahan data mahasiswa.
  */
 
-$pageTitle = 'Edit Data Dosen - SIAKAD Kampus';
-require_once '../config/database.php';
+$pageTitle = 'Edit Data Mahasiswa - SIAKAD Kampus';
+require_once '../../config/database.php';
 
-// Pastikan session dimulai
+// Pastikan session aktif
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 $error = '';
 $data = null;
-$nidn_param = $_GET['id'] ?? '';
+$nim_param = $_GET['id'] ?? '';
 
 // Validasi parameter ID
-if (empty($nidn_param)) {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'ID data tidak ditemukan!'];
-    header('Location: view_dosen.php');
+if (empty($nim_param)) {
+    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'NIM tidak ditemukan!'];
+    header('Location: index.php');
     exit;
 }
 
 $conn = getConnection();
 
-// Ambil data dosen eksisting
-$stmt = $conn->prepare("SELECT * FROM tbl_dosen WHERE nidn = ?");
-$stmt->bind_param("s", $nidn_param);
+// Ambil data mahasiswa eksisting
+$stmt = $conn->prepare("SELECT * FROM tbl_mahasiswa WHERE nim = ?");
+$stmt->bind_param("s", $nim_param);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows == 0) {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Data dosen tidak ditemukan!'];
-    header('Location: view_dosen.php');
+    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Data mahasiswa tidak ditemukan!'];
+    header('Location: index.php');
     exit;
 }
 
@@ -41,26 +41,23 @@ $data = $result->fetch_assoc();
 
 // Proses Update Form
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nama  = $_POST['nama'];
-    $prodi = $_POST['prodi'];
-    $email = $_POST['email'];
+    $nama   = $_POST['nama'];
+    $prodi  = $_POST['prodi'];
 
     // Validasi data input
-    if (empty($nama) || empty($prodi) || empty($email)) {
-        $error = 'Nama Lengkap, Program Studi, dan Email wajib diisi!';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = 'Format email tidak valid!';
+    if (empty($nama) || empty($prodi)) {
+        $error = 'Semua field wajib diisi!';
     } else {
-        // Eksekusi update data
-        $stmtUpdate = $conn->prepare("UPDATE tbl_dosen SET nama = ?, prodi = ?, email = ? WHERE nidn = ?");
-        $stmtUpdate->bind_param("ssss", $nama, $prodi, $email, $nidn_param);
+        // Eksekusi update
+        $stmtUpdate = $conn->prepare("UPDATE tbl_mahasiswa SET nama = ?, prodi = ? WHERE nim = ?");
+        $stmtUpdate->bind_param("sss", $nama, $prodi, $nim_param);
 
         if ($stmtUpdate->execute()) {
              $_SESSION['flash_message'] = [
                 'type' => 'success',
-                'message' => 'Data dosen berhasil diperbarui!'
+                'message' => 'Data mahasiswa berhasil diperbarui!'
              ];
-             header('Location: view_dosen.php');
+             header('Location: index.php');
             exit;
         } else {
             $error = 'Gagal memperbarui data: ' . $conn->error;
@@ -68,21 +65,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-require_once '../includes/header.php';
+require_once '../../includes/header.php';
 ?>
 
-<!-- Page Header -->
-<div class="bg-primary text-white py-4 mb-4">
+<!-- Header Halaman -->
+<div class="bg-success text-white py-4 mb-4">
     <div class="container">
         <div class="row align-items-center">
             <div class="col">
                 <h2 class="mb-0">
-                    <i class="bi bi-pencil-square me-2"></i>Edit Dosen
+                    <i class="bi bi-pencil-square me-2"></i>Edit Mahasiswa
                 </h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 mt-2">
-                        <li class="breadcrumb-item"><a href="../index.php" class="text-white-50">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="view_dosen.php" class="text-white-50">Data Dosen</a></li>
+                        <li class="breadcrumb-item"><a href="../../index.php" class="text-white-50">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="index.php" class="text-white-50">Data Mahasiswa</a></li>
                         <li class="breadcrumb-item active text-white" aria-current="page">Edit Data</li>
                     </ol>
                 </nav>
@@ -91,13 +88,13 @@ require_once '../includes/header.php';
     </div>
 </div>
 
-<!-- Main Content -->
+<!-- Konten Utama -->
 <main class="container mb-5">
     <div class="row justify-center">
         <div class="col-lg-8 mx-auto">
             <div class="card shadow-sm">
                 <div class="card-header bg-white py-3">
-                    <h5 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Form Edit Dosen</h5>
+                    <h5 class="mb-0"><i class="bi bi-person-lines-fill me-2"></i>Form Edit Mahasiswa</h5>
                 </div>
                 <div class="card-body">
                     
@@ -109,13 +106,10 @@ require_once '../includes/header.php';
                     <?php endif; ?>
 
                     <form action="" method="POST" class="needs-validation" novalidate>
-                        <!-- Hidden Old NIDN -->
-                        <input type="hidden" name="nidn_old" value="<?= htmlspecialchars($data['nidn']) ?>">
-
                         <div class="mb-3">
-                            <label for="nidn" class="form-label">NIDN</label>
-                            <input type="text" class="form-control bg-light" id="nidn" name="nidn" value="<?= htmlspecialchars($data['nidn']) ?>" readonly>
-                            <div class="form-text">NIDN tidak dapat diubah.</div>
+                            <label for="nim" class="form-label">NIM</label>
+                            <input type="text" class="form-control bg-light" id="nim" name="nim" value="<?= htmlspecialchars($data['nim']) ?>" readonly>
+                            <div class="form-text">NIM tidak dapat diubah.</div>
                         </div>
 
                         <div class="mb-3">
@@ -138,16 +132,21 @@ require_once '../includes/header.php';
                             </select>
                         </div>
 
+                         <div class="mb-3">
+                            <label for="angkatan" class="form-label">Tahun Angkatan</label>
+                            <input type="number" class="form-control" id="angkatan" name="angkatan" required min="2000" max="2099" value="<?= htmlspecialchars(isset($_POST['angkatan']) ? $_POST['angkatan'] : $data['angkatan']) ?>">
+                        </div>
+
                         <div class="mb-4">
                             <label for="email" class="form-label">Alamat Email</label>
                             <input type="email" class="form-control" id="email" name="email" required value="<?= htmlspecialchars(isset($_POST['email']) ? $_POST['email'] : $data['email']) ?>">
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="view_dosen.php" class="btn btn-secondary me-md-2">
+                            <a href="index.php" class="btn btn-secondary me-md-2">
                                 <i class="bi bi-arrow-left me-1"></i>Batal
                             </a>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-success">
                                 <i class="bi bi-save me-1"></i>Simpan Perubahan
                             </button>
                         </div>
@@ -158,4 +157,4 @@ require_once '../includes/header.php';
     </div>
 </main>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once '../../includes/footer.php'; ?>

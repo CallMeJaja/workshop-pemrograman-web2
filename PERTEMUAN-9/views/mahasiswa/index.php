@@ -1,19 +1,18 @@
-<?php
 /**
  * Halaman Manajemen Data Mahasiswa
  * Menampilkan daftar mahasiswa, opsi tambah, edit, dan hapus.
  */
 
 $pageTitle = 'Data Mahasiswa - SIAKAD Kampus';
-require_once '../config/database.php';
-require_once '../includes/header.php';
+require_once '../../config/database.php';
+require_once '../../includes/header.php';
 
 // Ambil data mahasiswa urut NIM
 $conn = getConnection();
 $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
 ?>
 
-<!-- Page Header -->
+<!-- Header Halaman -->
 <div class="bg-success text-white py-4 mb-4">
     <div class="container">
         <div class="row align-items-center">
@@ -23,7 +22,7 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
                 </h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 mt-2">
-                        <li class="breadcrumb-item"><a href="../index.php" class="text-white-50">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="../../index.php" class="text-white-50">Beranda</a></li>
                         <li class="breadcrumb-item active text-white" aria-current="page">Data Mahasiswa</li>
                     </ol>
                 </nav>
@@ -32,7 +31,7 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
     </div>
 </div>
 
-<!-- Main Content -->
+<!-- Konten Utama -->
 <main class="container mb-5">
     <div class="card">
         <div class="card-header bg-white py-3">
@@ -43,13 +42,13 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
                     </h5>
                 </div>
                 <div class="col-auto">
-                    <a href="add_mahasiswa.php" class="btn btn-success text-white fw-bold">
+                    <a href="add.php" class="btn btn-success text-white fw-bold">
                         <i class="bi bi-plus me-1"></i>Tambah Data Mahasiswa
                     </a>
                 </div>
                 <div class="col-auto">
                     <span class="badge bg-success fs-6">
-                        Total: <?= $result->num_rows ?> data
+                        Total: <?= $result->num_rows ?> mahasiswa
                     </span>
                 </div>
             </div>
@@ -62,10 +61,8 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
                             <tr>
                                 <th scope="col" class="text-center" style="width: 60px;">No</th>
                                 <th scope="col">NIM</th>
-                                <th scope="col">Nama Mahasiswa</th>
+                                <th scope="col">Nama Lengkap</th>
                                 <th scope="col">Program Studi</th>
-                                <th scope="col" class="text-center">Angkatan</th>
-                                <th scope="col">Email</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
@@ -77,7 +74,7 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
                                 <tr>
                                     <td class="text-center"><?= $no++ ?></td>
                                     <td>
-                                        <span class="badge bg-secondary"><?= htmlspecialchars($row['nim']) ?></span>
+                                        <span class="badge bg-dark"><?= htmlspecialchars($row['nim']) ?></span>
                                     </td>
                                     <td>
                                         <i class="bi bi-person-circle me-2 text-success"></i>
@@ -85,23 +82,12 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
                                     </td>
                                     <td>
                                         <span class="badge bg-info text-dark">
-                                            <?= htmlspecialchars($row['prodi']) ?>
+                                            <?= htmlspecialchars($row['prodi'] ?? '-') ?>
                                         </span>
-                                    </td>
-                                    <td class="text-center">
-                                        <span class="badge bg-warning text-dark">
-                                            <?= htmlspecialchars($row['angkatan']) ?>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <a href="mailto:<?= htmlspecialchars($row['email']) ?>" class="text-decoration-none">
-                                            <i class="bi bi-envelope me-1"></i>
-                                            <?= htmlspecialchars($row['email']) ?>
-                                        </a>
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="edit_mahasiswa.php?id=<?= htmlspecialchars($row['nim']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
+                                            <a href="edit.php?id=<?= htmlspecialchars($row['nim']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
                                             <button type="button" class="btn btn-sm btn-outline-danger" 
@@ -127,14 +113,14 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
             <?php endif; ?>
         </div>
         <div class="card-footer bg-white">
-            <a href="../index.php" class="btn btn-outline-secondary">
+            <a href="../../index.php" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left me-1"></i>Kembali ke Beranda
             </a>
         </div>
     </div>
 </main>
 
-<!-- Delete Confirmation Modal -->
+<!-- Modal Konfirmasi Hapus -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -145,7 +131,7 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Apakah Anda yakin ingin menghapus data mahasiswa <strong id="deleteName"></strong>?</p>
+                <p>Apakah Anda yakin ingin menghapus mahasiswa <strong id="deleteName"></strong>?</p>
                 <div class="alert alert-warning small mb-0">
                     <i class="bi bi-info-circle me-1"></i>
                     Data yang dihapus tidak dapat dikembalikan.
@@ -171,9 +157,9 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
             var confirmBtn = deleteModal.querySelector('#confirmDeleteBtn');
             
             namaEl.textContent = nama;
-            confirmBtn.setAttribute('href', 'delete_mahasiswa.php?id=' + id);
+            confirmBtn.setAttribute('href', 'delete.php?id=' + id);
         });
     });
 </script>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once '../../includes/footer.php'; ?>

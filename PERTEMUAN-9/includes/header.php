@@ -2,8 +2,8 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// Get current page for active nav highlighting
-$currentPage = basename($_SERVER['PHP_SELF']);
+// Simple active state detection based on URI
+$uri = $_SERVER['REQUEST_URI'];
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -65,7 +65,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="../index.php">
+            <a class="navbar-brand" href="/index.php">
                 <i class="bi bi-mortarboard-fill me-2"></i>SIAKAD Kampus
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,35 +74,35 @@ $currentPage = basename($_SERVER['PHP_SELF']);
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link <?= $currentPage === 'index.php' ? 'active' : '' ?>" href="../index.php">
+                        <a class="nav-link <?= strpos($uri, '/index.php') !== false || $uri == '/' ? 'active' : '' ?>" href="/index.php">
                             <i class="bi bi-house-door me-1"></i>Beranda
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle <?= in_array($currentPage, ['view_dosen.php', 'view_mk.php', 'view_mahasiswa.php', 'view_nilai.php']) ? 'active' : '' ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle <?= strpos($uri, '/views/') !== false ? 'active' : '' ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-database me-1"></i>Data Master
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
-                                <a class="dropdown-item <?= $currentPage === 'view_dosen.php' ? 'active' : '' ?>" href="../views/view_dosen.php">
+                                <a class="dropdown-item <?= strpos($uri, '/dosen/') !== false ? 'active' : '' ?>" href="/views/dosen/index.php">
                                     <i class="bi bi-person-badge me-2"></i>Data Dosen
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item <?= $currentPage === 'view_mk.php' ? 'active' : '' ?>" href="../views/view_mk.php">
-                                    <i class="bi bi-book me-2"></i>Data Mata Kuliah
+                                <a class="dropdown-item <?= strpos($uri, '/mahasiswa/') !== false ? 'active' : '' ?>" href="/views/mahasiswa/index.php">
+                                    <i class="bi bi-people me-2"></i>Data Mahasiswa
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item <?= $currentPage === 'view_mahasiswa.php' ? 'active' : '' ?>" href="../views/view_mahasiswa.php">
-                                    <i class="bi bi-people me-2"></i>Data Mahasiswa
+                                <a class="dropdown-item <?= strpos($uri, '/matkul/') !== false ? 'active' : '' ?>" href="/views/matkul/index.php">
+                                    <i class="bi bi-book me-2"></i>Data Mata Kuliah
                                 </a>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <a class="dropdown-item <?= $currentPage === 'view_nilai.php' ? 'active' : '' ?>" href="../views/view_nilai.php">
+                                <a class="dropdown-item <?= strpos($uri, '/nilai/') !== false ? 'active' : '' ?>" href="/views/nilai/index.php">
                                     <i class="bi bi-card-checklist me-2"></i>Data Nilai
                                 </a>
                             </li>

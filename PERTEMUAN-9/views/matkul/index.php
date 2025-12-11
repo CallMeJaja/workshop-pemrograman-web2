@@ -1,12 +1,11 @@
-<?php
 /**
  * Halaman Manajemen Data Mata Kuliah
  * Menampilkan daftar mata kuliah dan relasi dosen pengampu.
  */
 
 $pageTitle = 'Data Mata Kuliah - SIAKAD Kampus';
-require_once '../config/database.php';
-require_once '../includes/header.php';
+require_once '../../config/database.php';
+require_once '../../includes/header.php';
 
 // Ambil data mata kuliah dengan nama dosen
 $conn = getConnection();
@@ -17,7 +16,7 @@ $query = "SELECT m.*, d.nama as nama_dosen
 $result = $conn->query($query);
 ?>
 
-<!-- Page Header -->
+<!-- Header Halaman -->
 <div class="bg-info text-white py-4 mb-4">
     <div class="container">
         <div class="row align-items-center">
@@ -27,7 +26,7 @@ $result = $conn->query($query);
                 </h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 mt-2">
-                        <li class="breadcrumb-item"><a href="../index.php" class="text-white-50">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="../../index.php" class="text-white-50">Beranda</a></li>
                         <li class="breadcrumb-item active text-white" aria-current="page">Data Mata Kuliah</li>
                     </ol>
                 </nav>
@@ -36,7 +35,7 @@ $result = $conn->query($query);
     </div>
 </div>
 
-<!-- Main Content -->
+<!-- Konten Utama -->
 <main class="container mb-5">
     <div class="card">
         <div class="card-header bg-white py-3">
@@ -47,7 +46,7 @@ $result = $conn->query($query);
                     </h5>
                 </div>
                 <div class="col-auto">
-                    <a href="add_mk.php" class="btn btn-info text-white fw-bold">
+                    <a href="add.php" class="btn btn-info text-white fw-bold">
                         <i class="bi bi-plus me-1"></i>Tambah Data Mata Kuliah
                     </a>
                 </div>
@@ -98,7 +97,7 @@ $result = $conn->query($query);
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="edit_mk.php?id=<?= htmlspecialchars($row['kodeMatkul']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
+                                            <a href="edit.php?id=<?= htmlspecialchars($row['kodeMatkul']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
                                             <button type="button" class="btn btn-sm btn-outline-danger" 
@@ -124,14 +123,14 @@ $result = $conn->query($query);
             <?php endif; ?>
         </div>
         <div class="card-footer bg-white">
-            <a href="../index.php" class="btn btn-outline-secondary">
+            <a href="../../index.php" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left me-1"></i>Kembali ke Beranda
             </a>
         </div>
     </div>
 </main>
 
-<!-- Delete Confirmation Modal -->
+<!-- Modal Konfirmasi Hapus -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -168,9 +167,9 @@ $result = $conn->query($query);
             var confirmBtn = deleteModal.querySelector('#confirmDeleteBtn');
             
             namaEl.textContent = nama;
-            confirmBtn.setAttribute('href', 'delete_mk.php?id=' + id);
+            confirmBtn.setAttribute('href', 'delete.php?id=' + id);
         });
     });
 </script>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once '../../includes/footer.php'; ?>

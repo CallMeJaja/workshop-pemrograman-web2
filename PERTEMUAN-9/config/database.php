@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Database Configuration
- * Konfigurasi koneksi database MySQL
+ * Konfigurasi Database
+ * Mengatur koneksi ke database MySQL
  */
 
-// Database credentials
+// Kredensial Database
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'kampus');
 define('DB_USER', 'root');
@@ -13,7 +13,7 @@ define('DB_PASS', '');
 define('DB_CHARSET', 'utf8mb4');
 
 /**
- * Get database connection
+ * Membuat koneksi ke database
  * @return mysqli|null
  */
 function getConnection()
@@ -38,7 +38,7 @@ function getConnection()
 }
 
 /**
- * Close database connection
+ * Menutup koneksi database
  */
 function closeConnection()
 {

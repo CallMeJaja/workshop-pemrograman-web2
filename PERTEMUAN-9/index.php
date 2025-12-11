@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Index - Halaman Utama
- * Main dashboard with navigation to all data views
+ * Halaman Utama (Dashboard)
+ * Menampilkan statistik ringkas dan navigasi ke modul data master.
  */
 
 $pageTitle = 'Beranda - SIAKAD Kampus';
 require_once 'config/database.php';
 require_once 'includes/header.php';
 
-// Get counts from database
+// Ambil jumlah data dari database
 $conn = getConnection();
 
 $dosenCount = $conn->query("SELECT COUNT(*) as total FROM tbl_dosen")->fetch_assoc()['total'];
@@ -18,7 +18,7 @@ $mkCount = $conn->query("SELECT COUNT(*) as total FROM tbl_matkul")->fetch_assoc
 $nilaiCount = $conn->query("SELECT COUNT(*) as total FROM tbl_nilai")->fetch_assoc()['total'];
 ?>
 
-<!-- Hero Section -->
+<!-- Bagian Hero -->
 <section class="hero-section">
     <div class="container">
         <div class="row align-items-center">
@@ -36,9 +36,9 @@ $nilaiCount = $conn->query("SELECT COUNT(*) as total FROM tbl_nilai")->fetch_ass
     </div>
 </section>
 
-<!-- Main Content -->
+<!-- Konten Utama -->
 <main class="container mb-5">
-    <!-- Statistics Cards -->
+    <!-- Kartu Statistik -->
     <div class="row g-4 mb-5">
         <div class="col-6 col-lg-3">
             <div class="card bg-primary text-white h-100">
@@ -91,69 +91,61 @@ $nilaiCount = $conn->query("SELECT COUNT(*) as total FROM tbl_nilai")->fetch_ass
         <i class="bi bi-grid-3x3-gap-fill me-2"></i>Menu Utama
     </h2>
     <div class="row g-4">
-        <!-- Data Dosen -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card menu-card h-100">
-                <div class="card-body text-center py-4">
-                    <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                        <i class="bi bi-person-badge text-primary" style="font-size: 2.5rem;"></i>
+        <!-- Card Dosen -->
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100 border-0">
+                    <div class="card-body text-center">
+                        <i class="bi bi-person-badge text-primary display-4 mb-3"></i>
+                        <h5 class="card-title fw-bold">Data Dosen</h5>
+                        <p class="card-text text-muted">Manajemen data dosen pengajar dan informasinya.</p>
+                        <a href="views/dosen/index.php" class="btn btn-outline-primary stretched-link w-100">
+                            <i class="bi bi-arrow-right me-1"></i>Kelola
+                        </a>
                     </div>
-                    <h5 class="card-title">Data Dosen</h5>
-                    <p class="card-text text-muted small">Lihat dan kelola data dosen kampus</p>
-                    <a href="views/view_dosen.php" class="btn btn-primary">
-                        <i class="bi bi-eye me-1"></i>Lihat Data
-                    </a>
                 </div>
             </div>
-        </div>
+            
+            <!-- Card Mahasiswa -->
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100 border-0">
+                    <div class="card-body text-center">
+                        <i class="bi bi-people text-success display-4 mb-3"></i>
+                        <h5 class="card-title fw-bold">Data Mahasiswa</h5>
+                        <p class="card-text text-muted">Kelola data mahasiswa, termasuk tambah, edit, dan hapus.</p>
+                        <a href="views/mahasiswa/index.php" class="btn btn-outline-success stretched-link w-100">
+                            <i class="bi bi-arrow-right me-1"></i>Kelola
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card Mata Kuliah -->
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100 border-0">
+                    <div class="card-body text-center">
+                        <i class="bi bi-book text-info display-4 mb-3"></i>
+                        <h5 class="card-title fw-bold">Mata Kuliah</h5>
+                        <p class="card-text text-muted">Daftar mata kuliah yang tersedia beserta SKS-nya.</p>
+                        <a href="views/matkul/index.php" class="btn btn-outline-info stretched-link w-100">
+                            <i class="bi bi-arrow-right me-1"></i>Kelola
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-<!-- Data Mahasiswa -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card menu-card h-100">
-                <div class="card-body text-center py-4">
-                    <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                        <i class="bi bi-people text-success" style="font-size: 2.5rem;"></i>
+            <!-- Card Nilai -->
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100 border-0">
+                    <div class="card-body text-center">
+                        <i class="bi bi-card-checklist text-warning display-4 mb-3"></i>
+                        <h5 class="card-title fw-bold">Data Nilai</h5>
+                        <p class="card-text text-muted">Input dan kelola nilai mahasiswa per mata kuliah.</p>
+                        <a href="views/nilai/index.php" class="btn btn-outline-warning text-dark stretched-link w-100">
+                            <i class="bi bi-arrow-right me-1"></i>Kelola
+                        </a>
                     </div>
-                    <h5 class="card-title">Data Mahasiswa</h5>
-                    <p class="card-text text-muted small">Lihat dan kelola data mahasiswa</p>
-                    <a href="views/view_mahasiswa.php" class="btn btn-success">
-                        <i class="bi bi-eye me-1"></i>Lihat Data
-                    </a>
                 </div>
             </div>
-        </div>
-
-        <!-- Data Mata Kuliah -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card menu-card h-100">
-                <div class="card-body text-center py-4">
-                    <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                        <i class="bi bi-book text-info" style="font-size: 2.5rem;"></i>
-                    </div>
-                    <h5 class="card-title">Data Mata Kuliah</h5>
-                    <p class="card-text text-muted small">Lihat dan kelola data mata kuliah</p>
-                    <a href="views/view_mk.php" class="btn btn-info text-white">
-                        <i class="bi bi-eye me-1"></i>Lihat Data
-                    </a>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Data Nilai -->
-        <div class="col-md-6 col-lg-3">
-            <div class="card menu-card h-100">
-                <div class="card-body text-center py-4">
-                    <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
-                        <i class="bi bi-card-checklist text-warning" style="font-size: 2.5rem;"></i>
-                    </div>
-                    <h5 class="card-title">Data Nilai</h5>
-                    <p class="card-text text-muted small">Lihat dan kelola data nilai mahasiswa</p>
-                    <a href="views/view_nilai.php" class="btn btn-warning">
-                        <i class="bi bi-eye me-1"></i>Lihat Data
-                    </a>
-                </div>
-            </div>
-        </div>
     </div>
 </main>
 

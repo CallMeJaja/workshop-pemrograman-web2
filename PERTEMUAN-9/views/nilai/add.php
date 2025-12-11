@@ -1,82 +1,67 @@
 <?php
 /**
- * Halaman Tambah Data Nilai
- * Memproses input nilai mahasiswa. Grade dihitung otomatis.
+ * Halaman Input Nilai
+ * Memproses input nilai mahasiswa untuk mata kuliah tertentu.
  */
 
-$pageTitle = 'Tambah Data Nilai - SIAKAD Kampus';
-require_once '../config/database.php';
+$pageTitle = 'Input Nilai - SIAKAD Kampus';
+require_once '../../config/database.php';
 
 // Pastikan session aktif
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+$conn = getConnection();
 $error = '';
 
-$conn = getConnection();
-
-// Ambil data untuk dropdown
+// Data dropdown
 $mhsResult = $conn->query("SELECT nim, nama FROM tbl_mahasiswa ORDER BY nama ASC");
-$mkResult  = $conn->query("SELECT kodeMatkul, namaMatkul FROM tbl_matkul ORDER BY namaMatkul ASC");
-
-// Fungsi hitung Grade
-function calculateGrade($score) {
-    if ($score >= 80) return 'A';
-    if ($score >= 70) return 'B';
-    if ($score >= 60) return 'C';
-    if ($score >= 50) return 'D';
-    return 'E';
-}
+$mkResult = $conn->query("SELECT kode_mk, nama_mk FROM tbl_matkul ORDER BY nama_mk ASC");
+$dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nim        = $_POST['nim'];
-    $kodeMatkul = $_POST['kodeMatkul'];
+    $kode_mk    = $_POST['kode_mk'];
+    $nidn       = $_POST['nidn'];
     $nilai      = $_POST['nilai'];
 
-    // Validasi input
-    if (empty($nim) || empty($kodeMatkul) || $nilai === '') {
+    // Validasi data input
+    if (empty($nim) || empty($kode_mk) || empty($nidn) || $nilai === '') {
         $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($nilai) || $nilai < 0 || $nilai > 100) {
-        $error = 'Nilai harus berupa angka antara 0 sampai 100!';
+        $error = 'Nilai harus berupa angka antara 0 - 100!';
     } else {
-        // Otomatis ambil Dosen pengampu berdasarkan Mata Kuliah
-        $checkDosen = $conn->prepare("SELECT nidn FROM tbl_matkul WHERE kodeMatkul = ?");
-        $checkDosen->bind_param("s", $kodeMatkul);
-        $checkDosen->execute();
-        $resDosen = $checkDosen->get_result();
-        
-        if ($rowDosen = $resDosen->fetch_assoc()) {
-            $nidn = $rowDosen['nidn'];
-            
-            // Hitung Grade Huruf
-            $nilaiHuruf = calculateGrade($nilai);
-    
-            // Simpan data nilai
-            $stmt = $conn->prepare("INSERT INTO tbl_nilai (nim, kodeMatkul, nidn, nilai, nilaiHuruf) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssis", $nim, $kodeMatkul, $nidn, $nilai, $nilaiHuruf);
-    
-            if ($stmt->execute()) {
-                $_SESSION['flash_message'] = [
-                    'type' => 'success',
-                    'message' => "Data nilai berhasil ditambahkan! Grade: $nilaiHuruf"
-                ];
-                header('Location: view_nilai.php');
-                exit;
-            } else {
-                $error = 'Terjadi kesalahan sistem: ' . $conn->error;
-            }
+        // Hitung Grade otomatis
+        $grade = '';
+        if ($nilai >= 85) $grade = 'A';
+        elseif ($nilai >= 75) $grade = 'B';
+        elseif ($nilai >= 60) $grade = 'C';
+        elseif ($nilai >= 50) $grade = 'D';
+        else $grade = 'E';
+
+        // Simpan data
+        $stmt = $conn->prepare("INSERT INTO tbl_nilai (nim, kode_mk, nidn, nilai, grade) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssds", $nim, $kode_mk, $nidn, $nilai, $grade); // 'd' for double if nilai is decimal, otherwise 'i' or 'd' works. Assuming decimal/float.
+
+        if ($stmt->execute()) {
+            $_SESSION['flash_message'] = [
+                'type' => 'success',
+                'message' => 'Nilai berhasil disimpan!'
+            ];
+            header('Location: index.php');
+            exit;
         } else {
-           $error = 'Mata kuliah tidak valid atau tidak memiliki Dosen pengampu!'; 
+            $error = 'Terjadi kesalahan sistem: ' . $conn->error;
         }
     }
 }
 
-require_once '../includes/header.php';
+require_once '../../includes/header.php';
 ?>
 
-<!-- Page Header -->
-<div class="bg-warning text-dark py-4 mb-4">
+<!-- Header Halaman -->
+<div class="bg-warning py-4 mb-4">
     <div class="container">
         <div class="row align-items-center">
             <div class="col">
@@ -85,8 +70,8 @@ require_once '../includes/header.php';
                 </h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 mt-2">
-                        <li class="breadcrumb-item"><a href="../index.php" class="text-dark">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="view_nilai.php" class="text-dark">Data Nilai</a></li>
+                        <li class="breadcrumb-item"><a href="../../index.php" class="text-dark">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="index.php" class="text-dark">Data Nilai</a></li>
                         <li class="breadcrumb-item active text-dark" aria-current="page">Tambah Baru</li>
                     </ol>
                 </nav>
@@ -95,7 +80,7 @@ require_once '../includes/header.php';
     </div>
 </div>
 
-<!-- Main Content -->
+<!-- Konten Utama -->
 <main class="container mb-5">
     <div class="row justify-center">
         <div class="col-lg-8 mx-auto">
@@ -149,7 +134,7 @@ require_once '../includes/header.php';
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="view_nilai.php" class="btn btn-secondary me-md-2">
+                            <a href="index.php" class="btn btn-secondary me-md-2">
                                 <i class="bi bi-arrow-left me-1"></i>Batal
                             </a>
                             <button type="submit" class="btn btn-warning text-dark fw-bold">
@@ -163,4 +148,4 @@ require_once '../includes/header.php';
     </div>
 </main>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once '../../includes/footer.php'; ?>

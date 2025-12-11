@@ -1,53 +1,48 @@
-<?php
 /**
- * Halaman Tambah Data Mata Kuliah
- * Memproses penambahan data mata kuliah baru.
+ * Halaman Tambah Mata Kuliah
+ * Memproses penambahan mata kuliah baru.
  */
 
-$pageTitle = 'Tambah Data Mata Kuliah - SIAKAD Kampus';
-require_once '../config/database.php';
+$pageTitle = 'Tambah Mata Kuliah - SIAKAD Kampus';
+require_once '../../config/database.php';
 
 // Pastikan session aktif
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+$conn = getConnection();
 $error = '';
 
-// Ambil data dosen untuk dropdown
-$conn = getConnection();
-$dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $kodeMatkul = $_POST['kodeMatkul'];
-    $namaMatkul = $_POST['namaMatkul'];
-    $sks        = $_POST['sks'];
-    $nidn       = $_POST['nidn'];
+    $kode_mk = $_POST['kode_mk'];
+    $nama_mk = $_POST['nama_mk'];
+    $sks     = $_POST['sks'];
 
     // Validasi data input
-    if (empty($kodeMatkul) || empty($namaMatkul) || empty($sks) || empty($nidn)) {
+    if (empty($kode_mk) || empty($nama_mk) || empty($sks)) {
         $error = 'Semua field wajib diisi!';
-    } elseif (!is_numeric($sks) || $sks < 1 || $sks > 6) {
-        $error = 'SKS harus berupa angka antara 1 sampai 6!';
+    } elseif (!is_numeric($sks)) {
+        $error = 'SKS harus berupa angka!';
     } else {
         // Cek duplikasi Kode MK
-        $stmtCheck = $conn->prepare("SELECT kodeMatkul FROM tbl_matkul WHERE kodeMatkul = ?");
-        $stmtCheck->bind_param("s", $kodeMatkul);
+        $stmtCheck = $conn->prepare("SELECT kode_mk FROM tbl_matkul WHERE kode_mk = ?");
+        $stmtCheck->bind_param("s", $kode_mk);
         $stmtCheck->execute();
-
+        
         if ($stmtCheck->get_result()->num_rows > 0) {
-            $error = 'Kode Mata Kuliah sudah terdaftar di sistem!';
+           $error = 'Kode Mata Kuliah sudah terdaftar di sistem!'; 
         } else {
             // Simpan data baru
-            $stmt = $conn->prepare("INSERT INTO tbl_matkul (kodeMatkul, namaMatkul, sks, nidn) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssis", $kodeMatkul, $namaMatkul, $sks, $nidn);
+            $stmt = $conn->prepare("INSERT INTO tbl_matkul (kode_mk, nama_mk, sks) VALUES (?, ?, ?)");
+            $stmt->bind_param("ssi", $kode_mk, $nama_mk, $sks);
 
             if ($stmt->execute()) {
                 $_SESSION['flash_message'] = [
                     'type' => 'success',
-                    'message' => 'Data mata kuliah berhasil ditambahkan!'
+                    'message' => 'Mata kuliah berhasil ditambahkan!'
                 ];
-                header('Location: view_mk.php');
+                header('Location: index.php');
                 exit;
             } else {
                 $error = 'Terjadi kesalahan sistem: ' . $conn->error;
@@ -56,10 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-require_once '../includes/header.php';
+require_once '../../includes/header.php';
 ?>
 
-<!-- Page Header -->
+<!-- Header Halaman -->
 <div class="bg-info text-white py-4 mb-4">
     <div class="container">
         <div class="row align-items-center">
@@ -69,8 +64,8 @@ require_once '../includes/header.php';
                 </h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 mt-2">
-                        <li class="breadcrumb-item"><a href="../index.php" class="text-white-50">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="view_mk.php" class="text-white-50">Data Mata Kuliah</a></li>
+                        <li class="breadcrumb-item"><a href="../../index.php" class="text-white-50">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="index.php" class="text-white-50">Data Mata Kuliah</a></li>
                         <li class="breadcrumb-item active text-white" aria-current="page">Tambah Baru</li>
                     </ol>
                 </nav>
@@ -79,7 +74,7 @@ require_once '../includes/header.php';
     </div>
 </div>
 
-<!-- Main Content -->
+<!-- Konten Utama -->
 <main class="container mb-5">
     <div class="row justify-center">
         <div class="col-lg-8 mx-auto">
@@ -129,7 +124,7 @@ require_once '../includes/header.php';
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="view_mk.php" class="btn btn-secondary me-md-2">
+                            <a href="index.php" class="btn btn-secondary me-md-2">
                                 <i class="bi bi-arrow-left me-1"></i>Batal
                             </a>
                             <button type="submit" class="btn btn-info text-white">
@@ -143,4 +138,4 @@ require_once '../includes/header.php';
     </div>
 </main>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once '../../includes/footer.php'; ?>

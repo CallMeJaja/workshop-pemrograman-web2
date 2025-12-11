@@ -1,4 +1,3 @@
-<?php
 /**
  * Halaman Manajemen Data Nilai
  * Menampilkan daftar nilai mahasiswa (NIM, Nama, Mata Kuliah, Dosen, Nilai, Grade).
@@ -6,8 +5,8 @@
  */
 
 $pageTitle = 'Data Nilai - SIAKAD Kampus';
-require_once '../config/database.php';
-require_once '../includes/header.php';
+require_once '../../config/database.php';
+require_once '../../includes/header.php';
 
 // Ambil data nilai beserta informasi relasinya
 $conn = getConnection();
@@ -29,9 +28,8 @@ $query = "SELECT
           ORDER BY n.id_nilai ASC";
 $result = $conn->query($query);
 
-// Fungsi bantu untuk warna badge grade
-function getGradeBadge($grade)
-{
+// Fungsi menentukan warna badge berdasarkan grade
+function getGradeColor($grade) {
     switch ($grade) {
         case 'A': return 'bg-success';
         case 'B': return 'bg-primary';
@@ -40,10 +38,9 @@ function getGradeBadge($grade)
         case 'E': return 'bg-dark';
         default: return 'bg-secondary';
     }
-}
-?>
+}?>
 
-<!-- Page Header -->
+<!-- Header Halaman -->
 <div class="bg-warning py-4 mb-4">
     <div class="container">
         <div class="row align-items-center">
@@ -53,7 +50,7 @@ function getGradeBadge($grade)
                 </h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 mt-2">
-                        <li class="breadcrumb-item"><a href="../index.php" class="text-dark">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="../../index.php" class="text-dark">Beranda</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Data Nilai</li>
                     </ol>
                 </nav>
@@ -62,7 +59,7 @@ function getGradeBadge($grade)
     </div>
 </div>
 
-<!-- Main Content -->
+<!-- Konten Utama -->
 <main class="container mb-5">
     <div class="card">
         <div class="card-header bg-white py-3">
@@ -73,8 +70,8 @@ function getGradeBadge($grade)
                     </h5>
                 </div>
                 <div class="col-auto">
-                    <a href="add_nilai.php" class="btn btn-warning text-dark fw-bold">
-                        <i class="bi bi-plus me-1"></i>Tambah Data Nilai
+                    <a href="add.php" class="btn btn-warning text-dark fw-bold">
+                        <i class="bi bi-plus me-1"></i>Input Nilai Baru
                     </a>
                 </div>
                 <div class="col-auto">
@@ -88,16 +85,14 @@ function getGradeBadge($grade)
             <?php if ($result->num_rows > 0): ?>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover align-middle">
-                        <thead class="bg-warning">
+                        <thead class="bg-warning text-dark">
                             <tr>
                                 <th scope="col" class="text-center" style="width: 60px;">No</th>
-                                <th scope="col">NIM</th>
-                                <th scope="col">Nama Mahasiswa</th>
+                                <th scope="col">Mahasiswa</th>
                                 <th scope="col">Mata Kuliah</th>
-                                <th scope="col" class="text-center">SKS</th>
+                                <th scope="col">Dosen Pengampu</th>
                                 <th scope="col" class="text-center">Nilai</th>
                                 <th scope="col" class="text-center">Grade</th>
-                                <th scope="col">Dosen Pengampu</th>
                                 <th scope="col">Aksi</th>
                             </tr>
                         </thead>
@@ -109,44 +104,34 @@ function getGradeBadge($grade)
                                 <tr>
                                     <td class="text-center"><?= $no++ ?></td>
                                     <td>
-                                        <span class="badge bg-secondary"><?= htmlspecialchars($row['nim']) ?></span>
+                                        <i class="bi bi-person me-2"></i>
+                                        <?= htmlspecialchars($row['nama_mhs']) ?>
                                     </td>
                                     <td>
-                                        <i class="bi bi-person-circle me-2 text-success"></i>
-                                        <?= htmlspecialchars($row['nama_mahasiswa'] ?? 'N/A') ?>
+                                        <i class="bi bi-book me-2"></i>
+                                        <?= htmlspecialchars($row['nama_mk']) ?>
                                     </td>
                                     <td>
-                                        <small class="text-muted"><?= htmlspecialchars($row['kodeMatkul']) ?></small><br>
-                                        <i class="bi bi-book me-1 text-info"></i>
-                                        <?= htmlspecialchars($row['namaMatkul'] ?? 'N/A') ?>
+                                        <small class="text-muted"><?= htmlspecialchars($row['nama_dosen']) ?></small>
+                                    </td>
+                                    <td class="text-center fw-bold">
+                                        <?= htmlspecialchars($row['nilai']) ?>
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge bg-info text-dark">
-                                            <?= htmlspecialchars($row['sks'] ?? '-') ?>
+                                        <span class="badge <?= getGradeColor($row['grade']) ?> rounded-pill" style="width: 30px;">
+                                            <?= htmlspecialchars($row['grade']) ?>
                                         </span>
-                                    </td>
-                                    <td class="text-center">
-                                        <strong><?= number_format($row['nilai'], 1) ?></strong>
-                                    </td>
-                                    <td class="text-center">
-                                        <span class="badge <?= getGradeBadge($row['nilaiHuruf']) ?> fs-6 px-3">
-                                            <?= htmlspecialchars($row['nilaiHuruf']) ?>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <i class="bi bi-person-check me-1 text-primary"></i>
-                                        <?= htmlspecialchars($row['nama_dosen'] ?? 'N/A') ?>
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <a href="edit_nilai.php?id=<?= htmlspecialchars($row['id_nilai']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
+                                            <a href="edit.php?id=<?= htmlspecialchars($row['id_nilai']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-outline-danger" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#deleteModal" 
+                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal"
                                                 data-id="<?= htmlspecialchars($row['id_nilai']) ?>"
-                                                data-nama="<?= htmlspecialchars($row['nama_mahasiswa']) ?> - <?= htmlspecialchars($row['namaMatkul']) ?>"
+                                                data-nama="<?= htmlspecialchars($row['nama_mhs']) ?> - <?= htmlspecialchars($row['nama_mk']) ?>"
                                                 title="Hapus Data">
                                                 <i class="bi bi-trash"></i>
                                             </button>
@@ -158,7 +143,7 @@ function getGradeBadge($grade)
                     </table>
                 </div>
 
-                <!-- Legend -->
+                <!-- Legenda Grade -->
                 <div class="mt-4 p-3 bg-light rounded">
                     <h6 class="mb-2"><i class="bi bi-info-circle me-2"></i>Keterangan Grade:</h6>
                     <div class="d-flex flex-wrap gap-2">
@@ -172,19 +157,19 @@ function getGradeBadge($grade)
             <?php else: ?>
                 <div class="alert alert-info mb-0">
                     <i class="bi bi-info-circle me-2"></i>
-                    Tidak ada data nilai yang tersedia.
+                    Belum ada data nilai yang diinput.
                 </div>
             <?php endif; ?>
         </div>
         <div class="card-footer bg-white">
-            <a href="../index.php" class="btn btn-outline-secondary">
+            <a href="../../index.php" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left me-1"></i>Kembali ke Beranda
             </a>
         </div>
     </div>
 </main>
 
-<!-- Delete Confirmation Modal -->
+<!-- Modal Konfirmasi Hapus -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -221,9 +206,9 @@ function getGradeBadge($grade)
             var confirmBtn = deleteModal.querySelector('#confirmDeleteBtn');
             
             namaEl.textContent = nama;
-            confirmBtn.setAttribute('href', 'delete_nilai.php?id=' + id);
+            confirmBtn.setAttribute('href', 'delete.php?id=' + id);
         });
     });
 </script>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once '../../includes/footer.php'; ?>

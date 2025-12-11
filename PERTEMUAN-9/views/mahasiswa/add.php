@@ -1,56 +1,48 @@
-<?php
 /**
  * Halaman Tambah Data Mahasiswa
- * Memproses pendaftaran mahasiswa baru dengan validasi data.
+ * Memproses penambahan data mahasiswa baru.
  */
 
 $pageTitle = 'Tambah Data Mahasiswa - SIAKAD Kampus';
-require_once '../config/database.php';
+require_once '../../config/database.php';
 
 // Pastikan session aktif
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+$conn = getConnection();
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nim = $_POST['nim'];
     $nama = $_POST['nama'];
     $prodi = $_POST['prodi'];
-    $angkatan = $_POST['angkatan'];
-    $email = $_POST['email'];
 
-    // Validasi input
-    if (empty($nim) || empty($nama) || empty($prodi) || empty($angkatan) || empty($email)) {
+    // Validasi data input
+    if (empty($nim) || empty($nama) || empty($prodi)) {
         $error = 'Semua field wajib diisi!';
     } elseif (!is_numeric($nim)) {
         $error = 'NIM harus berupa angka!';
-    } elseif (!is_numeric($angkatan) || strlen($angkatan) != 4) {
-        $error = 'Tahun angkatan harus 4 digit angka!';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = 'Format email tidak valid!';
     } else {
-        $conn = getConnection();
-
         // Cek duplikasi NIM
         $stmtCheck = $conn->prepare("SELECT nim FROM tbl_mahasiswa WHERE nim = ?");
         $stmtCheck->bind_param("s", $nim);
         $stmtCheck->execute();
-
+        
         if ($stmtCheck->get_result()->num_rows > 0) {
-            $error = 'NIM sudah terdaftar dalam sistem!';
+           $error = 'NIM sudah terdaftar di sistem!'; 
         } else {
-            // Simpan data mahasiswa
-            $stmt = $conn->prepare("INSERT INTO tbl_mahasiswa (nim, nama, prodi, angkatan, email) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssss", $nim, $nama, $prodi, $angkatan, $email);
+            // Simpan data baru
+            $stmt = $conn->prepare("INSERT INTO tbl_mahasiswa (nim, nama, prodi) VALUES (?, ?, ?)");
+            $stmt->bind_param("sss", $nim, $nama, $prodi);
 
             if ($stmt->execute()) {
                 $_SESSION['flash_message'] = [
                     'type' => 'success',
                     'message' => 'Data mahasiswa berhasil ditambahkan!'
                 ];
-                header('Location: view_mahasiswa.php');
+                header('Location: index.php');
                 exit;
             } else {
                 $error = 'Terjadi kesalahan sistem: ' . $conn->error;
@@ -59,10 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-require_once '../includes/header.php';
+require_once '../../includes/header.php';
 ?>
 
-<!-- Page Header -->
+<!-- Header Halaman -->
 <div class="bg-success text-white py-4 mb-4">
     <div class="container">
         <div class="row align-items-center">
@@ -72,8 +64,8 @@ require_once '../includes/header.php';
                 </h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 mt-2">
-                        <li class="breadcrumb-item"><a href="../index.php" class="text-white-50">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="view_mahasiswa.php" class="text-white-50">Data Mahasiswa</a></li>
+                        <li class="breadcrumb-item"><a href="../../index.php" class="text-white-50">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="index.php" class="text-white-50">Data Mahasiswa</a></li>
                         <li class="breadcrumb-item active text-white" aria-current="page">Tambah Baru</li>
                     </ol>
                 </nav>
@@ -82,7 +74,7 @@ require_once '../includes/header.php';
     </div>
 </div>
 
-<!-- Main Content -->
+<!-- Konten Utama -->
 <main class="container mb-5">
     <div class="row justify-center">
         <div class="col-lg-8 mx-auto">
@@ -133,7 +125,7 @@ require_once '../includes/header.php';
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a href="view_mahasiswa.php" class="btn btn-secondary me-md-2">
+                            <a href="index.php" class="btn btn-secondary me-md-2">
                                 <i class="bi bi-arrow-left me-1"></i>Batal
                             </a>
                             <button type="submit" class="btn btn-success">
@@ -147,4 +139,4 @@ require_once '../includes/header.php';
     </div>
 </main>
 
-<?php require_once '../includes/footer.php'; ?>
+<?php require_once '../../includes/footer.php'; ?>
