@@ -1,66 +1,45 @@
 <?php
 /**
  * Halaman Edit Mata Kuliah
- * Memproses perubahan data mata kuliah.
+ * Menggunakan arsitektur MVC.
  */
 
-$pageTitle = 'Edit Mata Kuliah - SIAKAD Kampus';
-require_once '../../config/database.php';
+require_once '../../controllers/MatkulController.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
+$controller = new MatkulController();
 $error = '';
-$data = null;
 $kode_mk_param = $_GET['id'] ?? '';
 
+// Validasi parameter ID
 if (empty($kode_mk_param)) {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Kode Mata Kuliah tidak ditemukan!'];
+    setFlash('error', 'Kode Mata Kuliah tidak ditemukan!');
     header('Location: index.php');
     exit;
 }
 
-$conn = getConnection();
+// Ambil data mata kuliah
+$editData = $controller->edit($kode_mk_param);
 
-$dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
-
-$stmt = $conn->prepare("SELECT * FROM tbl_matkul WHERE kodeMatkul = ?");
-$stmt->bind_param("s", $kode_mk_param);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 0) {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Mata kuliah tidak ditemukan!'];
+if (!$editData) {
+    setFlash('error', 'Mata kuliah tidak ditemukan!');
     header('Location: index.php');
     exit;
 }
 
-$data = $result->fetch_assoc();
+$data = $editData['matkul'];
+$dosenList = $editData['dosen'];
+$pageTitle = $editData['pageTitle'];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $namaMatkul = $_POST['namaMatkul'];
-    $sks        = $_POST['sks'];
-    $nidn       = $_POST['nidn'];
-
-    if (empty($namaMatkul) || empty($sks) || empty($nidn)) {
-        $error = 'Semua field wajib diisi!';
-    } elseif (!is_numeric($sks)) {
-        $error = 'SKS harus berupa angka!';
+// Proses Update Form
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $result = $controller->update($kode_mk_param, $_POST);
+    
+    if ($result['success']) {
+        setFlash('success', $result['message']);
+        header('Location: index.php');
+        exit;
     } else {
-        $stmtUpdate = $conn->prepare("UPDATE tbl_matkul SET namaMatkul = ?, sks = ?, nidn = ? WHERE kodeMatkul = ?");
-        $stmtUpdate->bind_param("siss", $namaMatkul, $sks, $nidn, $kode_mk_param);
-
-        if ($stmtUpdate->execute()) {
-             $_SESSION['flash_message'] = [
-                'type' => 'success',
-                'message' => 'Data mata kuliah berhasil diperbarui!'
-             ];
-             header('Location: index.php');
-            exit;
-        } else {
-            $error = 'Gagal memperbarui data: ' . $conn->error;
-        }
+        $error = implode('<br>', $result['errors']);
     }
 }
 
@@ -105,6 +84,7 @@ require_once '../../includes/header.php';
                     <?php endif; ?>
 
                     <form action="" method="POST" class="needs-validation" novalidate>
+                        <?= csrfField() ?>
                         <div class="mb-3">
                             <label for="kodeMatkul" class="form-label">Kode Mata Kuliah</label>
                             <input type="text" class="form-control bg-light" id="kodeMatkul" name="kodeMatkul" value="<?= htmlspecialchars($data['kodeMatkul']) ?>" readonly>
@@ -126,12 +106,10 @@ require_once '../../includes/header.php';
                             <select class="form-select" id="nidn" name="nidn" required>
                                 <option value="" disabled>Pilih Dosen</option>
                                 <?php
-                                if ($dosenResult->num_rows > 0) {
-                                    $currentDosen = isset($_POST['nidn']) ? $_POST['nidn'] : $data['nidn'];
-                                    while ($dosen = $dosenResult->fetch_assoc()) {
-                                        $selected = ($currentDosen == $dosen['nidn']) ? 'selected' : '';
-                                        echo "<option value='" . $dosen['nidn'] . "' $selected>" . $dosen['nama'] . " (" . $dosen['nidn'] . ")</option>";
-                                    }
+                                $currentDosen = isset($_POST['nidn']) ? $_POST['nidn'] : $data['nidn'];
+                                foreach ($dosenList as $dosen) {
+                                    $selected = ($currentDosen == $dosen['nidn']) ? 'selected' : '';
+                                    echo "<option value='" . htmlspecialchars($dosen['nidn']) . "' $selected>" . htmlspecialchars($dosen['nama']) . " (" . htmlspecialchars($dosen['nidn']) . ")</option>";
                                 }
                                 ?>
                             </select>

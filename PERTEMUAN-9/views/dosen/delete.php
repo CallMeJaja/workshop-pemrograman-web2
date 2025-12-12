@@ -1,50 +1,28 @@
 <?php
 /**
  * Script Hapus Data Dosen
- * Menghapus data dosen berdasarkan NIDN. Mengelola foreign key constraint.
+ * Menggunakan arsitektur MVC.
  */
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once '../../controllers/DosenController.php';
 
-require_once '../../config/database.php';
+$controller = new DosenController();
 
 // Cek parameter ID
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id = $_GET['id'];
-    $conn = getConnection();
+    $result = $controller->destroy($id);
     
-    // Eksekusi penghapusan
-    $stmt = $conn->prepare("DELETE FROM tbl_dosen WHERE nidn = ?");
-    $stmt->bind_param("s", $id);
-
-    if ($stmt->execute()) {
-        $_SESSION['flash_message'] = [
-            'type' => 'success',
-            'message' => 'Data dosen berhasil dihapus.'
-        ];
+    if ($result['success']) {
+        setFlash('success', $result['message']);
     } else {
-        // Cek error constraint
-        $errorMsg = $conn->error;
-        if (strpos($errorMsg, 'Constraint') !== false || strpos($errorMsg, 'foreign key') !== false) {
-            $_SESSION['flash_message'] = [
-                'type' => 'error',
-                'message' => 'Gagal menghapus! Dosen ini masih menjadi pengampu mata kuliah atau wali.'
-            ];
-        } else {
-            $_SESSION['flash_message'] = [
-                'type' => 'error',
-                'message' => 'Gagal menghapus data: ' . $errorMsg
-            ];
-        }
+        setFlash('error', implode('<br>', $result['errors']));
     }
     
-    $stmt->close();
     header('Location: index.php');
     exit;
 } else {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'NIDN tidak valid!'];
+    setFlash('error', 'NIDN tidak valid!');
     header('Location: index.php');
     exit;
 }

@@ -1,72 +1,45 @@
 <?php
 /**
  * Halaman Edit Data Dosen
- * Memproses perubahan data dosen. NIDN bersifat read-only.
+ * Menggunakan arsitektur MVC.
  */
 
-$pageTitle = 'Edit Data Dosen - SIAKAD Kampus';
-require_once '../../config/database.php';
+require_once '../../controllers/DosenController.php';
 
-// Pastikan session aktif
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
+$controller = new DosenController();
 $error = '';
-$data = null;
 $nidn_param = $_GET['id'] ?? '';
 
 // Validasi parameter ID
 if (empty($nidn_param)) {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'NIDN tidak ditemukan!'];
+    setFlash('error', 'NIDN tidak ditemukan!');
     header('Location: index.php');
     exit;
 }
 
-$conn = getConnection();
+// Ambil data dosen
+$data = $controller->edit($nidn_param);
 
-// Ambil data dosen eksisting
-$stmt = $conn->prepare("SELECT * FROM tbl_dosen WHERE nidn = ?");
-$stmt->bind_param("s", $nidn_param);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 0) {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Data dosen tidak ditemukan!'];
+if (!$data) {
+    setFlash('error', 'Data dosen tidak ditemukan!');
     header('Location: index.php');
     exit;
 }
-
-$data = $result->fetch_assoc();
 
 // Proses Update Form
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nama  = $_POST['nama'];
-    $email = $_POST['email'];
-
-    // Validasi data input
-    if (empty($nama) || empty($email)) {
-        $error = 'Semua field wajib diisi!';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = 'Format email tidak valid!';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $result = $controller->update($nidn_param, $_POST);
+    
+    if ($result['success']) {
+        setFlash('success', $result['message']);
+        header('Location: index.php');
+        exit;
     } else {
-        // Eksekusi update data
-        $stmtUpdate = $conn->prepare("UPDATE tbl_dosen SET nama = ?, email = ? WHERE nidn = ?");
-        $stmtUpdate->bind_param("sss", $nama, $email, $nidn_param);
-
-        if ($stmtUpdate->execute()) {
-             $_SESSION['flash_message'] = [
-                'type' => 'success',
-                'message' => 'Data dosen berhasil diperbarui!'
-             ];
-             header('Location: index.php');
-            exit;
-        } else {
-            $error = 'Gagal memperbarui data: ' . $conn->error;
-        }
+        $error = implode('<br>', $result['errors']);
     }
 }
 
+$pageTitle = 'Edit Data Dosen - SIAKAD Kampus';
 require_once '../../includes/header.php';
 ?>
 
@@ -108,6 +81,7 @@ require_once '../../includes/header.php';
                     <?php endif; ?>
 
                     <form action="" method="POST" class="needs-validation" novalidate>
+                        <?= csrfField() ?>
                         <!-- Hidden Old NIDN -->
                         <input type="hidden" name="nidn_old" value="<?= htmlspecialchars($data['nidn']) ?>">
 

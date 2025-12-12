@@ -1,43 +1,18 @@
 <?php
 /**
  * Halaman Manajemen Data Nilai
- * Menampilkan daftar nilai mahasiswa (NIM, Nama, Mata Kuliah, Dosen, Nilai, Grade).
- * Relasi ke tabel mahasiswa, matkul, dan dosen.
+ * Menggunakan arsitektur MVC.
  */
 
-$pageTitle = 'Data Nilai - SIAKAD Kampus';
-require_once '../../config/database.php';
+require_once '../../controllers/NilaiController.php';
+
+$controller = new NilaiController();
+$data = $controller->index();
+$pageTitle = $data['pageTitle'];
+$nilaiList = $data['nilai'];
+
 require_once '../../includes/header.php';
-
-$conn = getConnection();
-$query = "SELECT 
-            n.id_nilai,
-            n.nilai,
-            n.nilaiHuruf,
-            m.nim,
-            m.nama as nama_mahasiswa,
-            mk.kodeMatkul,
-            mk.namaMatkul,
-            mk.sks,
-            d.nidn,
-            d.nama as nama_dosen
-          FROM tbl_nilai n
-          LEFT JOIN tbl_mahasiswa m ON n.nim = m.nim
-          LEFT JOIN tbl_matkul mk ON n.kodeMatkul = mk.kodeMatkul
-          LEFT JOIN tbl_dosen d ON n.nidn = d.nidn
-          ORDER BY n.id_nilai ASC";
-$result = $conn->query($query);
-
-function getGradeColor($grade) {
-    switch ($grade) {
-        case 'A': return 'bg-success';
-        case 'B': return 'bg-primary';
-        case 'C': return 'bg-warning text-dark';
-        case 'D': return 'bg-danger';
-        case 'E': return 'bg-dark';
-        default: return 'bg-secondary';
-    }
-}?>
+?>
 
 <div class="bg-warning py-4 mb-4">
     <div class="container">
@@ -73,13 +48,13 @@ function getGradeColor($grade) {
                 </div>
                 <div class="col-auto">
                     <span class="badge bg-warning text-dark fs-6">
-                        Total: <?= $result->num_rows ?> data
+                        Total: <?= count($nilaiList) ?> data
                     </span>
                 </div>
             </div>
         </div>
         <div class="card-body">
-            <?php if ($result->num_rows > 0): ?>
+            <?php if (count($nilaiList) > 0): ?>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover align-middle">
                         <thead class="bg-warning text-dark">
@@ -96,7 +71,7 @@ function getGradeColor($grade) {
                         <tbody>
                             <?php
                             $no = 1;
-                            while ($row = $result->fetch_assoc()):
+                            foreach ($nilaiList as $row):
                             ?>
                                 <tr>
                                     <td class="text-center"><?= $no++ ?></td>
@@ -115,7 +90,7 @@ function getGradeColor($grade) {
                                         <?= htmlspecialchars($row['nilai']) ?>
                                     </td>
                                     <td class="text-center">
-                                        <span class="badge <?= getGradeColor($row['nilaiHuruf']) ?> rounded-pill" style="width: 30px;">
+                                        <span class="badge <?= NilaiController::getGradeColor($row['nilaiHuruf']) ?> rounded-pill" style="width: 30px;">
                                             <?= htmlspecialchars($row['nilaiHuruf']) ?>
                                         </span>
                                     </td>
@@ -135,7 +110,7 @@ function getGradeColor($grade) {
                                         </div>
                                     </td>
                                 </tr>
-                            <?php endwhile; ?>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>

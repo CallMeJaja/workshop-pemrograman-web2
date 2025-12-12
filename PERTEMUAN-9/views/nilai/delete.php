@@ -1,39 +1,28 @@
 <?php
 /**
  * Script Hapus Nilai
- * Menghapus data nilai berdasarkan ID.
+ * Menggunakan arsitektur MVC.
  */
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once '../../controllers/NilaiController.php';
 
-require_once '../../config/database.php';
+$controller = new NilaiController();
 
+// Cek parameter ID
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id = $_GET['id'];
-    $conn = getConnection();
+    $result = $controller->destroy($id);
     
-    $stmt = $conn->prepare("DELETE FROM tbl_nilai WHERE id_nilai = ?");
-    $stmt->bind_param("i", $id);
-
-    if ($stmt->execute()) {
-        $_SESSION['flash_message'] = [
-            'type' => 'success',
-            'message' => 'Data nilai berhasil dihapus.'
-        ];
+    if ($result['success']) {
+        setFlash('success', $result['message']);
     } else {
-        $_SESSION['flash_message'] = [
-            'type' => 'error',
-            'message' => 'Gagal menghapus data: ' . $conn->error
-        ];
+        setFlash('error', implode('<br>', $result['errors']));
     }
     
-    $stmt->close();
     header('Location: index.php');
     exit;
 } else {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'ID Nilai tidak valid!'];
+    setFlash('error', 'ID Nilai tidak valid!');
     header('Location: index.php');
     exit;
 }
