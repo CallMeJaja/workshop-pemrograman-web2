@@ -1,20 +1,17 @@
 <?php
 /**
  * Halaman Manajemen Data Mata Kuliah
- * Menampilkan daftar mata kuliah dan relasi dosen pengampu.
+ * Menggunakan arsitektur MVC.
  */
 
-$pageTitle = 'Data Mata Kuliah - SIAKAD Kampus';
-require_once '../../config/database.php';
-require_once '../../includes/header.php';
+require_once '../../controllers/MatkulController.php';
 
-// Ambil data mata kuliah dengan nama dosen
-$conn = getConnection();
-$query = "SELECT m.*, d.nama as nama_dosen 
-          FROM tbl_matkul m 
-          LEFT JOIN tbl_dosen d ON m.nidn = d.nidn 
-          ORDER BY m.kodeMatkul ASC";
-$result = $conn->query($query);
+$controller = new MatkulController();
+$data = $controller->index();
+$pageTitle = $data['pageTitle'];
+$matkulList = $data['matkul'];
+
+require_once '../../includes/header.php';
 ?>
 
 <!-- Header Halaman -->
@@ -53,13 +50,13 @@ $result = $conn->query($query);
                 </div>
                 <div class="col-auto">
                     <span class="badge bg-info fs-6">
-                        Total: <?= $result->num_rows ?> data
+                        Total: <?= count($matkulList) ?> data
                     </span>
                 </div>
             </div>
         </div>
         <div class="card-body">
-            <?php if ($result->num_rows > 0): ?>
+            <?php if (count($matkulList) > 0): ?>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover align-middle">
                         <thead class="bg-info text-white">
@@ -75,7 +72,7 @@ $result = $conn->query($query);
                         <tbody>
                             <?php
                             $no = 1;
-                            while ($row = $result->fetch_assoc()):
+                            foreach ($matkulList as $row):
                             ?>
                                 <tr>
                                     <td class="text-center"><?= $no++ ?></td>
@@ -112,7 +109,7 @@ $result = $conn->query($query);
                                         </div>
                                     </td>
                                 </tr>
-                            <?php endwhile; ?>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>

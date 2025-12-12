@@ -1,72 +1,45 @@
 <?php
 /**
  * Halaman Edit Data Mahasiswa
- * Memproses perubahan data mahasiswa.
+ * Menggunakan arsitektur MVC.
  */
 
-$pageTitle = 'Edit Data Mahasiswa - SIAKAD Kampus';
-require_once '../../config/database.php';
+require_once '../../controllers/MahasiswaController.php';
 
-// Pastikan session aktif
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
+$controller = new MahasiswaController();
 $error = '';
-$data = null;
 $nim_param = $_GET['id'] ?? '';
 
 // Validasi parameter ID
 if (empty($nim_param)) {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'NIM tidak ditemukan!'];
+    setFlash('error', 'NIM tidak ditemukan!');
     header('Location: index.php');
     exit;
 }
 
-$conn = getConnection();
+// Ambil data mahasiswa
+$data = $controller->edit($nim_param);
 
-// Ambil data mahasiswa eksisting
-$stmt = $conn->prepare("SELECT * FROM tbl_mahasiswa WHERE nim = ?");
-$stmt->bind_param("s", $nim_param);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 0) {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Data mahasiswa tidak ditemukan!'];
+if (!$data) {
+    setFlash('error', 'Data mahasiswa tidak ditemukan!');
     header('Location: index.php');
     exit;
 }
-
-$data = $result->fetch_assoc();
 
 // Proses Update Form
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nama     = $_POST['nama'];
-    $prodi    = $_POST['prodi'];
-    $angkatan = $_POST['angkatan'];
-    $email    = $_POST['email'];
-
-    // Validasi data input
-    if (empty($nama) || empty($prodi) || empty($angkatan) || empty($email)) {
-        $error = 'Semua field wajib diisi!';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $result = $controller->update($nim_param, $_POST);
+    
+    if ($result['success']) {
+        setFlash('success', $result['message']);
+        header('Location: index.php');
+        exit;
     } else {
-        // Eksekusi update
-        $stmtUpdate = $conn->prepare("UPDATE tbl_mahasiswa SET nama = ?, prodi = ?, angkatan = ?, email = ? WHERE nim = ?");
-        $stmtUpdate->bind_param("sssss", $nama, $prodi, $angkatan, $email, $nim_param);
-
-        if ($stmtUpdate->execute()) {
-             $_SESSION['flash_message'] = [
-                'type' => 'success',
-                'message' => 'Data mahasiswa berhasil diperbarui!'
-             ];
-             header('Location: index.php');
-            exit;
-        } else {
-            $error = 'Gagal memperbarui data: ' . $conn->error;
-        }
+        $error = implode('<br>', $result['errors']);
     }
 }
 
+$pageTitle = 'Edit Data Mahasiswa - SIAKAD Kampus';
 require_once '../../includes/header.php';
 ?>
 
@@ -108,6 +81,7 @@ require_once '../../includes/header.php';
                     <?php endif; ?>
 
                     <form action="" method="POST" class="needs-validation" novalidate>
+                        <?= csrfField() ?>
                         <div class="mb-3">
                             <label for="nim" class="form-label">NIM</label>
                             <input type="text" class="form-control bg-light" id="nim" name="nim" value="<?= htmlspecialchars($data['nim']) ?>" readonly>

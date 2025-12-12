@@ -1,54 +1,27 @@
 <?php
 /**
  * Halaman Tambah Mata Kuliah
- * Memproses penambahan mata kuliah baru.
+ * Menggunakan arsitektur MVC.
  */
 
-$pageTitle = 'Tambah Mata Kuliah - SIAKAD Kampus';
-require_once '../../config/database.php';
+require_once '../../controllers/MatkulController.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-$conn = getConnection();
+$controller = new MatkulController();
 $error = '';
+$createData = $controller->create();
+$pageTitle = $createData['pageTitle'];
+$dosenList = $createData['dosen'];
 
-$dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
-
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $kodeMatkul = $_POST['kodeMatkul'];
-    $namaMatkul = $_POST['namaMatkul'];
-    $sks        = $_POST['sks'];
-    $nidn       = $_POST['nidn'];
-
-    if (empty($kodeMatkul) || empty($namaMatkul) || empty($sks) || empty($nidn)) {
-        $error = 'Semua field wajib diisi!';
-    } elseif (!is_numeric($sks)) {
-        $error = 'SKS harus berupa angka!';
+// Proses form submit
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $result = $controller->store($_POST);
+    
+    if ($result['success']) {
+        setFlash('success', $result['message']);
+        header('Location: index.php');
+        exit;
     } else {
-        $stmtCheck = $conn->prepare("SELECT kodeMatkul FROM tbl_matkul WHERE kodeMatkul = ?");
-        $stmtCheck->bind_param("s", $kodeMatkul);
-        $stmtCheck->execute();
-        
-        if ($stmtCheck->get_result()->num_rows > 0) {
-           $error = 'Kode Mata Kuliah sudah terdaftar di sistem!'; 
-        } else {
-            $stmt = $conn->prepare("INSERT INTO tbl_matkul (kodeMatkul, namaMatkul, sks, nidn) VALUES (?, ?, ?, ?)");
-            $stmt->bind_param("ssis", $kodeMatkul, $namaMatkul, $sks, $nidn);
-
-            if ($stmt->execute()) {
-                $_SESSION['flash_message'] = [
-                    'type' => 'success',
-                    'message' => 'Mata kuliah berhasil ditambahkan!'
-                ];
-                header('Location: index.php');
-                exit;
-            } else {
-                $error = 'Terjadi kesalahan sistem: ' . $conn->error;
-            }
-        }
+        $error = implode('<br>', $result['errors']);
     }
 }
 
@@ -93,6 +66,7 @@ require_once '../../includes/header.php';
                     <?php endif; ?>
 
                     <form action="" method="POST" class="needs-validation" novalidate>
+                        <?= csrfField() ?>
                         <div class="mb-3">
                             <label for="kodeMatkul" class="form-label">Kode Mata Kuliah</label>
                             <input type="text" class="form-control" id="kodeMatkul" name="kodeMatkul" required placeholder="Contoh: MK001" value="<?= isset($_POST['kodeMatkul']) ? htmlspecialchars($_POST['kodeMatkul']) : '' ?>">
@@ -114,11 +88,9 @@ require_once '../../includes/header.php';
                             <select class="form-select" id="nidn" name="nidn" required>
                                 <option value="" selected disabled>Pilih Dosen</option>
                                 <?php
-                                if ($dosenResult->num_rows > 0) {
-                                    while ($dosen = $dosenResult->fetch_assoc()) {
-                                        $selected = (isset($_POST['nidn']) && $_POST['nidn'] == $dosen['nidn']) ? 'selected' : '';
-                                        echo "<option value='" . $dosen['nidn'] . "' $selected>" . $dosen['nama'] . " (" . $dosen['nidn'] . ")</option>";
-                                    }
+                                foreach ($dosenList as $dosen) {
+                                    $selected = (isset($_POST['nidn']) && $_POST['nidn'] == $dosen['nidn']) ? 'selected' : '';
+                                    echo "<option value='" . htmlspecialchars($dosen['nidn']) . "' $selected>" . htmlspecialchars($dosen['nama']) . " (" . htmlspecialchars($dosen['nidn']) . ")</option>";
                                 }
                                 ?>
                             </select>

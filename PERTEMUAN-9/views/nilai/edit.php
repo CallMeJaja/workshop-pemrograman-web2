@@ -1,76 +1,47 @@
 <?php
 /**
  * Halaman Edit Nilai
- * Memproses perubahan nilai mahasiswa.
+ * Menggunakan arsitektur MVC.
  */
 
-$pageTitle = 'Edit Nilai - SIAKAD Kampus';
-require_once '../../config/database.php';
+require_once '../../controllers/NilaiController.php';
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-$conn = getConnection();
+$controller = new NilaiController();
 $error = '';
-$data = null;
 $id_nilai = $_GET['id'] ?? '';
 
+// Validasi parameter ID
 if (empty($id_nilai)) {
-     $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'ID Nilai tidak ditemukan!'];
-     header('Location: index.php');
-     exit;
-}
-
-$stmt = $conn->prepare("SELECT * FROM tbl_nilai WHERE id_nilai = ?");
-$stmt->bind_param("i", $id_nilai);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows == 0) {
-    $_SESSION['flash_message'] = ['type' => 'error', 'message' => 'Data tidak ditemukan!'];
+    setFlash('error', 'ID Nilai tidak ditemukan!');
     header('Location: index.php');
     exit;
 }
-$data = $result->fetch_assoc();
 
-$mhsResult = $conn->query("SELECT nim, nama FROM tbl_mahasiswa ORDER BY nama ASC");
-$mkResult = $conn->query("SELECT kodeMatkul, namaMatkul FROM tbl_matkul ORDER BY namaMatkul ASC");
-$dosenResult = $conn->query("SELECT nidn, nama FROM tbl_dosen ORDER BY nama ASC");
+// Ambil data nilai
+$editData = $controller->edit($id_nilai);
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nim        = $_POST['nim'];
-    $kodeMatkul = $_POST['kodeMatkul'];
-    $nidn       = $_POST['nidn'];
-    $nilai      = $_POST['nilai'];
+if (!$editData) {
+    setFlash('error', 'Data tidak ditemukan!');
+    header('Location: index.php');
+    exit;
+}
 
-    if (empty($nim) || empty($kodeMatkul) || empty($nidn) || $nilai === '') {
-        $error = 'Semua field wajib diisi!';
-    } elseif (!is_numeric($nilai) || $nilai < 0 || $nilai > 100) {
-        $error = 'Nilai harus berupa angka antara 0 - 100!';
+$data = $editData['nilai'];
+$mahasiswaList = $editData['mahasiswa'];
+$matkulList = $editData['matkul'];
+$dosenList = $editData['dosen'];
+$pageTitle = $editData['pageTitle'];
+
+// Proses Update Form
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $result = $controller->update($id_nilai, $_POST);
+    
+    if ($result['success']) {
+        setFlash('success', $result['message']);
+        header('Location: index.php');
+        exit;
     } else {
-        $grade = '';
-        if ($nilai >= 85) $grade = 'A';
-        elseif ($nilai >= 75) $grade = 'B';
-        elseif ($nilai >= 60) $grade = 'C';
-        elseif ($nilai >= 50) $grade = 'D';
-        else $grade = 'E';
-        
-        $nilaiHuruf = $grade;
-
-        $stmtUpdate = $conn->prepare("UPDATE tbl_nilai SET nim = ?, kodeMatkul = ?, nidn = ?, nilai = ?, nilaiHuruf = ? WHERE id_nilai = ?");
-        $stmtUpdate->bind_param("sssdsi", $nim, $kodeMatkul, $nidn, $nilai, $nilaiHuruf, $id_nilai);
-
-        if ($stmtUpdate->execute()) {
-             $_SESSION['flash_message'] = [
-                'type' => 'success',
-                'message' => 'Data nilai berhasil diperbarui!'
-             ];
-             header('Location: index.php');
-            exit;
-        } else {
-            $error = 'Gagal memperbarui data: ' . $conn->error;
-        }
+        $error = implode('<br>', $result['errors']);
     }
 }
 
@@ -115,17 +86,16 @@ require_once '../../includes/header.php';
                     <?php endif; ?>
 
                     <form action="" method="POST" class="needs-validation" novalidate>
+                        <?= csrfField() ?>
                         <div class="mb-3">
                             <label for="nim" class="form-label">Mahasiswa</label>
                             <select class="form-select" id="nim" name="nim" required>
                                 <option value="" disabled>Pilih Mahasiswa</option>
                                 <?php
-                                if ($mhsResult->num_rows > 0) {
-                                    $currentMhs = isset($_POST['nim']) ? $_POST['nim'] : $data['nim'];
-                                    while ($mhs = $mhsResult->fetch_assoc()) {
-                                        $selected = ($currentMhs == $mhs['nim']) ? 'selected' : '';
-                                        echo "<option value='" . $mhs['nim'] . "' $selected>" . $mhs['nama'] . " (" . $mhs['nim'] . ")</option>";
-                                    }
+                                $currentMhs = isset($_POST['nim']) ? $_POST['nim'] : $data['nim'];
+                                foreach ($mahasiswaList as $mhs) {
+                                    $selected = ($currentMhs == $mhs['nim']) ? 'selected' : '';
+                                    echo "<option value='" . htmlspecialchars($mhs['nim']) . "' $selected>" . htmlspecialchars($mhs['nama']) . " (" . htmlspecialchars($mhs['nim']) . ")</option>";
                                 }
                                 ?>
                             </select>
@@ -136,12 +106,10 @@ require_once '../../includes/header.php';
                             <select class="form-select" id="kodeMatkul" name="kodeMatkul" required>
                                 <option value="" disabled>Pilih Mata Kuliah</option>
                                 <?php
-                                if ($mkResult->num_rows > 0) {
-                                    $currentMk = isset($_POST['kodeMatkul']) ? $_POST['kodeMatkul'] : $data['kodeMatkul'];
-                                    while ($mk = $mkResult->fetch_assoc()) {
-                                        $selected = ($currentMk == $mk['kodeMatkul']) ? 'selected' : '';
-                                        echo "<option value='" . $mk['kodeMatkul'] . "' $selected>" . $mk['namaMatkul'] . " (" . $mk['kodeMatkul'] . ")</option>";
-                                    }
+                                $currentMk = isset($_POST['kodeMatkul']) ? $_POST['kodeMatkul'] : $data['kodeMatkul'];
+                                foreach ($matkulList as $mk) {
+                                    $selected = ($currentMk == $mk['kodeMatkul']) ? 'selected' : '';
+                                    echo "<option value='" . htmlspecialchars($mk['kodeMatkul']) . "' $selected>" . htmlspecialchars($mk['namaMatkul']) . " (" . htmlspecialchars($mk['kodeMatkul']) . ")</option>";
                                 }
                                 ?>
                             </select>

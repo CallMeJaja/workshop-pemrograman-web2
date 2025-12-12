@@ -1,56 +1,25 @@
 <?php
 /**
  * Halaman Tambah Data Dosen
- * Memproses penambahan data dosen baru.
+ * Menggunakan arsitektur MVC.
  */
 
-$pageTitle = 'Tambah Data Dosen - SIAKAD Kampus';
-require_once '../../config/database.php';
+require_once '../../controllers/DosenController.php';
 
-// Pastikan session aktif
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-$conn = getConnection();
+$controller = new DosenController();
 $error = '';
+$pageTitle = 'Tambah Data Dosen - SIAKAD Kampus';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nidn   = $_POST['nidn'];
-    $nama   = $_POST['nama'];
-    $email  = $_POST['email'];
-
-    // Validasi data input
-    if (empty($nidn) || empty($nama) || empty($email)) {
-        $error = 'Semua field wajib diisi!';
-    } elseif (!is_numeric($nidn)) {
-        $error = 'NIDN harus berupa angka!';
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = 'Format email tidak valid!';
+// Proses form submit
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $result = $controller->store($_POST);
+    
+    if ($result['success']) {
+        setFlash('success', $result['message']);
+        header('Location: index.php');
+        exit;
     } else {
-        // Cek duplikasi NIDN
-        $stmtCheck = $conn->prepare("SELECT nidn FROM tbl_dosen WHERE nidn = ?");
-        $stmtCheck->bind_param("s", $nidn);
-        $stmtCheck->execute();
-        
-        if ($stmtCheck->get_result()->num_rows > 0) {
-           $error = 'NIDN sudah terdaftar di sistem!'; 
-        } else {
-            // Simpan data baru
-            $stmt = $conn->prepare("INSERT INTO tbl_dosen (nidn, nama, email) VALUES (?, ?, ?)");
-            $stmt->bind_param("sss", $nidn, $nama, $email);
-
-            if ($stmt->execute()) {
-                $_SESSION['flash_message'] = [
-                    'type' => 'success',
-                    'message' => 'Data dosen berhasil ditambahkan!'
-                ];
-                header('Location: index.php');
-                exit;
-            } else {
-                $error = 'Terjadi kesalahan sistem: ' . $conn->error;
-            }
-        }
+        $error = implode('<br>', $result['errors']);
     }
 }
 
@@ -95,6 +64,7 @@ require_once '../../includes/header.php';
                     <?php endif; ?>
 
                     <form action="" method="POST" class="needs-validation" novalidate>
+                        <?= csrfField() ?>
                         <div class="mb-3">
                             <label for="nidn" class="form-label">NIDN (Nomor Induk Dosen Nasional)</label>
                             <input type="text" class="form-control" id="nidn" name="nidn" required placeholder="Masukkan NIDN (hanya angka)" value="<?= isset($_POST['nidn']) ? htmlspecialchars($_POST['nidn']) : '' ?>" pattern="[0-9]+" title="NIDN harus berupa angka">

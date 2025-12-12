@@ -1,56 +1,25 @@
 <?php
 /**
  * Halaman Tambah Data Mahasiswa
- * Memproses penambahan data mahasiswa baru.
+ * Menggunakan arsitektur MVC.
  */
 
-$pageTitle = 'Tambah Data Mahasiswa - SIAKAD Kampus';
-require_once '../../config/database.php';
+require_once '../../controllers/MahasiswaController.php';
 
-// Pastikan session aktif
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-$conn = getConnection();
+$controller = new MahasiswaController();
 $error = '';
+$pageTitle = 'Tambah Data Mahasiswa - SIAKAD Kampus';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $nim      = $_POST['nim'];
-    $nama     = $_POST['nama'];
-    $prodi    = $_POST['prodi'];
-    $angkatan = $_POST['angkatan'];
-    $email    = $_POST['email'];
-
-    // Validasi data input
-    if (empty($nim) || empty($nama) || empty($prodi) || empty($angkatan) || empty($email)) {
-        $error = 'Semua field wajib diisi!';
-    } elseif (!is_numeric($nim)) {
-        $error = 'NIM harus berupa angka!';
+// Proses form submit
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $result = $controller->store($_POST);
+    
+    if ($result['success']) {
+        setFlash('success', $result['message']);
+        header('Location: index.php');
+        exit;
     } else {
-        // Cek duplikasi NIM
-        $stmtCheck = $conn->prepare("SELECT nim FROM tbl_mahasiswa WHERE nim = ?");
-        $stmtCheck->bind_param("s", $nim);
-        $stmtCheck->execute();
-        
-        if ($stmtCheck->get_result()->num_rows > 0) {
-           $error = 'NIM sudah terdaftar di sistem!'; 
-        } else {
-            // Simpan data baru
-            $stmt = $conn->prepare("INSERT INTO tbl_mahasiswa (nim, nama, prodi, angkatan, email) VALUES (?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssss", $nim, $nama, $prodi, $angkatan, $email);
-
-            if ($stmt->execute()) {
-                $_SESSION['flash_message'] = [
-                    'type' => 'success',
-                    'message' => 'Data mahasiswa berhasil ditambahkan!'
-                ];
-                header('Location: index.php');
-                exit;
-            } else {
-                $error = 'Terjadi kesalahan sistem: ' . $conn->error;
-            }
-        }
+        $error = implode('<br>', $result['errors']);
     }
 }
 
@@ -95,6 +64,7 @@ require_once '../../includes/header.php';
                     <?php endif; ?>
 
                     <form action="" method="POST" class="needs-validation" novalidate>
+                        <?= csrfField() ?>
                         <div class="mb-3">
                             <label for="nim" class="form-label">NIM (Nomor Induk Mahasiswa)</label>
                             <input type="text" class="form-control" id="nim" name="nim" required placeholder="Masukkan NIM (hanya angka)" value="<?= isset($_POST['nim']) ? htmlspecialchars($_POST['nim']) : '' ?>" pattern="[0-9]+" title="NIM harus berupa angka">

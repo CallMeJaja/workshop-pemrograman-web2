@@ -1,16 +1,17 @@
 <?php
 /**
  * Halaman Manajemen Data Mahasiswa
- * Menampilkan daftar mahasiswa, opsi tambah, edit, dan hapus.
+ * Menggunakan arsitektur MVC.
  */
 
-$pageTitle = 'Data Mahasiswa - SIAKAD Kampus';
-require_once '../../config/database.php';
-require_once '../../includes/header.php';
+require_once '../../controllers/MahasiswaController.php';
 
-// Ambil data mahasiswa urut NIM
-$conn = getConnection();
-$result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
+$controller = new MahasiswaController();
+$data = $controller->index();
+$pageTitle = $data['pageTitle'];
+$mahasiswaList = $data['mahasiswa'];
+
+require_once '../../includes/header.php';
 ?>
 
 <!-- Header Halaman -->
@@ -49,13 +50,13 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
                 </div>
                 <div class="col-auto">
                     <span class="badge bg-success fs-6">
-                        Total: <?= $result->num_rows ?> mahasiswa
+                        Total: <?= count($mahasiswaList) ?> mahasiswa
                     </span>
                 </div>
             </div>
         </div>
         <div class="card-body">
-            <?php if ($result->num_rows > 0): ?>
+            <?php if (count($mahasiswaList) > 0): ?>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover align-middle">
                         <thead class="bg-success text-white">
@@ -72,7 +73,7 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
                         <tbody>
                             <?php
                             $no = 1;
-                            while ($row = $result->fetch_assoc()):
+                            foreach ($mahasiswaList as $row):
                             ?>
                                 <tr>
                                     <td class="text-center"><?= $no++ ?></td>
@@ -110,7 +111,7 @@ $result = $conn->query("SELECT * FROM tbl_mahasiswa ORDER BY nim ASC");
                                         </div>
                                     </td>
                                 </tr>
-                            <?php endwhile; ?>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
