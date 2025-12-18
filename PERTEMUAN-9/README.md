@@ -30,10 +30,16 @@ Sistem Informasi Akademik (SIAKAD) merupakan aplikasi yang mengelola data akadem
 
 ## 🚀 Cara Instalasi
 
-1. **Clone/Simpan Project**
+1. **Download/Clone Project**
+   
+   **Opsi A: Download ZIP (Rekomendasi)**
+   - Download file [`TUGAS_PART2_SESSION_WEB_REZA.zip`](https://github.com/CallMeJaja/workshop-pemrograman-web2/raw/master/PERTEMUAN-9/TUGAS_PART2_SESSION_WEB_REZA.zip) yang sudah disediakan
+   - Extract ke folder `htdocs` (XAMPP) atau folder web server Anda
+   
+   **Opsi B: Clone Repository**
    ```bash
-   git clone <repository-url>
-   cd PERTEMUAN-9
+   git clone https://github.com/CallMeJaja/workshop-pemrograman-web2.git
+   cd workshop-pemrograman-web2/PERTEMUAN-9
    ```
 
 2. **Buat Database**
