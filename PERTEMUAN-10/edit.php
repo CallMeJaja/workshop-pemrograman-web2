@@ -1,5 +1,6 @@
 <?php
 include 'koneksi.php';
+include 'blok.php';
 
 $nim = $_GET['nim'];
 $sql = "SELECT * FROM tbl_mahasiswa WHERE nim = '$nim'";

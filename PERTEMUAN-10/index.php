@@ -1,5 +1,7 @@
 <?php
+
 include 'koneksi.php';
+include 'blok.php';
 
 $sql = "SELECT * FROM tbl_mahasiswa";
 $hasil_query = mysqli_query($conn, $sql);
@@ -11,6 +13,7 @@ if (!$hasil_query) {
 ?>
 <h1>Data Mahasiswa</h1>
 <a href="tambah.php">Tambah Data</a>
+<button onclick="window.location.href='logout.php'">Logout</button>
 <br>
 <br>
 <table border="1">

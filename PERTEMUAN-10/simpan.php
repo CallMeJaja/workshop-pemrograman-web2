@@ -1,5 +1,6 @@
 <?php
 include 'koneksi.php';
+include 'blok.php';
 
 $vNim = $_POST['nim'];
 $vName = $_POST['name'];

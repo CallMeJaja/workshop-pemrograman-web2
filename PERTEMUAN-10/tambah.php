@@ -1,3 +1,7 @@
+<?php
+include 'blok.php';
+?>
+
 <h3>Form Input Data</h3>
 <form action="simpan.php" method="post">
     <table>

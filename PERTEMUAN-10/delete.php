@@ -1,5 +1,6 @@
 <?php
 include 'koneksi.php';
+include 'blok.php';
 
 $vNim = $_GET['nim'];
 $sql = "DELETE FROM tbl_mahasiswa WHERE nim = '$vNim'";
