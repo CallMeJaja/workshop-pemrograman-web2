@@ -2,8 +2,14 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+require_once __DIR__ . '/../helpers/auth.php';
+
 // Simple active state detection based on URI
 $uri = $_SERVER['REQUEST_URI'];
+$isLoggedIn = isLoggedIn();
+$userRole = getRole();
+$username = getUsername();
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -58,6 +64,10 @@ $uri = $_SERVER['REQUEST_URI'];
             background-color: #212529;
             color: #adb5bd;
         }
+
+        .user-badge {
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 
@@ -65,49 +75,103 @@ $uri = $_SERVER['REQUEST_URI'];
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="/index.php">
+            <a class="navbar-brand" href="/index.php?modul=dashboard">
                 <i class="bi bi-mortarboard-fill me-2"></i>SIAKAD Kampus
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link <?= strpos($uri, '/index.php') !== false || $uri == '/' ? 'active' : '' ?>" href="/index.php">
-                            <i class="bi bi-house-door me-1"></i>Beranda
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle <?= strpos($uri, '/views/') !== false ? 'active' : '' ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-database me-1"></i>Data Master
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item <?= strpos($uri, '/dosen/') !== false ? 'active' : '' ?>" href="/views/dosen/index.php">
-                                    <i class="bi bi-person-badge me-2"></i>Data Dosen
+                <ul class="navbar-nav me-auto">
+                    <?php if ($isLoggedIn): ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?= strpos($uri, 'modul=dashboard') !== false ? 'active' : '' ?>" href="/index.php?modul=dashboard">
+                                <i class="bi bi-speedometer2 me-1"></i>Dashboard
+                            </a>
+                        </li>
+                        
+                        <?php if ($userRole === 'dosen'): ?>
+                            <!-- Menu lengkap untuk Dosen -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle <?= strpos($uri, '/views/') !== false ? 'active' : '' ?>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-database me-1"></i>Data Master
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item <?= strpos($uri, '/dosen/') !== false ? 'active' : '' ?>" href="/views/dosen/index.php">
+                                            <i class="bi bi-person-badge me-2"></i>Data Dosen
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item <?= strpos($uri, '/mahasiswa/') !== false ? 'active' : '' ?>" href="/views/mahasiswa/index.php">
+                                            <i class="bi bi-people me-2"></i>Data Mahasiswa
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item <?= strpos($uri, '/matkul/') !== false ? 'active' : '' ?>" href="/views/matkul/index.php">
+                                            <i class="bi bi-book me-2"></i>Data Mata Kuliah
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item <?= strpos($uri, '/nilai/') !== false ? 'active' : '' ?>" href="/views/nilai/index.php">
+                                            <i class="bi bi-card-checklist me-2"></i>Data Nilai
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        <?php else: ?>
+                            <!-- Menu terbatas untuk Mahasiswa -->
+                            <li class="nav-item">
+                                <a class="nav-link <?= strpos($uri, '/mahasiswa/') !== false ? 'active' : '' ?>" href="/views/mahasiswa/index.php">
+                                    <i class="bi bi-people me-1"></i>Data Mahasiswa
                                 </a>
                             </li>
-                            <li>
-                                <a class="dropdown-item <?= strpos($uri, '/mahasiswa/') !== false ? 'active' : '' ?>" href="/views/mahasiswa/index.php">
-                                    <i class="bi bi-people me-2"></i>Data Mahasiswa
+                            <li class="nav-item">
+                                <a class="nav-link <?= strpos($uri, '/matkul/') !== false ? 'active' : '' ?>" href="/views/matkul/index.php">
+                                    <i class="bi bi-book me-1"></i>Mata Kuliah
                                 </a>
                             </li>
-                            <li>
-                                <a class="dropdown-item <?= strpos($uri, '/matkul/') !== false ? 'active' : '' ?>" href="/views/matkul/index.php">
-                                    <i class="bi bi-book me-2"></i>Data Mata Kuliah
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <a class="dropdown-item <?= strpos($uri, '/nilai/') !== false ? 'active' : '' ?>" href="/views/nilai/index.php">
-                                    <i class="bi bi-card-checklist me-2"></i>Data Nilai
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </ul>
+
+                <!-- User Info & Actions -->
+                <ul class="navbar-nav">
+                    <?php if ($isLoggedIn): ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-1"></i>
+                                <?= htmlspecialchars($username) ?>
+                                <?php if ($userRole === 'dosen'): ?>
+                                    <span class="badge bg-warning text-dark user-badge ms-1">Dosen</span>
+                                <?php else: ?>
+                                    <span class="badge bg-success user-badge ms-1">Mahasiswa</span>
+                                <?php endif; ?>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <span class="dropdown-item-text text-muted">
+                                        <small>Login sebagai: <strong><?= htmlspecialchars($userRole) ?></strong></small>
+                                    </span>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="/index.php?modul=auth&fitur=logout">
+                                        <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a href="/index.php?modul=auth" class="nav-link">
+                                <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                            </a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>

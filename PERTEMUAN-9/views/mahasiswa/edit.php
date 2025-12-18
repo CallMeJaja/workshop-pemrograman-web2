@@ -1,10 +1,10 @@
 <?php
-/**
- * Halaman Edit Data Mahasiswa
- * Menggunakan arsitektur MVC.
- */
-
 require_once '../../controllers/MahasiswaController.php';
+require_once '../../helpers/auth.php';
+
+// Cek login dan akses - hanya dosen
+requireLogin();
+requireRole('dosen');
 
 $controller = new MahasiswaController();
 $error = '';

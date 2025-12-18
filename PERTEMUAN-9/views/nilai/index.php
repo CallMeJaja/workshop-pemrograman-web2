@@ -1,10 +1,10 @@
 <?php
-/**
- * Halaman Manajemen Data Nilai
- * Menggunakan arsitektur MVC.
- */
-
 require_once '../../controllers/NilaiController.php';
+require_once '../../helpers/auth.php';
+
+// Cek login dan akses - hanya dosen
+requireLogin();
+requireRole('dosen');
 
 $controller = new NilaiController();
 $data = $controller->index();

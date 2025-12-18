@@ -1,15 +1,25 @@
 <?php
-/**
- * Halaman Manajemen Data Mahasiswa
- * Menggunakan arsitektur MVC.
- */
-
 require_once '../../controllers/MahasiswaController.php';
+require_once '../../helpers/auth.php';
+
+// Cek login dan akses
+requireLogin();
+if (!canAccess('mahasiswa')) {
+    $_SESSION['flash_message'] = [
+        'type' => 'error',
+        'message' => 'Anda tidak memiliki akses ke halaman tersebut.'
+    ];
+    header('Location: /index.php?modul=dashboard');
+    exit;
+}
 
 $controller = new MahasiswaController();
 $data = $controller->index();
 $pageTitle = $data['pageTitle'];
 $mahasiswaList = $data['mahasiswa'];
+
+// Cek apakah user bisa CRUD
+$canEdit = canCRUD();
 
 require_once '../../includes/header.php';
 ?>
@@ -24,7 +34,7 @@ require_once '../../includes/header.php';
                 </h2>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 mt-2">
-                        <li class="breadcrumb-item"><a href="../../index.php" class="text-white-50">Beranda</a></li>
+                        <li class="breadcrumb-item"><a href="/index.php?modul=dashboard" class="text-white-50">Dashboard</a></li>
                         <li class="breadcrumb-item active text-white" aria-current="page">Data Mahasiswa</li>
                     </ol>
                 </nav>
@@ -43,11 +53,13 @@ require_once '../../includes/header.php';
                         <i class="bi bi-table me-2"></i>Tabel Data Mahasiswa
                     </h5>
                 </div>
-                <div class="col-auto">
-                    <a href="add.php" class="btn btn-success text-white fw-bold">
-                        <i class="bi bi-plus me-1"></i>Tambah Data Mahasiswa
-                    </a>
-                </div>
+                <?php if ($canEdit): ?>
+                    <div class="col-auto">
+                        <a href="add.php" class="btn btn-success text-white fw-bold">
+                            <i class="bi bi-plus me-1"></i>Tambah Data Mahasiswa
+                        </a>
+                    </div>
+                <?php endif; ?>
                 <div class="col-auto">
                     <span class="badge bg-success fs-6">
                         Total: <?= count($mahasiswaList) ?> mahasiswa
@@ -67,7 +79,9 @@ require_once '../../includes/header.php';
                                 <th scope="col">Program Studi</th>
                                 <th scope="col" class="text-center">Angkatan</th>
                                 <th scope="col">Email</th>
-                                <th scope="col">Aksi</th>
+                                <?php if ($canEdit): ?>
+                                    <th scope="col">Aksi</th>
+                                <?php endif; ?>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,21 +109,23 @@ require_once '../../includes/header.php';
                                     <td>
                                         <small class="text-muted"><?= htmlspecialchars($row['email'] ?? '-') ?></small>
                                     </td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <a href="edit.php?id=<?= htmlspecialchars($row['nim']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
-                                            <button type="button" class="btn btn-sm btn-outline-danger" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#deleteModal" 
-                                                data-id="<?= htmlspecialchars($row['nim']) ?>"
-                                                data-nama="<?= htmlspecialchars($row['nama']) ?>"
-                                                title="Hapus Data">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
+                                    <?php if ($canEdit): ?>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="edit.php?id=<?= htmlspecialchars($row['nim']) ?>" class="btn btn-sm btn-outline-primary" title="Ubah Data">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#deleteModal" 
+                                                    data-id="<?= htmlspecialchars($row['nim']) ?>"
+                                                    data-nama="<?= htmlspecialchars($row['nama']) ?>"
+                                                    title="Hapus Data">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    <?php endif; ?>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -123,13 +139,14 @@ require_once '../../includes/header.php';
             <?php endif; ?>
         </div>
         <div class="card-footer bg-white">
-            <a href="../../index.php" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left me-1"></i>Kembali ke Beranda
+            <a href="/index.php?modul=dashboard" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>Kembali ke Dashboard
             </a>
         </div>
     </div>
 </main>
 
+<?php if ($canEdit): ?>
 <!-- Modal Konfirmasi Hapus -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -171,5 +188,6 @@ require_once '../../includes/header.php';
         });
     });
 </script>
+<?php endif; ?>
 
 <?php require_once '../../includes/footer.php'; ?>

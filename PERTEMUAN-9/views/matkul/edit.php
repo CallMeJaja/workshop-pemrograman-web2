@@ -1,10 +1,10 @@
 <?php
-/**
- * Halaman Edit Mata Kuliah
- * Menggunakan arsitektur MVC.
- */
-
 require_once '../../controllers/MatkulController.php';
+require_once '../../helpers/auth.php';
+
+// Cek login dan akses - hanya dosen
+requireLogin();
+requireRole('dosen');
 
 $controller = new MatkulController();
 $error = '';

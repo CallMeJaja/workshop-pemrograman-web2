@@ -1,10 +1,10 @@
 <?php
-/**
- * Halaman Edit Data Dosen
- * Menggunakan arsitektur MVC.
- */
-
 require_once '../../controllers/DosenController.php';
+require_once '../../helpers/auth.php';
+
+// Cek login dan akses - hanya dosen
+requireLogin();
+requireRole('dosen');
 
 $controller = new DosenController();
 $error = '';
