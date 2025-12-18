@@ -48,7 +48,8 @@ INSERT INTO `tbl_dosen` VALUES
 (1007,'Eko Prasetyo, M.T','Teknik Informatika','eko@kampus.ac.id'),
 (1008,'Fajar Nugraha, M.Cs','Teknik Informatika','fajar@kampus.ac.id'),
 (1009,'Hendra Gunawan, M.Kom','Manajemen Informatika','hendra@kampus.ac.id'),
-(1010,'Maya Putri, M.T','Teknik Komputer','maya@kampus.ac.id');
+(1010,'Maya Putri, M.T','Teknik Komputer','maya@kampus.ac.id'),
+(1022,'Dr. Eng. Reza Asriano Maulana, S.Kom., S.T., M.Kom., ','Sistem Informasi','reza@kampus.ac.id');
 /*!40000 ALTER TABLE `tbl_dosen` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -76,16 +77,16 @@ CREATE TABLE `tbl_mahasiswa` (
 LOCK TABLES `tbl_mahasiswa` WRITE;
 /*!40000 ALTER TABLE `tbl_mahasiswa` DISABLE KEYS */;
 INSERT INTO `tbl_mahasiswa` VALUES
+(2022001,'Gilang Dirga','Teknik Informatika',2022,'gilang@mhs.ac.id'),
+(2022002,'Hesti Purwadinata','Teknik Informatika',2022,'hesti@mhs.ac.id'),
+(2022003,'Indra Bekti','Manajemen Informatika',2022,'indra@mhs.ac.id'),
+(2022004,'Joko Anwar','Teknik Komputer',2022,'joko@mhs.ac.id'),
 (2023001,'Ahmad Fauzi','Teknik Informatika',2023,'ahmad@mhs.ac.id'),
 (2023002,'Bunga Citra','Sistem Informasi',2023,'bunga@mhs.ac.id'),
 (2023003,'Candra Wijaya','Teknik Informatika',2023,'candra@mhs.ac.id'),
 (2023004,'Dinda Kirana','Manajemen Informatika',2023,'dinda@mhs.ac.id'),
 (2023005,'Erik Saputra','Teknik Komputer',2023,'erik@mhs.ac.id'),
-(2023006,'Farah Quinn','Sistem Informasi',2023,'farah@mhs.ac.id'),
-(2023007,'Gilang Dirga','Teknik Informatika',2022,'gilang@mhs.ac.id'),
-(2023008,'Hesti Purwadinata','Teknik Informatika',2022,'hesti@mhs.ac.id'),
-(2023009,'Indra Bekti','Manajemen Informatika',2022,'indra@mhs.ac.id'),
-(2023010,'Joko Anwar','Teknik Komputer',2022,'joko@mhs.ac.id');
+(2023006,'Reza Asriano','Teknik Informatika',2023,'reza@mhs.ac.id');
 /*!40000 ALTER TABLE `tbl_mahasiswa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,7 +124,8 @@ INSERT INTO `tbl_matkul` VALUES
 ('MK007','Kecerdasan Buatan',3,1001),
 ('MK008','Analisis Sistem',3,1006),
 ('MK009','Etika Profesi',2,1004),
-('MK010','Keamanan Jaringan',3,1010);
+('MK010','Keamanan Jaringan',3,1010),
+('MK020','Pemrograman PHP',6,1022);
 /*!40000 ALTER TABLE `tbl_matkul` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,7 +150,7 @@ CREATE TABLE `tbl_nilai` (
   CONSTRAINT `tbl_nilai_ibfk_1` FOREIGN KEY (`kodeMatkul`) REFERENCES `tbl_matkul` (`kodeMatkul`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tbl_nilai_ibfk_2` FOREIGN KEY (`nim`) REFERENCES `tbl_mahasiswa` (`nim`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tbl_nilai_ibfk_3` FOREIGN KEY (`nidn`) REFERENCES `tbl_dosen` (`nidn`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,16 +162,49 @@ LOCK TABLES `tbl_nilai` WRITE;
 INSERT INTO `tbl_nilai` VALUES
 (1,85.5,'A','MK001',2023001,1001),
 (2,78,'B','MK002',2023002,1002),
-(3,90,'A','MK003',2023003,1003),
 (4,65,'C','MK004',2023005,1005),
 (5,88,'A','MK006',2023001,1008),
-(6,72.5,'B','MK005',2023007,1007),
+(6,72.5,'B','MK005',2022001,1007),
 (7,95,'A','MK001',2023003,1001),
 (8,60,'C','MK008',2023006,1006),
-(9,82,'A','MK010',2023010,1010),
-(10,79,'B','MK002',2023004,1002);
+(9,82,'A','MK010',2022004,1010),
+(10,79,'B','MK002',2023004,1002),
+(13,88,'A','MK009',2023001,1004);
 /*!40000 ALTER TABLE `tbl_nilai` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `tbl_user`
+--
+
+DROP TABLE IF EXISTS `tbl_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tbl_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `role` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tbl_user_unique` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbl_user`
+--
+
+LOCK TABLES `tbl_user` WRITE;
+/*!40000 ALTER TABLE `tbl_user` DISABLE KEYS */;
+INSERT INTO `tbl_user` VALUES
+(1,'1011','dosen123','dosen'),
+(2,'2024021','mhs123','mahasiswa');
+/*!40000 ALTER TABLE `tbl_user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'kampus'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -180,4 +215,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-04 13:10:25
+-- Dump completed on 2025-12-18 20:12:16
