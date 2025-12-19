@@ -10,7 +10,7 @@ $mhs = mysqli_fetch_array($data);
 
 <h3>Form Edit Data</h3>
 <button onclick="window.location.href='index.php'">Kembali</button>
-<form action="proses_edit.php" method="post">
+<form action="proses_edit.php" method="post" enctype="multipart/form-data">
     <table>
         <tr>
             <td>NIM</td>
@@ -39,6 +39,13 @@ $mhs = mysqli_fetch_array($data);
         <tr>
             <td>No. HP</td>
             <td><input type="number" name="no_hp" id="no_hp" value="<?= $mhs['nohp']; ?>"></td>
+        </tr>
+        <tr>
+            <td>Foto</td>
+            <td>
+                <img src="<?= $mhs['foto'] ?>" width="100px" height="auto">
+                <input type="file" name="fileFoto" id="foto">
+            </td>
         </tr>
         <tr>
             <td></td>

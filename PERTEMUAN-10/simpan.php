@@ -7,8 +7,9 @@ $vName = $_POST['name'];
 $vProdi = $_POST['prodi'];
 $vEmail = $_POST['email'];
 $vNoHp = $_POST['no_hp'];
+$vFoto = $_POST['foto']['name'];
 
-$querySimpan = "INSERT INTO tbl_mahasiswa (nim, nama, prodi, email, nohp) VALUES ('$vNim', '$vName', '$vProdi', '$vEmail', '$vNoHp')";
+$querySimpan = "INSERT INTO tbl_mahasiswa (nim, nama, prodi, email, nohp, foto) VALUES ('$vNim', '$vName', '$vProdi', '$vEmail', '$vNoHp', '$vFoto')";
 
 if (mysqli_query($conn, $querySimpan)) {
     header("Location: index.php");

@@ -3,7 +3,7 @@ include 'blok.php';
 ?>
 
 <h3>Form Input Data</h3>
-<form action="simpan.php" method="post">
+<form action="simpan.php" method="post" enctype="multipart/form-data">
     <table>
         <tr>
             <td>NIM</td>
@@ -33,7 +33,10 @@ include 'blok.php';
             <td>No. HP</td>
             <td><input type="number" name="no_hp" id="no_hp"></td>
         </tr>
-
+        <tr>
+            <td>Foto</td>
+            <td><input type="file" name="foto" id="foto"></td>
+        </tr>
     </table>
     <input type="submit" value="Simpan" />
     <input type="reset" value="Batal" />
