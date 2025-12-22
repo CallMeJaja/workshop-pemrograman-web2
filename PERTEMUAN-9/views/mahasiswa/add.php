@@ -13,7 +13,7 @@ $pageTitle = 'Tambah Data Mahasiswa - SIAKAD Kampus';
 
 // Proses form submit
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $result = $controller->store($_POST);
+    $result = $controller->store($_POST, $_FILES['foto'] ?? null);
     
     if ($result['success']) {
         setFlash('success', $result['message']);
@@ -64,7 +64,7 @@ require_once '../../includes/header.php';
                         </div>
                     <?php endif; ?>
 
-                    <form action="" method="POST" class="needs-validation" novalidate>
+                    <form action="" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                         <?= csrfField() ?>
                         <div class="mb-3">
                             <label for="nim" class="form-label">NIM (Nomor Induk Mahasiswa)</label>
@@ -96,6 +96,11 @@ require_once '../../includes/header.php';
                         <div class="mb-4">
                             <label for="email" class="form-label">Alamat Email</label>
                             <input type="email" class="form-control" id="email" name="email" required placeholder="mahasiswa@kampus.ac.id" value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="foto" class="form-label">Foto Profil</label>
+                            <input type="file" class="form-control" id="foto" name="foto" accept="image/*" required>
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">

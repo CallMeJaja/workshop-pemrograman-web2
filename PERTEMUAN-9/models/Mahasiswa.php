@@ -32,26 +32,34 @@ class Mahasiswa extends Model
 
     /**
      * Simpan data mahasiswa baru
-     * @param array $data Data mahasiswa (nim, nama, prodi, angkatan, email)
+     * @param array $data Data mahasiswa (nim, nama, prodi, angkatan, email, foto)
      * @return bool
      */
     public function create($data)
     {
-        $stmt = $this->conn->prepare("INSERT INTO {$this->table} (nim, nama, prodi, angkatan, email) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $data['nim'], $data['nama'], $data['prodi'], $data['angkatan'], $data['email']);
+        $foto = $data['foto'] ?? null;
+        $stmt = $this->conn->prepare("INSERT INTO {$this->table} (nim, nama, prodi, angkatan, email, foto) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssss", $data['nim'], $data['nama'], $data['prodi'], $data['angkatan'], $data['email'], $foto);
         return $stmt->execute();
     }
 
     /**
      * Update data mahasiswa
      * @param string $nim NIM mahasiswa yang diupdate
-     * @param array $data Data baru (nama, prodi, angkatan, email)
+     * @param array $data Data baru (nama, prodi, angkatan, email, foto)
      * @return bool
      */
     public function update($nim, $data)
     {
-        $stmt = $this->conn->prepare("UPDATE {$this->table} SET nama = ?, prodi = ?, angkatan = ?, email = ? WHERE nim = ?");
-        $stmt->bind_param("sssss", $data['nama'], $data['prodi'], $data['angkatan'], $data['email'], $nim);
+        // Jika ada foto baru, update dengan foto
+        if (isset($data['foto']) && $data['foto'] !== null) {
+            $stmt = $this->conn->prepare("UPDATE {$this->table} SET nama = ?, prodi = ?, angkatan = ?, email = ?, foto = ? WHERE nim = ?");
+            $stmt->bind_param("ssssss", $data['nama'], $data['prodi'], $data['angkatan'], $data['email'], $data['foto'], $nim);
+        } else {
+            // Tanpa update foto
+            $stmt = $this->conn->prepare("UPDATE {$this->table} SET nama = ?, prodi = ?, angkatan = ?, email = ? WHERE nim = ?");
+            $stmt->bind_param("sssss", $data['nama'], $data['prodi'], $data['angkatan'], $data['email'], $nim);
+        }
         return $stmt->execute();
     }
 

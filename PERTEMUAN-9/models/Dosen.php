@@ -32,26 +32,34 @@ class Dosen extends Model
 
     /**
      * Simpan data dosen baru
-     * @param array $data Data dosen (nidn, nama, email)
+     * @param array $data Data dosen (nidn, nama, email, foto)
      * @return bool
      */
     public function create($data)
     {
-        $stmt = $this->conn->prepare("INSERT INTO {$this->table} (nidn, nama, email) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $data['nidn'], $data['nama'], $data['email']);
+        $foto = $data['foto'] ?? null;
+        $stmt = $this->conn->prepare("INSERT INTO {$this->table} (nidn, nama, email, foto) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $data['nidn'], $data['nama'], $data['email'], $foto);
         return $stmt->execute();
     }
 
     /**
      * Update data dosen
      * @param string $nidn NIDN dosen yang diupdate
-     * @param array $data Data baru (nama, email)
+     * @param array $data Data baru (nama, email, foto)
      * @return bool
      */
     public function update($nidn, $data)
     {
-        $stmt = $this->conn->prepare("UPDATE {$this->table} SET nama = ?, email = ? WHERE nidn = ?");
-        $stmt->bind_param("sss", $data['nama'], $data['email'], $nidn);
+        // Jika ada foto baru, update dengan foto
+        if (isset($data['foto']) && $data['foto'] !== null) {
+            $stmt = $this->conn->prepare("UPDATE {$this->table} SET nama = ?, email = ?, foto = ? WHERE nidn = ?");
+            $stmt->bind_param("ssss", $data['nama'], $data['email'], $data['foto'], $nidn);
+        } else {
+            // Tanpa update foto
+            $stmt = $this->conn->prepare("UPDATE {$this->table} SET nama = ?, email = ? WHERE nidn = ?");
+            $stmt->bind_param("sss", $data['nama'], $data['email'], $nidn);
+        }
         return $stmt->execute();
     }
 

@@ -9,6 +9,7 @@ require_once __DIR__ . '/../models/Mahasiswa.php';
 require_once __DIR__ . '/../core/Validator.php';
 require_once __DIR__ . '/../helpers/flash.php';
 require_once __DIR__ . '/../helpers/csrf.php';
+require_once __DIR__ . '/../helpers/upload.php';
 
 class MahasiswaController
 {
@@ -38,7 +39,7 @@ class MahasiswaController
      * @param array $input Data dari form
      * @return array Result dengan success status dan message/errors
      */
-    public function store($input)
+    public function store($input, $file = null)
     {
         // Validasi CSRF
         if (!isset($input['csrf_token']) || !verifyCsrfToken($input['csrf_token'])) {
@@ -64,10 +65,28 @@ class MahasiswaController
             return ['success' => false, 'errors' => ['NIM sudah terdaftar di sistem!']];
         }
 
+        // Handle upload foto jika ada
+        $fotoFilename = null;
+        if ($file && $file['error'] !== UPLOAD_ERR_NO_FILE) {
+            $uploadResult = uploadImage($file, 'profile/mahasiswa');
+            if ($uploadResult['error']) {
+                return ['success' => false, 'errors' => [$uploadResult['error']]];
+            }
+            if ($uploadResult['success']) {
+                $fotoFilename = $uploadResult['filename'];
+            }
+        }
+        $input['foto'] = $fotoFilename;
+
         // Simpan data
         if ($this->model->create($input)) {
             regenerateCsrfToken();
             return ['success' => true, 'message' => 'Data mahasiswa berhasil ditambahkan!'];
+        }
+
+        // Jika gagal simpan dan ada foto, hapus foto yang sudah diupload
+        if ($fotoFilename) {
+            deleteImage($fotoFilename, 'profile/mahasiswa');
         }
 
         return ['success' => false, 'errors' => ['Gagal menyimpan data: ' . $this->model->getError()]];
@@ -89,7 +108,7 @@ class MahasiswaController
      * @param array $input Data baru dari form
      * @return array Result dengan success status dan message/errors
      */
-    public function update($nim, $input)
+    public function update($nim, $input, $file = null)
     {
         // Validasi CSRF
         if (!isset($input['csrf_token']) || !verifyCsrfToken($input['csrf_token'])) {
@@ -108,10 +127,36 @@ class MahasiswaController
             return ['success' => false, 'errors' => $validator->getErrors()];
         }
 
+        // Handle upload foto jika ada file baru
+        $fotoFilename = null;
+        $oldFoto = null;
+        if ($file && $file['error'] !== UPLOAD_ERR_NO_FILE) {
+            $uploadResult = uploadImage($file, 'profile/mahasiswa');
+            if ($uploadResult['error']) {
+                return ['success' => false, 'errors' => [$uploadResult['error']]];
+            }
+            if ($uploadResult['success']) {
+                $fotoFilename = $uploadResult['filename'];
+                // Simpan nama foto lama untuk dihapus nanti
+                $currentData = $this->model->getByNim($nim);
+                $oldFoto = $currentData['foto'] ?? null;
+            }
+        }
+        $input['foto'] = $fotoFilename;
+
         // Update data
         if ($this->model->update($nim, $input)) {
+            // Hapus foto lama jika ada foto baru
+            if ($fotoFilename && $oldFoto) {
+                deleteImage($oldFoto, 'profile/mahasiswa');
+            }
             regenerateCsrfToken();
             return ['success' => true, 'message' => 'Data mahasiswa berhasil diperbarui!'];
+        }
+
+        // Jika gagal update dan ada foto baru, hapus foto yang sudah diupload
+        if ($fotoFilename) {
+            deleteImage($fotoFilename, 'profile/mahasiswa');
         }
 
         return ['success' => false, 'errors' => ['Gagal memperbarui data: ' . $this->model->getError()]];

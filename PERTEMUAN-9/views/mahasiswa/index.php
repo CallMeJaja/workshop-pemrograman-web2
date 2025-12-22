@@ -74,6 +74,7 @@ require_once '../../includes/header.php';
                         <thead class="bg-success text-white">
                             <tr>
                                 <th scope="col" class="text-center" style="width: 60px;">No</th>
+                                <th scope="col">Foto</th>
                                 <th scope="col">NIM</th>
                                 <th scope="col">Nama Lengkap</th>
                                 <th scope="col">Program Studi</th>
@@ -91,6 +92,19 @@ require_once '../../includes/header.php';
                             ?>
                                 <tr>
                                     <td class="text-center"><?= $no++ ?></td>
+                                    <td>
+                                        <?php if (!empty($row['foto'])): ?>
+                                            <img src="../../upload/profile/mahasiswa/<?= htmlspecialchars($row['foto']) ?>" 
+                                                 alt="Foto <?= htmlspecialchars($row['nama']) ?>" 
+                                                 class="rounded-circle" 
+                                                 style="width: 45px; height: 45px; object-fit: cover;">
+                                        <?php else: ?>
+                                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" 
+                                                 style="width: 45px; height: 45px; font-size: 18px;">
+                                                <i class="bi bi-person-fill"></i>
+                                            </div>
+                                        <?php endif; ?>
+                                    </td>
                                     <td>
                                         <span class="badge bg-dark"><?= htmlspecialchars($row['nim']) ?></span>
                                     </td>

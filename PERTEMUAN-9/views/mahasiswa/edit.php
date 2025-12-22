@@ -28,7 +28,7 @@ if (!$data) {
 
 // Proses Update Form
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $result = $controller->update($nim_param, $_POST);
+    $result = $controller->update($nim_param, $_POST, $_FILES['foto'] ?? null);
     
     if ($result['success']) {
         setFlash('success', $result['message']);
@@ -80,7 +80,7 @@ require_once '../../includes/header.php';
                         </div>
                     <?php endif; ?>
 
-                    <form action="" method="POST" class="needs-validation" novalidate>
+                    <form action="" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                         <?= csrfField() ?>
                         <div class="mb-3">
                             <label for="nim" class="form-label">NIM</label>
@@ -116,6 +116,19 @@ require_once '../../includes/header.php';
                         <div class="mb-4">
                             <label for="email" class="form-label">Alamat Email</label>
                             <input type="email" class="form-control" id="email" name="email" required value="<?= htmlspecialchars(isset($_POST['email']) ? $_POST['email'] : $data['email']) ?>">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="foto" class="form-label">Foto Profil</label>
+                            <?php if (!empty($data['foto'])): ?>
+                                <div class="mb-2">
+                                    <img src="../../upload/profile/mahasiswa/<?= htmlspecialchars($data['foto']) ?>" 
+                                         alt="Foto <?= htmlspecialchars($data['nama']) ?>" 
+                                         class="img-thumbnail" style="max-height: 150px;">
+                                    <p class="text-muted small mt-1">Foto saat ini. Upload foto baru untuk mengganti.</p>
+                                </div>
+                            <?php endif; ?>
+                            <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
