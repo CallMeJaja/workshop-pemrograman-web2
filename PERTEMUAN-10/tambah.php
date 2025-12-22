@@ -35,7 +35,7 @@ include 'blok.php';
         </tr>
         <tr>
             <td>Foto</td>
-            <td><input type="file" name="foto" id="foto"></td>
+            <td><input type="file" name="fileFoto" id="foto"></td>
         </tr>
     </table>
     <input type="submit" value="Simpan" />

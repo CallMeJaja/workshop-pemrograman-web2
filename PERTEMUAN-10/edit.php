@@ -43,12 +43,16 @@ $mhs = mysqli_fetch_array($data);
         <tr>
             <td>Foto</td>
             <td>
-                <img src="<?= $mhs['foto'] ?>" width="100px" height="auto">
-                <input type="file" name="fileFoto" id="foto">
+                <img src="<?= $mhs['foto'] ?>" width="200px" height="auto" alt=" Foto">
             </td>
         </tr>
         <tr>
             <td></td>
+            <td>
+                <input type="file" name="fileFoto" id="foto">
+            </td>
+        </tr>
+        <tr>
             <td>
                 <input type="submit" value="Update" />
             </td>

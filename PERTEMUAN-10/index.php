@@ -20,6 +20,7 @@ if (!$hasil_query) {
     <thead>
         <tr>
             <th>#</th>
+            <td>Foto</td>
             <th>NIM</th>
             <th>Nama</th>
             <th>Prodi</th>
@@ -34,6 +35,7 @@ if (!$hasil_query) {
         while ($row = mysqli_fetch_assoc($hasil_query)) {
             echo "<tr>";
             echo "<td>" . $no++ . "</td>";
+            echo "<td><img src='" . $row['foto'] . "' width='100px' height='100px1' alt='Foto'></td>";
             echo "<td>" . $row['nim'] . "</td>";
             echo "<td>" . $row['nama'] . "</td>";
             echo "<td>" . $row['prodi'] . "</td>";
