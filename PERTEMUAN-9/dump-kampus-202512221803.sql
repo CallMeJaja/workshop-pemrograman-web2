@@ -28,6 +28,7 @@ CREATE TABLE `tbl_dosen` (
   `nama` varchar(120) DEFAULT NULL,
   `prodi` varchar(120) DEFAULT NULL,
   `email` char(50) DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL COMMENT 'Foto Profil',
   PRIMARY KEY (`nidn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -39,17 +40,17 @@ CREATE TABLE `tbl_dosen` (
 LOCK TABLES `tbl_dosen` WRITE;
 /*!40000 ALTER TABLE `tbl_dosen` DISABLE KEYS */;
 INSERT INTO `tbl_dosen` VALUES
-(1001,'Dr. Budi Santoso','Teknik Informatika','budi@kampus.ac.id'),
-(1002,'Siti Aminah, M.Kom','Sistem Informasi','siti@kampus.ac.id'),
-(1003,'Rudi Hermawan, M.T','Teknik Informatika','rudi@kampus.ac.id'),
-(1004,'Dewi Lestari, M.Si','Manajemen Informatika','dewi@kampus.ac.id'),
-(1005,'Prof. Andi Wijaya','Teknik Komputer','andi@kampus.ac.id'),
-(1006,'Rina Marlina, M.Kom','Sistem Informasi','rina@kampus.ac.id'),
-(1007,'Eko Prasetyo, M.T','Teknik Informatika','eko@kampus.ac.id'),
-(1008,'Fajar Nugraha, M.Cs','Teknik Informatika','fajar@kampus.ac.id'),
-(1009,'Hendra Gunawan, M.Kom','Manajemen Informatika','hendra@kampus.ac.id'),
-(1010,'Maya Putri, M.T','Teknik Komputer','maya@kampus.ac.id'),
-(1022,'Dr. Eng. Reza Asriano Maulana, S.Kom., S.T., M.Kom., ','Sistem Informasi','reza@kampus.ac.id');
+(1001,'Dr. Budi Santoso','Teknik Informatika','budi@kampus.ac.id','img_20251222_105754_04506d21f1bb5aa5.png'),
+(1002,'Siti Aminah, M.Kom','Sistem Informasi','siti@kampus.ac.id',NULL),
+(1003,'Rudi Hermawan, M.T','Teknik Informatika','rudi@kampus.ac.id',NULL),
+(1004,'Dewi Lestari, M.Si','Manajemen Informatika','dewi@kampus.ac.id',NULL),
+(1005,'Prof. Andi Wijaya','Teknik Komputer','andi@kampus.ac.id',NULL),
+(1006,'Rina Marlina, M.Kom','Sistem Informasi','rina@kampus.ac.id',NULL),
+(1007,'Eko Prasetyo, M.T','Teknik Informatika','eko@kampus.ac.id',NULL),
+(1008,'Fajar Nugraha, M.Cs','Teknik Informatika','fajar@kampus.ac.id',NULL),
+(1009,'Hendra Gunawan, M.Kom','Manajemen Informatika','hendra@kampus.ac.id',NULL),
+(1010,'Maya Putri, M.T','Teknik Komputer','maya@kampus.ac.id',NULL),
+(1022,'Dr. Eng. Reza Asriano Maulana, S.Kom., S.T., M.Kom., ','Sistem Informasi','reza@kampus.ac.id',NULL);
 /*!40000 ALTER TABLE `tbl_dosen` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,6 +67,7 @@ CREATE TABLE `tbl_mahasiswa` (
   `prodi` varchar(120) DEFAULT NULL,
   `angkatan` int(11) DEFAULT NULL,
   `email` char(50) DEFAULT NULL,
+  `foto` varchar(255) DEFAULT NULL COMMENT 'Foto Profil',
   PRIMARY KEY (`nim`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -77,16 +79,16 @@ CREATE TABLE `tbl_mahasiswa` (
 LOCK TABLES `tbl_mahasiswa` WRITE;
 /*!40000 ALTER TABLE `tbl_mahasiswa` DISABLE KEYS */;
 INSERT INTO `tbl_mahasiswa` VALUES
-(2022001,'Gilang Dirga','Teknik Informatika',2022,'gilang@mhs.ac.id'),
-(2022002,'Hesti Purwadinata','Teknik Informatika',2022,'hesti@mhs.ac.id'),
-(2022003,'Indra Bekti','Manajemen Informatika',2022,'indra@mhs.ac.id'),
-(2022004,'Joko Anwar','Teknik Komputer',2022,'joko@mhs.ac.id'),
-(2023001,'Ahmad Fauzi','Teknik Informatika',2023,'ahmad@mhs.ac.id'),
-(2023002,'Bunga Citra','Sistem Informasi',2023,'bunga@mhs.ac.id'),
-(2023003,'Candra Wijaya','Teknik Informatika',2023,'candra@mhs.ac.id'),
-(2023004,'Dinda Kirana','Manajemen Informatika',2023,'dinda@mhs.ac.id'),
-(2023005,'Erik Saputra','Teknik Komputer',2023,'erik@mhs.ac.id'),
-(2023006,'Reza Asriano','Teknik Informatika',2023,'reza@mhs.ac.id');
+(2022001,'Gilang Dirga','Teknik Informatika',2022,'gilang@mhs.ac.id','img_20251222_105857_f76872a5e4f38053.png'),
+(2022002,'Hesti Purwadinata','Teknik Informatika',2022,'hesti@mhs.ac.id',NULL),
+(2022003,'Indra Bekti','Manajemen Informatika',2022,'indra@mhs.ac.id',NULL),
+(2022004,'Joko Anwar','Teknik Komputer',2022,'joko@mhs.ac.id',NULL),
+(2023001,'Ahmad Fauzi','Teknik Informatika',2023,'ahmad@mhs.ac.id',NULL),
+(2023002,'Bunga Citra','Sistem Informasi',2023,'bunga@mhs.ac.id',NULL),
+(2023003,'Candra Wijaya','Teknik Informatika',2023,'candra@mhs.ac.id',NULL),
+(2023004,'Dinda Kirana','Manajemen Informatika',2023,'dinda@mhs.ac.id',NULL),
+(2023005,'Erik Saputra','Teknik Komputer',2023,'erik@mhs.ac.id',NULL),
+(2023006,'Reza Asriano','Teknik Informatika',2023,'reza@mhs.ac.id',NULL);
 /*!40000 ALTER TABLE `tbl_mahasiswa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -215,4 +217,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-12-18 20:12:16
+-- Dump completed on 2025-12-22 18:03:34
