@@ -13,9 +13,9 @@ Sistem Informasi Akademik (SIAKAD) merupakan aplikasi yang mengelola data akadem
 | Modul | Deskripsi | Akses Dosen | Akses Mahasiswa |
 |-------|-----------|:-----------:|:---------------:|
 | Dashboard | Ringkasan statistik data | ✅ | ✅ |
-| Data Dosen | CRUD data tenaga pengajar | ✅ Full CRUD | ❌ |
-| Data Mahasiswa | CRUD data peserta didik | ✅ Full CRUD | ✅ View Only |
-| Mata Kuliah | CRUD data perkuliahan | ✅ Full CRUD | ✅ View Only |
+| Data Dosen | CRUD data dosen + Foto | ✅ Full CRUD | ❌ |
+| Data Mahasiswa | CRUD data mahasiswa + Foto | ✅ Full CRUD | ✅ View Only |
+| Mata Kuliah | CRUD data matkul | ✅ Full CRUD | ✅ View Only |
 | Data Nilai | Input dan kelola nilai | ✅ Full CRUD | ❌ |
 
 ---
@@ -33,7 +33,7 @@ Sistem Informasi Akademik (SIAKAD) merupakan aplikasi yang mengelola data akadem
 1. **Download/Clone Project**
    
    **Opsi A: Download ZIP (Rekomendasi)**
-   - Download file [`TUGAS_PART2_SESSION_WEB_REZA.zip`](https://github.com/CallMeJaja/workshop-pemrograman-web2/blob/master/PERTEMUAN-9/TUGAS_PART12_SESSION_WEB_REZA.zip) yang sudah disediakan
+   - Download file [`TUGAS_PART13_UPLOAD_FOTO_WEB_REZA.zip`](https://github.com/CallMeJaja/workshop-pemrograman-web2/blob/master/PERTEMUAN-9/TUGAS_PART13_UPLOAD_FOTO_WEB_REZA.zip) yang sudah disediakan
    - Extract ke folder `htdocs` (XAMPP) atau folder web server Anda
    
    **Opsi B: Clone Repository**
@@ -49,7 +49,7 @@ Sistem Informasi Akademik (SIAKAD) merupakan aplikasi yang mengelola data akadem
 
 3. **Import Database**
    ```bash
-   mysql -u root -p kampus < dump-kampus-202512182012.sql
+   mysql -u root -p kampus < dump-kampus-202512221803.sql
    ```
 
 4. **Konfigurasi Koneksi** (`config/database.php`)
@@ -95,7 +95,8 @@ PERTEMUAN-9/
 ├── helpers/            # Fungsi utilitas
 │   ├── auth.php        # RBAC helper
 │   ├── csrf.php        # CSRF protection
-│   └── flash.php       # Flash messages
+│   ├── flash.php       # Flash messages
+│   └── upload.php      # File upload handler
 ├── includes/           # Layout templates
 │   ├── header.php
 │   └── footer.php
@@ -112,6 +113,10 @@ PERTEMUAN-9/
 │   ├── mahasiswa/
 │   ├── matkul/
 │   └── nilai/
+├── upload/             # Folder upload file
+│   └── profile/
+│       ├── dosen/      # Foto profil dosen
+│       └── mahasiswa/  # Foto profil mahasiswa
 ├── index.php           # Entry point (Front Controller)
 └── dump-kampus-*.sql   # Database dump
 ```
@@ -222,6 +227,7 @@ HTTP Request
 | nama | VARCHAR(120) | - |
 | prodi | VARCHAR(120) | - |
 | email | CHAR(50) | - |
+| foto | VARCHAR(255) | Nullable |
 
 #### tbl_mahasiswa
 | Column | Type | Constraint |
@@ -231,6 +237,7 @@ HTTP Request
 | prodi | VARCHAR(120) | - |
 | angkatan | INT(11) | - |
 | email | CHAR(50) | - |
+| foto | VARCHAR(255) | Nullable |
 
 #### tbl_matkul
 | Column | Type | Constraint |
@@ -271,6 +278,7 @@ HTTP Request
 | CSRF Protection | Synchronizer Token Pattern [6] |
 | SQL Injection | Prepared Statements [7] |
 | XSS Prevention | htmlspecialchars() output [8] |
+| File Upload | MIME validation + unique filename |
 
 ---
 
